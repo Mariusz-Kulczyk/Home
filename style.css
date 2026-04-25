@@ -20,16 +20,45 @@ body { font-family: 'Barlow', sans-serif; color: var(--text); line-height: 1.6; 
 .btn-sm { background: #fff; color: var(--red); padding: 5px 12px; text-decoration: none; margin-left: 15px; border-radius: 2px; }
 
 /* HEADER */
-.main-header { padding: 25px 0; background: #fff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #eee; }
-.header-flex { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 1.4rem; letter-spacing: -1px; }
-.logo span { color: var(--red); margin-left: 5px; font-weight: 400; font-size: 0.8rem; letter-spacing: 2px; }
-.nav-links { list-style: none; display: flex; gap: 25px; align-items: center; }
-.nav-links a { text-decoration: none; color: #000; font-weight: 700; font-size: 0.8rem; transition: 0.3s; }
-.nav-links a:hover { color: var(--red); }
-.btn-cta { background: var(--red); color: #fff !important; padding: 10px 20px; border-radius: 4px; }
-.lang-switcher img { width: 18px; margin-left: 8px; opacity: 0.7; transition: 0.3s; }
-.lang-switcher img:hover { opacity: 1; transform: scale(1.2); }
+/* Domyślny wygląd nagłówka (Białe tło) */
+.main-header { 
+    padding: 25px 0; 
+    background: #ffffff; 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    border-bottom: 1px solid #eee;
+    transition: all 0.4s ease; /* Płynne przejście */
+}
+
+.nav-links a { 
+    text-decoration: none; 
+    color: #000; /* Czarne napisy na początku */
+    font-weight: 700; 
+    font-size: 0.8rem; 
+    transition: 0.3s; 
+}
+
+/* Wygląd po zeskrolowaniu (Ciemne tło) */
+.main-header.scrolled {
+    background: #28221F; /* Twój ciemny brąz */
+    padding: 15px 0; /* Menu nieco się zwęża dla lepszego efektu */
+    border-bottom: 1px solid #3d3530;
+}
+
+.main-header.scrolled .nav-links a {
+    color: #ffffff; /* Białe napisy dla kontrastu na ciemnym tle */
+}
+
+.main-header.scrolled .logo {
+    color: #ffffff;
+}
+
+/* CTA pozostaje czerwone, ale możemy mu dodać biały border dla lepszej widoczności */
+.main-header.scrolled .btn-cta {
+    background: var(--red);
+    border: 1px solid rgba(255,255,255,0.2);
+}
 
 /* HERO - KŁOSIŃSKI STYLE */
 .hero-personal { padding: 120px 0; background: #fff; }
