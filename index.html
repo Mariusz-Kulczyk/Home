@@ -6,7 +6,7 @@
     <title>M.KULCZYK | Strategic Logistics Partner | Spedycja i Doradztwo Logistyczne</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=13">
     
     <style>
         .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
@@ -18,19 +18,50 @@
         .fleet-dark .title-light { margin-bottom: 20px !important; }
         .quality-list { margin-top: 25px !important; }
         
-        /* Stopka - zachowanie układu i miejsca na dane */
+        /* Stopka */
         footer#kontakt { background-color: #13100E !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding-bottom: 50px !important; }
-        footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; }
+        footer#kontakt p, footer#kontakt a, footer#kontakt span { color: #aaaaaa !important; }
         footer#kontakt a:hover { color: #e31e24 !important; }
         footer#kontakt h5 { color: #e31e24 !important; }
         footer#kontakt .logo { color: #ffffff !important; }
-        
         .footer-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr !important; gap: 40px !important; align-items: stretch; }
-        .f-legal { display: flex; align-items: flex-end; justify-content: flex-end; }
+        
+        /* Układ prawej kolumny stopki z tekstem ISO nad Copyright */
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 10px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; text-align: right; }
+        
+        /* PŁYNNA KARUZELA (MARQUEE) DLA SEKTORÓW */
+        .sectors-marquee { 
+            overflow: hidden; 
+            position: relative; 
+            width: 100%; 
+            padding: 20px 0; 
+        }
+        .sectors-track { 
+            display: flex; 
+            width: max-content; 
+            /* Czas 45s odpowiada za prędkość - im więcej, tym wolniej */
+            animation: marquee 45s linear infinite; 
+        }
+        .sectors-track:hover { 
+            animation-play-state: paused; /* Zatrzymanie po najechaniu myszką */
+        }
+        .sectors-track .sector-item { 
+            flex: 0 0 220px; /* Stała szerokość każdego kafelka */
+            margin-right: 20px; 
+            padding: 30px 15px !important;
+        }
+        .sectors-track .sector-item h5 { font-size: 0.9rem !important; }
+        
+        @keyframes marquee { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
         
         @media (max-width: 992px) {
             .footer-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
-            .f-legal { justify-content: flex-start; }
+            .f-legal { align-items: flex-start; justify-content: flex-start; }
+            .iso-text, .f-legal .copy { text-align: left !important; }
         }
     </style>
 </head>
@@ -160,88 +191,51 @@
                     <h2 class="badge">SEKTORY</h2>
                     <h3 class="title-dark">Branże, które mi ufają</h3>
                 </div>
-                <div class="sectors-grid">
-                    <div class="sector-item">
-                        <i class="fa-solid fa-car"></i>
-                        <h5>Automotive</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-microchip"></i>
-                        <h5>High-Tech / Elektronika</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-plane"></i>
-                        <h5>Aviation (AOG)</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-helmet-safety"></i>
-                        <h5>Budownictwo</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <h5>Towary Wysokiej Wartości</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-industry"></i>
-                        <h5>Przemysł i Produkcja</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <h5>Dobra Szybkozbywalne (FMCG)</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-shirt"></i>
-                        <h5>Moda i Towary Luksusowe</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-couch"></i>
-                        <h5>Branża Meblarska</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-bolt"></i>
-                        <h5>Energetyka i OZE</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-tractor"></i>
-                        <h5>Rolnictwo i Agro</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-flask"></i>
-                        <h5>Branża Chemiczna</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-box-open"></i>
-                        <h5>E-commerce</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-boxes-packing"></i>
-                        <h5>Papier i Opakowania</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-gears"></i>
-                        <h5>Części Maszyn i Serwis</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-cubes"></i>
-                        <h5>Tworzywa Sztuczne</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-wine-bottle"></i>
-                        <h5>Napoje i Alkohole</h5>
-                    </div>
-                    <div class="sector-item">
-                        <i class="fa-solid fa-tent"></i>
-                        <h5>Logistyka Eventowa</h5>
-                    </div>
+            </div>
+            
+            <div class="sectors-marquee">
+                <div class="sectors-track">
+                    <div class="sector-item"><i class="fa-solid fa-car"></i><h5>Automotive</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-microchip"></i><h5>High-Tech / Elektronika</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-plane"></i><h5>Aviation (AOG)</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-helmet-safety"></i><h5>Budownictwo</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-shield-halved"></i><h5>Towary Wysokiej Wartości</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-industry"></i><h5>Przemysł i Produkcja</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-cart-shopping"></i><h5>Dobra Szybkozbywalne (FMCG)</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-shirt"></i><h5>Moda i Towary Luksusowe</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-couch"></i><h5>Branża Meblarska</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-bolt"></i><h5>Energetyka i OZE</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-tractor"></i><h5>Rolnictwo i Agro</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-flask"></i><h5>Branża Chemiczna</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-box-open"></i><h5>E-commerce</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-boxes-packing"></i><h5>Papier i Opakowania</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-gears"></i><h5>Części Maszyn i Serwis</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-cubes"></i><h5>Tworzywa Sztuczne</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-wine-bottle"></i><h5>Napoje i Alkohole</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-tent"></i><h5>Logistyka Eventowa</h5></div>
+
+                    <div class="sector-item"><i class="fa-solid fa-car"></i><h5>Automotive</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-microchip"></i><h5>High-Tech / Elektronika</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-plane"></i><h5>Aviation (AOG)</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-helmet-safety"></i><h5>Budownictwo</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-shield-halved"></i><h5>Towary Wysokiej Wartości</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-industry"></i><h5>Przemysł i Produkcja</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-cart-shopping"></i><h5>Dobra Szybkozbywalne (FMCG)</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-shirt"></i><h5>Moda i Towary Luksusowe</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-couch"></i><h5>Branża Meblarska</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-bolt"></i><h5>Energetyka i OZE</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-tractor"></i><h5>Rolnictwo i Agro</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-flask"></i><h5>Branża Chemiczna</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-box-open"></i><h5>E-commerce</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-boxes-packing"></i><h5>Papier i Opakowania</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-gears"></i><h5>Części Maszyn i Serwis</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-cubes"></i><h5>Tworzywa Sztuczne</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-wine-bottle"></i><h5>Napoje i Alkohole</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-tent"></i><h5>Logistyka Eventowa</h5></div>
                 </div>
             </div>
         </section>
 
-        <section class="logos-strip">
-            <div class="container logos-flex" style="justify-content: center; opacity: 0.6;">
-                <span style="letter-spacing: 2px;">Standardy operacyjne oparte na normach ISO i GDP</span>
-            </div>
-        </section>
     </main>
 
     <footer id="kontakt">
@@ -261,6 +255,7 @@
                 <p style="white-space: nowrap;">Telefon: <strong>+48 722 270 532</strong></p>
             </div>
             <div class="f-legal">
+                <span class="iso-text">Standardy operacyjne oparte na normach ISO i GDP</span>
                 <p class="copy" style="margin: 0; text-align: right;">© 2026 Mariusz Kulczyk. All rights reserved.</p>
             </div>
         </div>
