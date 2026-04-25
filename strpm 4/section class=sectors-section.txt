@@ -1,0 +1,187 @@
+<section class="sectors-section">
+        <div class="container">
+            <div class="section-head center">
+                <h2 class="badge">BRANŻE</h2>
+                <h3 class="title-dark">Obsługujemy kluczowe sektory</h3>
+            </div>
+            <div class="sectors-grid">
+                <div class="sector-box">
+                    <i class="fa-solid fa-car-side"></i>
+                    <h4>Automotive</h4>
+                    <p>Dostawy komponentów na linie produkcyjne w systemie Just-in-Time. Brak przestojów to nasz priorytet.</p>
+                </div>
+                <div class="sector-box">
+                    <i class="fa-solid fa-microchip"></i>
+                    <h4>High-Tech</h4>
+                    <p>Transport czułej elektroniki. Zabezpieczamy ładunki o wysokiej wartości z najwyższą starannością.</p>
+                </div>
+                <div class="sector-box">
+                    <i class="fa-solid fa-pills"></i>
+                    <h4>Pharmacy</h4>
+                    <p>Pełna zgodność z GDP. Monitorujemy temperaturę na każdym kilometrze trasy.</p>
+                </div>
+                <div class="sector-box">
+                    <i class="fa-solid fa-industry"></i>
+                    <h4>Przemysł ciężki</h4>
+                    <p>Ładunki ponadgabarytowe i pełnopojazdowe dla budownictwa i energetyki.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="process-section bg-dark">
+        <div class="container">
+            <div class="section-head center">
+                <h2 class="badge" style="color: #fff; opacity: 0.6;">PROCES</h2>
+                <h3 class="title-light">4 Kroki do bezpiecznej dostawy</h3>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-num">01</div>
+                    <h4>Analiza i Wycena</h4>
+                    <p>W 15 minut analizujemy zapytanie i dobieramy optymalną trasę oraz pojazd.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">02</div>
+                    <h4>Podstawienie</h4>
+                    <p>Auto melduje się u nadawcy w dowolnym miejscu Europy w ciągu 2-5 godzin.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">03</div>
+                    <h4>Monitoring 24/7</h4>
+                    <p>Śledzisz ładunek w czasie rzeczywistym. Jesteśmy w stałym kontakcie z kierowcą.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">04</div>
+                    <h4>Bezpieczny Rozładunek</h4>
+                    <p>Potwierdzenie dostawy otrzymujesz natychmiast po przekazaniu towaru.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="detailed-about">
+        <div class="container grid-2">
+            <div class="image-stack">
+                <img src="https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=600&q=80" alt="Transport" class="img-1">
+            </div>
+            <div class="text-content">
+                <h3 class="title-dark">Twoja stabilność w dynamicznym świecie</h3>
+                <p>W branży TSL przetrwają tylko ci, którzy potrafią adaptować się do zmian. Moje 8-letnie doświadczenie pozwoliło mi zbudować sieć, która nie zawodzi w sytuacjach krytycznych.</p>
+                <div class="check-item">
+                    <strong>Gwarancja podstawienia:</strong> Dzięki flocie ponad 800 jednostek, słowo "niemożliwe" dla mnie nie istnieje.
+                </div>
+                <div class="check-item">
+                    <strong>Bezpieczeństwo finansowe:</strong> Wysokie polisy OCP i OCS chronią Twój biznes na każdym etapie.
+                </div>
+                <div class="check-item">
+                    <strong>Transparentność:</strong> Zero ukrytych kosztów. Cena, którą ustalasz na początku, jest ceną ostateczną.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section bg-light">
+        <div class="container">
+            <h3 class="title-dark center">Masz pytania?</h3>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h5>Jak szybko możecie podstawić auto?</h5>
+                    <p>W przypadku transportu ekspresowego na terenie UE, średni czas podstawienia to 2-4 godziny od akceptacji zlecenia.</p>
+                </div>
+                <div class="faq-item">
+                    <h5>Czy obsługujecie ładunki niebezpieczne?</h5>
+                    <p>Tak, posiadamy uprawnienia ADR oraz odpowiednio przeszkolonych kierowców do przewozu towarów klas 2-9.</p>
+                </div>
+                <div class="faq-item">
+                    <h5>Jakie ubezpieczenie posiadasz?</h5>
+                    <p>Dysponujemy polisą OCP Spedytora na kwotę 2,5 mln EUR oraz szerokim pakietem dodatkowym dla towarów wrażliwych.</p>
+                </div>
+                <div class="faq-item">
+                    <h5>Czy monitorujecie temperaturę?</h5>
+                    <p>W transporcie farmaceutycznym i chłodniczym oferujemy wydruki z termografów oraz monitoring temperatury online.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    ```
+
+### 2. Kod CSS (`style.css`)
+Dodaj to poniżej dotychczasowych stylów.
+
+```css
+/* SEKCJA SEKTORY */
+.sectors-section { padding: 100px 0; background: #fff; }
+.sectors-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 30px; 
+    margin-top: 50px; 
+}
+.sector-box { 
+    padding: 30px; 
+    border: 1px solid #eee; 
+    transition: 0.3s; 
+}
+.sector-box i { font-size: 2rem; color: var(--red); margin-bottom: 20px; }
+.sector-box h4 { margin-bottom: 15px; font-weight: 800; }
+.sector-box:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.sector-box:hover i { color: #fff; }
+
+/* SEKCJA PROCES (Timeline) */
+.bg-dark { background: var(--dark-bg); color: #fff; padding: 100px 0; }
+.process-steps { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 40px; 
+    margin-top: 60px; 
+    position: relative;
+}
+.step { position: relative; }
+.step-num { 
+    font-size: 4rem; 
+    font-weight: 900; 
+    color: rgba(227, 30, 36, 0.3); 
+    line-height: 1; 
+    margin-bottom: 10px; 
+}
+.step h4 { font-size: 1.1rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+.step p { color: #aaa; font-size: 0.9rem; }
+
+/* DLACZEGO JA / DETALICZNY OPIS */
+.detailed-about { padding: 120px 0; }
+.image-stack img { 
+    width: 100%; 
+    border-radius: 5px; 
+    box-shadow: 20px 20px 0px var(--red); 
+}
+.check-item { 
+    margin-top: 25px; 
+    padding-left: 20px; 
+    border-left: 3px solid var(--red); 
+    font-size: 1rem; 
+}
+.check-item strong { display: block; color: var(--red); text-transform: uppercase; font-size: 0.8rem; }
+
+/* FAQ */
+.faq-section { padding: 100px 0; }
+.faq-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 40px; 
+    margin-top: 60px; 
+}
+.faq-item h5 { 
+    font-size: 1.1rem; 
+    font-weight: 800; 
+    margin-bottom: 10px; 
+    color: var(--text-main); 
+}
+.faq-item p { color: #666; font-size: 0.95rem; }
+
+/* RWD - Poprawki dla urządzeń mobilnych */
+@media (max-width: 768px) {
+    .process-steps, .faq-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 3.5rem; }
+}
