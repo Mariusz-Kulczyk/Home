@@ -6,15 +6,13 @@
     <title>M.KULCZYK | Strategic Logistics Partner | Transport Krytyczny</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     
     <style>
-        /* Te style gwarantują, że układ poziomy i ciemna stopka zadziałają od razu */
         .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
         .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
         .nav-links li { display: inline-block !important; }
         
-        /* Ciemna stopka */
         footer#kontakt { background-color: #13100E !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; }
         footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; }
         footer#kontakt a:hover { color: #e31e24 !important; }
@@ -26,7 +24,7 @@
 
     <div class="top-ticker">
         <div class="container">
-            <span>PILNE ZLECENIE? PODSTAWIAMY AUTO W 2-5H NA TERENIE UE</span>
+            <span>PILNE ZLECENIE? PODSTAWIAM AUTO W 2-5H NA TERENIE UE</span>
             <a href="#kontakt" class="btn-sm">WYŚLIJ ZAPYTANIE</a>
         </div>
     </div>
@@ -43,7 +41,7 @@
                     </li>
                     <li><a href="#onas">O MNIE</a></li>
                     <li><a href="#uslugi">USŁUGI</a></li>
-                    <li><a href="#flota">FLOTA</a></li>
+                    <li><a href="#artykuly">ARTYKUŁY</a></li>
                     <li><a href="#sektory">SEKTORY</a></li>
                     <li><a href="#kontakt" class="btn-cta">KONTAKT</a></li>
                 </ul>
@@ -52,15 +50,16 @@
     </header>
 
     <main>
-        <section class="hero-personal">
+        <section class="hero-personal" id="onas">
             <div class="container grid-2">
                 <div class="hero-text">
                     <h1 class="hero-title">Sprawnie<br><span class="red-text">na trasie</span></h1>
-                    <p class="hero-lead">Jestem Mariusz i od 8 lat udowadniam, że nowoczesna spedycja to nie tylko transport, ale przede wszystkim partnerstwo oparte na danych. Twoja logistyka to moja odpowiedzialność.</p>
+                    <p class="hero-lead">Od 8 lat udowadniam, że nowoczesna spedycja to nie tylko transport, ale przede wszystkim partnerstwo oparte na danych. Twoja logistyka to moja odpowiedzialność.</p>
                     <div class="hero-stats-mini">
                         <div class="mini-stat"><strong>4,652</strong> <span>zleceń</span></div>
-                        <div class="mini-stat"><strong>1,021</strong> <span>klientów</span></div>
-                        <div class="mini-stat"><strong>1.1M</strong> <span>km</span></div>
+                        <div class="mini-stat"><strong>1000+</strong> <span>zaufanych klientów</span></div>
+                        <div class="mini-stat"><strong>1.9M+</strong> <span>przejechanych km</span></div>
+                        <div class="mini-stat"><strong>7</strong> <span>lat doświadczenia</span></div>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -79,12 +78,12 @@
                     <div class="s-card">
                         <i class="fa-solid fa-bolt icon-red"></i>
                         <h4>TRANSPORT EKSPRESOWY</h4>
-                        <p>Dedykowane rozwiązania dla ładunków, gdzie każda minuta ma znaczenie. Podstawienie auta w rekordowym czasie.</p>
+                        <p>Dedykowane rozwiązania dla ładunków, gdzie każda minuta ma znaczenie. Podstawienie auta w rekordowym czasie. Serwis 24/7.</p>
                     </div>
                     <div class="s-card">
                         <i class="fa-solid fa-truck-ramp-box icon-red"></i>
                         <h4>TRANSPORT CAŁOPOJAZDOWY</h4>
-                        <p>Kompleksowa obsługa ładunków FTL na terenie całej Europy, Azji i Afryki przy zachowaniu pełnej kontroli kosztów.</p>
+                        <p>Kompleksowa obsługa ładunków FTL na terenie całej Europy przy zachowaniu pełnej kontroli kosztów i najwyższych standardów.</p>
                     </div>
                     <div class="s-card">
                         <i class="fa-solid fa-biohazard icon-red"></i>
@@ -97,6 +96,14 @@
                         <p>Transport produktów leczniczych i spożywczych w kontrolowanej temperaturze. Gwarancja zachowania łańcucha dostaw.</p>
                     </div>
                 </div>
+
+                <div class="advisor-banner">
+                    <div class="advisor-text">
+                        <h4>Szukasz rozwiązań szytych na miarę?</h4>
+                        <p>Działam również jako niezależny doradca i <strong>Project Executioner</strong>. Optymalizuję łańcuchy dostaw i projektuję zaawansowane procesy logistyczne dla biznesu.</p>
+                    </div>
+                    <a href="#doradztwo" class="btn-cta">DOWIEDZ SIĘ WIĘCEJ</a>
+                </div>
             </div>
         </section>
 
@@ -104,11 +111,12 @@
             <div class="container grid-2">
                 <div class="fleet-content">
                     <h3 class="title-light">Nasza flota nie zna<br>granic terytorialnych</h3>
-                    <p>Działamy na 3 kontynentach. Posiadamy dostęp do sieci ponad 800 sprawdzonych jednostek transportowych gotowych do drogi w każdej chwili.</p>
+                    <p>Działamy na terenie całej Europy. Posiadamy dostęp do ponad 600 sprawdzonych jednostek transportowych gotowych do drogi w każdej chwili.</p>
                     <ul class="quality-list">
                         <li><i class="fa-solid fa-check"></i> Monitoring GPS 24/7 dla każdego zlecenia</li>
                         <li><i class="fa-solid fa-check"></i> Vany DMC 3.5t oraz Zestawy 40t</li>
-                        <li><i class="fa-solid fa-check"></i> Ubezpieczenie OCS na kwotę 2,500,000 EUR</li>
+                        <li><i class="fa-solid fa-check"></i> Ubezpieczenie CARGO w 15 minut</li>
+                        <li><i class="fa-solid fa-check"></i> Kompleksowa realizacja odpraw celnych</li>
                     </ul>
                 </div>
                 <div class="fleet-visual">
@@ -195,29 +203,6 @@
                             <h4>Finalizacja</h4>
                             <p>Bezpieczny rozładunek i błyskawiczne dostarczenie dokumentów transportowych.</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="faq-section">
-            <div class="container grid-2">
-                <div>
-                    <h3 class="title-dark">Częste pytania</h3>
-                    <p>Wszystko, co powinieneś wiedzieć przed rozpoczęciem współpracy.</p>
-                </div>
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <strong>Jakie kraje obsługujecie?</strong>
-                        <p>Cała Unia Europejska oraz wybrane kierunki w Azji i Afryce.</p>
-                    </div>
-                    <div class="faq-item">
-                        <strong>Czy ubezpieczenie jest w cenie?</strong>
-                        <p>Tak, każde zlecenie objęte jest naszą polisą spedycyjną (2.5 mln EUR).</p>
-                    </div>
-                    <div class="faq-item">
-                        <strong>Czy obsługujecie stałe linie?</strong>
-                        <p>Tak, projektujemy dedykowane łańcuchy dostaw dla stałych relacji biznesowych.</p>
                     </div>
                 </div>
             </div>
