@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV | Mariusz Kulczyk - International Freight Advisor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #e31e24; --dark: #13100e; --light: #f9f9f9; --soft-gray: #bbb; }
+        body { font-family: 'Barlow', sans-serif; margin: 0; color: #333; background-color: #fff; }
+        .cv-container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; display: grid; grid-template-columns: 320px 1fr; gap: 50px; }
+        
+        /* Sidebar */
+        .cv-sidebar { background: var(--light); padding: 40px; border-radius: 12px; height: fit-content; position: sticky; top: 20px; }
+        .profile-img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; margin: 0 auto 25px; display: block; border: 5px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .cv-sidebar h2 { font-family: 'Inter', sans-serif; font-size: 1.6rem; margin-bottom: 5px; text-align: center; }
+        .tagline { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 30px; display: block; text-align: center; letter-spacing: 1px; }
+        
+        .contact-info { list-style: none; padding: 0; margin-bottom: 35px; }
+        .contact-info li { margin-bottom: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 12px; }
+        .contact-info i { color: var(--primary); width: 15px; }
+
+        .skill-group { margin-bottom: 30px; }
+        .skill-group h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 15px; font-family: 'Inter', sans-serif; }
+        
+        .skill-tag { 
+            display: inline-block; 
+            background: #fff; 
+            border: 1px solid #eee; 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            font-size: 0.75rem; 
+            margin: 0 4px 8px 0; 
+            font-weight: 600; 
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .skill-tag:hover {
+            background: var(--primary);
+            color: #fff !important;
+            border-color: var(--primary);
+        }
+
+        /* Main Content */
+        .cv-main h1 { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 900; margin: 0 0 10px; color: var(--dark); }
+        .cv-section { margin-bottom: 50px; }
+        .cv-section h2 { font-family: 'Inter', sans-serif; font-size: 1.6rem; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
+        .cv-section h2::after { content: ""; flex: 1; height: 1px; background: #eee; }
+
+        .exp-item { position: relative; padding-left: 30px; border-left: 2px solid #eee; margin-bottom: 40px; }
+        .exp-item::before { content: ""; position: absolute; left: -7px; top: 12px; width: 12px; height: 12px; border-radius: 50%; background: #ddd; transition: 0.3s; }
+        .exp-item:hover::before { background: var(--primary); scale: 1.3; }
+        
+        .exp-date { font-weight: 700; color: var(--soft-gray); font-size: 0.9rem; display: block; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
+        
+        .exp-title { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            display: inline-block; 
+            margin-bottom: 4px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .exp-item:hover .exp-title {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .exp-company { color: var(--primary); font-weight: 700; font-size: 1rem; margin-bottom: 12px; display: block; padding-left: 12px; }
+        .exp-desc { font-size: 1rem; line-height: 1.6; color: #555; }
+        .exp-desc ul { padding-left: 20px; margin-top: 10px; }
+        .exp-desc li { margin-bottom: 6px; }
+
+        .cert-list { list-style: none; padding: 0; }
+        .cert-item { margin-bottom: 15px; display: flex; gap: 15px; align-items: flex-start; }
+        .cert-item i { color: var(--primary); margin-top: 5px; }
+        .cert-name { font-weight: 700; font-size: 1rem; display: block; }
+        .cert-org { color: #777; font-size: 0.85rem; }
+
+        .print-btn { background: var(--dark); color: #fff; border: none; padding: 14px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 20px; }
+        .print-btn:hover { background: var(--primary); box-shadow: 0 5px 15px rgba(227, 30, 36, 0.3); }
+
+        @media print { .print-btn { display: none !important; } .cv-container { padding: 0; display: block; } .cv-sidebar { border: 1px solid #eee; margin-bottom: 20px; } }
+        @media (max-width: 900px) { .cv-container { grid-template-columns: 1fr; } .cv-sidebar { position: static; } }
+    </style>
+</head>
+<body>
+
+    <main class="cv-container">
+        <aside class="cv-sidebar">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80" alt="Mariusz Kulczyk" class="profile-img">
+            <h2>Mariusz Kulczyk</h2>
+            <span class="tagline">International Freight Advisor</span>
+            
+            <ul class="contact-info">
+                <li><i class="fa-solid fa-phone"></i> +48 722 270 532</li>
+                <li><i class="fa-solid fa-envelope"></i> mariusz200701@gmail.com</li>
+                <li><i class="fa-solid fa-location-dot"></i> 41-407 Imielin, Polska</li>
+                <li><i class="fa-brands fa-linkedin"></i> linkedin.com/in/mariusz-kulczyk</li>
+            </ul>
+
+            <div class="skill-group">
+                <h3>Business Development</h3>
+                <span class="skill-tag">Consultative Selling</span>
+                <span class="skill-tag">Persuasive Copywriting</span>
+                <span class="skill-tag">Negocjacje handlowe</span>
+                <span class="skill-tag">Relational Networking</span>
+                <span class="skill-tag">B2B Sales Funnels</span>
+            </div>
+
+            <div class="skill-group">
+                <h3>Oprogramowanie TSL</h3>
+                <span class="skill-tag">TIMOCOM</span>
+                <span class="skill-tag">Trans.eu</span>
+                <span class="skill-tag">Transporeon</span>
+                <span class="skill-tag">Amazon Relay</span>
+                <span class="skill-tag">Marcos TMS</span>
+                <span class="skill-tag">FireTMS</span>
+            </div>
+
+            <div class="skill-group">
+                <h3>Digital & IT</h3>
+                <span class="skill-tag">Master Excel</span>
+                <span class="skill-tag">Web Building (HTML/CSS)</span>
+                <span class="skill-tag">Advanced IT Tools</span>
+                <span class="skill-tag">Data Analysis</span>
+                <span class="skill-tag">Google Workspace</span>
+            </div>
+
+            <button class="print-btn" onclick="window.print()">
+                <i class="fa-solid fa-file-pdf"></i> GENERUJ PDF / DRUKUJ
+            </button>
+        </aside>
+
+        <div class="cv-main">
+            <section class="cv-section">
+                <h1>Profil <span style="color:var(--primary)">Zawodowy</span></h1>
+                <p class="exp-desc" style="font-size: 1.1rem; line-height: 1.7;">
+                    Doświadczony spedytor i doradca ds. transportu międzynarodowego z silnym nastawieniem na optymalizację procesów i budowanie trwałych relacji z klientem. Ekspert w zarządzaniu flotą i planowaniu skomplikowanych łańcuchów dostaw na rynku europejskim. Skutecznie łączę wiedzę techniczną z zakresu logistyki (Inżynier) z analitycznym podejściem finansowym oraz nowoczesnymi technikami pozyskiwania klientów B2B.
+                </p>
+            </section>
+
+            <section class="cv-section">
+                <h2>Doświadczenie Zawodowe</h2>
+
+                <div class="exp-item">
+                    <span class="exp-date">04.2026 - Obecnie</span>
+                    <span class="exp-title">International Freight Advisor</span>
+                    <span class="exp-company">Motohouse Logistics</span>
+                    <div class="exp-desc">
+                        Projektowanie strategii logistycznych dla kluczowych partnerów oraz optymalizacja rentowności frachtów przy użyciu zaawansowanej analityki danych.
+                    </div>
+                </div>
+
+                <div class="exp-item">
+                    <span class="exp-date">10.2024 - 04.2026</span>
+                    <span class="exp-title">International Freight Forwarder</span>
+                    <span class="exp-company">TZM Sp. z o.o.</span>
+                    <div class="exp-desc">
+                        Aktywne budowanie portfela klientów i bazy przewoźników. Wykorzystanie technik doradczych w procesie sprzedaży usług transportowych na rynkach UE.
+                    </div>
+                </div>
+
+                <div class="exp-item">
+                    <span class="exp-date">06.2021 - 10.2024</span>
+                    <span class="exp-title">Freight Specialist / Dyspozytor</span>
+                    <span class="exp-company">Jarzyna Trans</span>
+                    <div class="exp-desc">
+                        Zarządzanie operacyjne flotą, planowanie tras międzynarodowych oraz bezpośrednie negocjacje warunków współpracy z kontrahentami zagranicznymi.
+                    </div>
+                </div>
+
+                <div class="exp-item">
+                    <span class="exp-date">02.2023 - 12.2023</span>
+                    <span class="exp-title">Spedytor - Projekt Amazon Relay</span>
+                    <span class="exp-company">VAN 7 Sp. z o.o.</span>
+                    <div class="exp-desc">
+                        Koordynacja floty 80 aut w systemie Amazon, monitorowanie wydajności operacyjnej oraz rozwiązywanie krytycznych problemów logistycznych.
+                    </div>
+                </div>
+
+                <div class="exp-item">
+                    <span class="exp-date">07.2022 - 09.2022 (Projekt)</span>
+                    <span class="exp-title">Spedytor Międzynarodowy</span>
+                    <span class="exp-company">AW Polska Logistyka Sp. z o.o.</span>
+                    <div class="exp-desc">
+                        Krótkoterminowy projekt skoncentrowany na intensywnej obsłudze giełd transportowych i optymalizacji procesów spedycyjnych.
+                    </div>
+                </div>
+            </section>
+
+            <section class="cv-section">
+                <h2>Certyfikaty i Uprawnienia</h2>
+                <div class="cert-list">
+                    <div class="cert-item">
+                        <i class="fa-solid fa-certificate"></i>
+                        <div>
+                            <span class="cert-name">Obsługa specjalistycznego oprogramowania dla firm transportowych</span>
+                            <span class="cert-org">Marcos Bis | 2019</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fa-solid fa-certificate"></i>
+                        <div>
+                            <span class="cert-name">Podstawy Księgowości</span>
+                            <span class="cert-org">P&M Management Group | 2024</span>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <i class="fa-solid fa-certificate"></i>
+                        <div>
+                            <span class="cert-name">Świadectwo kwalifikacji AU.32 i AU.22</span>
+                            <span class="cert-org">Organizacja transportu i obsługa magazynu</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cv-section">
+                <h2>Edukacja</h2>
+                <div class="exp-item">
+                    <span class="exp-date">2025 - 2027</span>
+                    <span class="exp-title">Magister: Finanse i Rachunkowość</span>
+                    <span class="exp-company">Uniwersytet WSB Merito Chorzów</span>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-date">2021 - 2025</span>
+                    <span class="exp-title">Inżynier: Logistyka</span>
+                    <span class="exp-company">Akademia Górnośląska im. W. Korfantego</span>
+                </div>
+            </section>
+
+            <section style="font-size: 0.7rem; color: #999; margin-top: 80px; border-top: 1px solid #eee; padding-top: 20px;">
+                Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO).
+            </section>
+        </div>
+    </main>
+
+</body>
+</html>
