@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beratung & Umfassende Logistikdienste | M.KULCZYK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=24">
+    
+    <style>
+        /* Keine Unterstreichung im Logo */
+        .logo { text-decoration: none !important; color: inherit; }
+
+        /* Main layout fixes */
+        .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
+        .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
+        .nav-links li { display: inline-block !important; }
+        
+        /* Subpage style */
+        .page-header { padding: 120px 0 80px; background: #fff; border-bottom: 1px solid #eee; }
+        .page-title { font-family: 'Inter', sans-serif; font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; }
+        
+        .service-list-block { padding: 80px 0; }
+        .service-list-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 50px; }
+        
+        .custom-list { list-style: none; padding: 0; }
+        .custom-list li { position: relative; padding-left: 35px; margin-bottom: 25px; font-size: 1.05rem; }
+        .custom-list li i { position: absolute; left: 0; top: 5px; color: #e31e24; font-size: 1.2rem; }
+        .custom-list li strong { display: block; color: #13100e; margin-bottom: 5px; font-family: 'Inter', sans-serif; font-size: 1.15rem; }
+        .custom-list li p { color: #666; font-size: 0.95rem; margin: 0; line-height: 1.5; }
+
+        /* --- HIGHLIGHT EFFECT --- */
+        .highlight-title {
+            display: inline-block;
+            padding: 8px 20px;
+            background: transparent;
+            color: #13100e;
+            transition: all 0.3s ease-in-out;
+            cursor: default;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border-left: 4px solid #e31e24;
+        }
+
+        .highlight-title:hover {
+            background: #e31e24;
+            color: #ffffff !important;
+            border-left-color: #e31e24;
+            transform: translateX(5px);
+        }
+
+        /* --- CAPABILITIES CARDS --- */
+        .capabilities-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 20px !important; margin-top: 50px; }
+        .cap-card { background: #fff; border: 1px solid #eee; padding: 30px 20px; border-top: 4px solid #e31e24; transition: 0.3s; height: 100%; border-radius: 4px; }
+        .cap-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.08); transform: translateY(-5px); }
+        
+        .cap-card h4 { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 1.1rem; 
+            margin-bottom: 20px; 
+            color: #13100e; 
+            display: inline-block;
+            padding: 4px 10px;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .cap-card:hover h4 {
+            background: #e31e24;
+            color: #fff;
+        }
+
+        .cap-card i.red-icon { color: #e31e24 !important; font-size: 2.2rem; margin-bottom: 20px; display: block; }
+        .cap-items { list-style: none; padding: 0; }
+        .cap-items li { font-size: 0.85rem; color: #666; margin-bottom: 10px; padding-left: 15px; position: relative; line-height: 1.4; }
+        .cap-items li::before { content: "•"; color: #e31e24; font-weight: bold; position: absolute; left: 0; top: 0; }
+
+        /* FOOTER */
+        footer#kontakt { background-color: #13100e !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding: 60px 0 40px !important; }
+        footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
+        footer#kontakt h5 { color: #e31e24 !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1.5fr 1.2fr !important; gap: 40px; }
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin-bottom: 8px; }
+        .copy { font-size: 0.75rem; color: #666; margin: 0; }
+
+        /* Mobile responsiveness */
+        @media (max-width: 1200px) { .capabilities-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 992px) {
+            .service-list-grid, .grid-2 { grid-template-columns: 1fr; gap: 40px; }
+            .page-title { font-size: 2.8rem; }
+            .footer-grid { grid-template-columns: 1fr !important; }
+            .f-legal { align-items: flex-start; }
+            .iso-text { white-space: normal; text-align: left; }
+        }
+        @media (max-width: 600px) { .capabilities-grid { grid-template-columns: 1fr !important; } }
+    </style>
+</head>
+<body>
+
+    <div class="top-ticker">
+        <div class="container">
+            <span>DRINGENDER AUFTRAG? FAHRZEUG IN 2-5 STD. EU-WEIT EINSATZBEREIT</span>
+            <a href="de.html#kontakt" class="btn-sm">ANFRAGE SENDEN</a>
+        </div>
+    </div>
+
+    <header class="main-header" id="navbar">
+        <div class="container header-flex">
+            <a href="de.html" class="logo">M.KULCZYK</a>
+            <nav>
+                <ul class="nav-links">
+                    <li class="lang-switcher">
+                        <a href="doradztwo.html"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a>
+                        <a href="en-doradztwo.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
+                        <a href="de-doradztwo.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
+                    </li>
+                    <li><a href="de.html#onas">ÜBER MICH</a></li>
+                    <li><a href="de-doradztwo.html" style="color: #e31e24; font-weight: 700;">LEISTUNGEN</a></li>
+                    <li><a href="de-artykuly.html">ARTIKEL</a></li>
+                    <li><a href="de.html#kontakt" class="btn-cta">KONTAKT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container grid-2">
+                <div>
+                    <h2 class="badge">IHR PERSÖNLICHER ANSPRECHPARTNER</h2>
+                    <h1 class="page-title">Projektmanagement<br>& <span class="red-text">Beratung</span></h1>
+                    <p class="hero-lead">Logistik ist mehr als nur der Warentransport von A nach B. Es ist eine Strategie, die Ihrem Unternehmen einen Wettbewerbsvorteil verschafft.</p>
+                </div>
+                <div>
+                    <p style="font-size: 1.1rem; color: #444; line-height: 1.7;">
+                        Als unabhängiger Berater und Ihr persönlicher Logistikmanager (Single Point of Contact) übernehme ich die volle Verantwortung für die Optimierung Ihrer Lieferkette. Ich sorge für einen reibungslosen Warenfluss, Kostenreduzierung und Planungssicherheit.
+                        <br><br>
+                        <strong>Benötigen Sie einen Notfalleinsatz?</strong> Ich kann innerhalb von 30 Minuten europaweit einen dedizierten Transport sichern und organisieren.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-list-block bg-gray">
+            <div class="container">
+                <div class="section-head center">
+                    <h2 class="badge">EXPERTISE</h2>
+                    <h3 class="title-dark">Umfassendes Logistikmanagement</h3>
+                </div>
+                
+                <div class="service-list-grid">
+                    <div>
+                        <h4 class="highlight-title">Kernkompetenzen</h4>
+                        <ul class="custom-list">
+                            <li><i class="fa-solid fa-route"></i><strong>Spedition & Transportmanagement</strong><p>Umfassende Organisation von nationalen und internationalen Transporten, zugeschnitten auf die Spezifikationen der Ladung.</p></li>
+                            <li><i class="fa-solid fa-diagram-project"></i><strong>Spezialprojekte (Project Execution)</strong><p>Planung und Umsetzung von nicht standardisierten, komplexen Logistikprojekten.</p></li>
+                            <li><i class="fa-solid fa-warehouse"></i><strong>Lagerlogistik (Warehousing)</strong><p>Verwaltung von Lagerflächen, Umschlag und Kontraktlogistik.</p></li>
+                            <li><i class="fa-solid fa-file-signature"></i><strong>Zollabwicklung</strong><p>Volle Unterstützung und Durchführung von Zollverfahren im internationalen Handel.</p></li>
+                            <li><i class="fa-solid fa-lightbulb"></i><strong>Logistikberatung (Consulting)</strong><p>Prozess-Audits, Kostenoptimierung und Aufbau individueller Lieferketten.</p></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="highlight-title">360° Operative Unterstützung</h4>
+                        <ul class="custom-list">
+                            <li><i class="fa-solid fa-user-shield"></i><strong>Dedizierter Spediteur (SPOC)</strong><p>Sie haben einen kompetenten Partner für alle logistischen Angelegenheiten an Ihrer Seite.</p></li>
+                            <li><i class="fa-solid fa-clock"></i><strong>24/7 Erreichbarkeit</strong><p>Logistik schläft nie. Ich stehe Ihnen rund um die Uhr zur Verfügung und reagiere sofort.</p></li>
+                            <li><i class="fa-solid fa-file-contract"></i><strong>Zusätzliche CARGO-Versicherung</strong><p>Ausstellung einer dedizierten Transportversicherung für Ihre Fracht in nur 15 Minuten.</p></li>
+                            <li><i class="fa-solid fa-folder-open"></i><strong>Dokumentenmanagement & POD</strong><p>Reibungsloser Ablauf von Frachtdokumenten und blitzschnelle Bereitstellung von Liefernachweisen.</p></li>
+                            <li><i class="fa-solid fa-magnifying-glass-location"></i><strong>Real-Time Track & Trace</strong><p>Kontinuierliche Sendungsverfolgung und proaktive Updates zum Ausführungsstatus.</p></li>
+                            <li><i class="fa-solid fa-chart-pie"></i><strong>KPI-Reporting</strong><p>Ich liefere klare Daten und Statistiken zu Effizienz, Kosten und Pünktlichkeit Ihrer Lieferungen.</p></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-list-block" style="background: #fff;">
+            <div class="container">
+                <div class="section-head center">
+                    <h2 class="badge">MÖGLICHKEITEN</h2>
+                    <h3 class="title-dark">Ich transportiere fast alles</h3>
+                </div>
+
+                <div class="capabilities-grid">
+                    <div class="cap-card">
+                        <i class="fa-solid fa-truck-ramp-box red-icon"></i>
+                        <h4>Spezialtransporte</h4>
+                        <ul class="cap-items">
+                            <li>Gefahrgut (ADR)</li>
+                            <li>Übermaß- und Spezialtransporte</li>
+                            <li>Abfalltransport (BDO)</li>
+                            <li>Spezialtransport mit Kran (HIAB)</li>
+                            <li>Fahrzeugüberführung & Automotive</li>
+                        </ul>
+                    </div>
+
+                    <div class="cap-card">
+                        <i class="fa-solid fa-temperature-low red-icon"></i>
+                        <h4>Temperaturgeführt</h4>
+                        <ul class="cap-items">
+                            <li>Kühltransport (Isotherm / Kühlkoffer)</li>
+                            <li>Pharma und Medizintechnik (GDP-Standard)</li>
+                            <li>Transport von Tiefkühl- und verderblichen Waren</li>
+                            <li>Pflanzen, Blumen und Agrarprodukte</li>
+                            <li>Hochempfindliche Güter und Elektronik</li>
+                        </ul>
+                    </div>
+
+                    <div class="cap-card">
+                        <i class="fa-solid fa-industry red-icon"></i>
+                        <h4>Rohstoffe & Industrie</h4>
+                        <ul class="cap-items">
+                            <li>Stahl, Aluminium und Metallprodukte</li>
+                            <li>Holz und Baumaterialien</li>
+                            <li>Schüttgüter (Kipper, Silos)</li>
+                            <li>Produktionsmaschinenteile</li>
+                            <li>Komponenten für Windparks / EE</li>
+                        </ul>
+                    </div>
+
+                    <div class="cap-card">
+                        <i class="fa-solid fa-truck-fast red-icon"></i>
+                        <h4>Express-Lösungen</h4>
+                        <ul class="cap-items">
+                            <li>Zeitkritischer Transport (Time-Critical)</li>
+                            <li>Dedizierte Exklusivfahrzeuge</li>
+                            <li>Direkte Door-to-Door Lieferungen</li>
+                            <li>AOG-Service (Aviation on Ground)</li>
+                            <li>Komplette Firmenumzüge und Verlagerungen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="kontakt">
+        <div class="container footer-grid">
+            <div class="f-brand">
+                <a href="de.html" class="logo">M.KULCZYK</a>
+                <p>Strategischer Logistikpartner</p>
+                <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:mariusz200701@gmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+            <div class="f-contact">
+                <h5>Kontakt</h5>
+                <p>E-Mail: <strong>mariusz200701@gmail.com</strong></p>
+                <p>Telefon: <strong>+48 722 270 532</strong></p>
+            </div>
+            <div class="f-legal">
+                <span class="iso-text">Betriebsstandards basierend auf ISO- und GDP-Normen</span>
+                <p class="copy">© 2026 Mariusz Kulczyk. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onscroll = function() {
+            var navbar = document.getElementById("navbar");
+            if (navbar && window.pageYOffset > 50) {
+                navbar.classList.add("scrolled");
+            } else if (navbar) {
+                navbar.classList.remove("scrolled");
+            }
+        };
+    </script>
+</body>
+</html>
