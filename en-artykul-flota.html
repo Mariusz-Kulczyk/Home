@@ -13,6 +13,10 @@
         /* Max width layout */
         .article-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         
+        .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
+        .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
+        .nav-links li { display: inline-block !important; }
+
         /* Article hero */
         .article-hero { 
             padding: 160px 0 80px; 
@@ -110,8 +114,8 @@
                 <ul class="nav-links" style="display: flex; list-style: none; gap: 30px; align-items: center;">
                     <li class="lang-switcher">
                         <a href="artykul-flota.html"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a>
-                        <a href="#"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
-                        <a href="#"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
+                        <a href="en-artykul-flota.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
+                        <a href="de-artykul-flota.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
                     </li>
                     <li><a href="en.html#onas">ABOUT ME</a></li>
                     <li><a href="en-doradztwo.html">SERVICES</a></li>
@@ -343,45 +347,4 @@
         <section id="equipment">
             <h2 class="section-heading">4. Additional Equipment</h3>
             <div class="fleet-card" style="margin-bottom: 0;">
-                <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Organizing a freight does not end with ordering a vehicle. It is equally important to ensure it has the elements guaranteeing legal compliance and physical security of the property:</p>
-                <div class="spec-item">
-                    <ul style="padding-left: 20px; line-height: 1.8;">
-                        <li><strong>Pallet Box:</strong> A metal box suspended under the trailer. It stores clean Euro-format pallets, crucial in transport for retail chains with a strict policy of immediate 1-to-1 "pallet exchange" upon unloading.</li>
-                        <li><strong>Truck-Mounted Forklift (Moffett / Mule):</strong> Trucks equipped with their own small forklift attached to the rear. A brilliant tool for independent, final delivery of heavy batches of building materials, rolled turf, or fertilizers straight to the yards of retail customers and agricultural fields.</li>
-                        <li><strong>Lashing & Securing Straps:</strong> A full set of certified straps with tensioners (often 16-20 sets are required).</li>
-                        <li><strong>Anti-slip Mats:</strong> Pieces of compressed rubber placed under pallets, increasing the friction coefficient and drastically reducing inertial forces acting on the load during sudden braking or sharp turns.</li>
-                        <li><strong>ADR Equipment:</strong> Necessary rescue and protective gear, fire extinguishers, goggles, shovels, and sandbags required under the European agreement concerning the international carriage of dangerous goods by road.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <div class="article-footer">
-            <h2>Your logistics, my responsibility.</h2>
-            <p style="color: #aaa; margin: 20px auto 40px; font-size: 1.1rem; max-width: 700px; line-height: 1.6;">
-                Understanding the technical intricacies of the fleet is the key to success and cutting unnecessary expenses. Need consulting and pricing to select the equipment that will optimize your process? Reach out, and I will point you to a tailor-made solution.
-            </p>
-            <a href="en.html#kontakt" class="btn-cta" style="padding: 15px 30px; font-size: 1.1rem;">SEND CONSULTING INQUIRY</a>
-        </div>
-
-    </main>
-
-    <footer id="kontakt" style="background: #13100e; color: #fff; padding: 60px 0; border-top: 10px solid #e31e24; text-align: center;">
-        <div class="container">
-            <p style="margin-bottom: 15px; font-weight: 700;">Mariusz Kulczyk - Strategic Logistics Partner</p>
-            <p style="font-size: 0.85rem; color: #666;">© 2026 All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        window.onscroll = function() {
-            var navbar = document.getElementById("navbar");
-            if (window.pageYOffset > 50) {
-                navbar.classList.add("scrolled");
-            } else {
-                navbar.classList.remove("scrolled");
-            }
-        };
-    </script>
-</body>
-</html>
+                <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Organizing a freight does not end with ordering a vehicle. It is

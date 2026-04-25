@@ -10,10 +10,14 @@
     <style>
         .logo { text-decoration: none !important; color: inherit; font-weight: 900; }
         
-        /* Max width layout */
+        .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
+        .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
+        .nav-links li { display: inline-block !important; }
+
+        /* Layout szerokości - maksymalne wykorzystanie miejsca */
         .article-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         
-        /* Article hero */
+        /* Nagłówek artykułu - wyrównany */
         .article-hero { 
             padding: 160px 0 80px; 
             background: #fdfdfd; 
@@ -37,7 +41,7 @@
             line-height: 1.6;
         }
 
-        /* TOC - 2 columns */
+        /* Spis treści - rozciągnięty na 2 kolumny */
         .toc { 
             background: #f9f9f9; 
             padding: 40px; 
@@ -54,7 +58,7 @@
         .toc a { color: #333; text-decoration: none; font-weight: 600; transition: 0.2s; font-size: 1.05rem; }
         .toc a:hover { color: #e31e24; padding-left: 5px; }
 
-        /* Fleet cards - Grid */
+        /* Karty taboru - układ siatki dla oszczędności miejsca */
         .fleet-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px; }
         .fleet-card { 
             background: #fff; 
@@ -73,14 +77,14 @@
         .spec-item strong { color: #13100e; font-weight: 700; }
         .spec-item .red-label { color: #e31e24; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
 
-        /* GVW Table */
+        /* Tabela DMC */
         .gvw-table { width: 100%; border-collapse: collapse; margin: 40px 0; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
         .gvw-table th, .gvw-table td { padding: 20px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
         .gvw-table th { background: #13100e; color: #fff; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; border: none; }
         .gvw-table tr:last-child td { border-bottom: none; }
         .gvw-table tr:nth-child(even) { background: #fafafa; }
 
-        /* Article footer */
+        /* Stopka artykułu */
         .article-footer { 
             margin-top: 100px; 
             padding: 80px 40px; 
@@ -91,7 +95,7 @@
         }
         .article-footer h2 { font-family: 'Inter', sans-serif; font-size: 2.2rem; margin-bottom: 20px; }
 
-        /* Section Headings */
+        /* Nagłówki sekcji */
         .section-heading { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 900; margin: 80px 0 40px; border-left: 8px solid #e31e24; padding-left: 20px; color: #13100e; }
 
         @media (max-width: 992px) {
@@ -111,7 +115,7 @@
                     <li class="lang-switcher">
                         <a href="artykul-flota.html"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a>
                         <a href="en-artykul-flota.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
-                        <a href="#"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
+                        <a href="de-artykul-flota.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
                     </li>
                     <li><a href="de.html#onas">ÜBER MICH</a></li>
                     <li><a href="de-doradztwo.html">LEISTUNGEN</a></li>
@@ -258,7 +262,7 @@
             </div>
         </section>
 
-        <section id="gvw">
+        <section id="klasyfikacja-dmc">
             <h2 class="section-heading">2. zGG-Klassifizierung (zulässiges Gesamtgewicht)</h2>
             <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #444;">
                 Das zulässige Gesamtgewicht (zGG / GVW) ist das Gewicht des Fahrzeugs inklusive Ladung, Fahrgästen und Betriebsflüssigkeiten. In der Logistik bestimmt es nicht nur die Nutzlast, sondern auch, welche Verkehrsvorschriften, Mautgebühren (Toll Collect / Viatoll) und städtischen Einfahrtsbeschränkungen für das Fahrzeug gelten.
@@ -321,7 +325,7 @@
             </table>
         </section>
 
-        <section id="systems">
+        <section id="systemy">
             <h2 class="section-heading">3. Lade- & Mechanische Systeme</h2>
             <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; color: #444;">Die Kenntnis verfügbarer technischer Erweiterungen ermöglicht es Spediteuren, erhebliche Wettbewerbsvorteile zu erzielen, indem sie infrastrukturelle Mängel in Kundenlagern ausgleichen. Hier die wichtigsten Systeme:</p>
             
@@ -340,7 +344,7 @@
             </div>
         </section>
 
-        <section id="equipment">
+        <section id="wyposazenie">
             <h2 class="section-heading">4. Zusatzausstattung</h3>
             <div class="fleet-card" style="margin-bottom: 0;">
                 <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Die Organisation einer Fracht endet nicht mit der Bestellung eines Fahrzeugs. Es muss sichergestellt werden, dass es über Elemente verfügt, die die rechtliche Konformität und physische Sicherheit garantieren:</p>
