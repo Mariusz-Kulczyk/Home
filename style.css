@@ -1,7 +1,7 @@
 /* ZMIENNE I RESET */
 :root {
     --red: #e31e24;
-    --dark: #13100e;
+    --dark: #28221F; /* Tutaj zmieniłem z #13100e */
     --gray-bg: #f4f4f4;
     --white: #ffffff;
     --text: #1a1a1a;
