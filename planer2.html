@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Planner 3D | M.KULCZYK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=40">
+    
+    <style>
+        body { background-color: #f4f6f8; margin: 0; padding: 0; }
+        .logo { text-decoration: none !important; color: inherit; font-weight: 900; }
+        .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
+        .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
+        .nav-links li { display: inline-block !important; }
+
+        /* HEADER PAGE */
+        .page-header { padding: 100px 0 40px; background: #fff; text-align: center; border-bottom: 1px solid #eee; }
+        .page-title { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 900; margin-bottom: 15px; color: #13100e; }
+        .hero-lead { font-size: 1.1rem; color: #555; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+
+        /* PLANNER LAYOUT */
+        .planner-section { padding: 40px 0 80px; }
+        .planner-grid { display: grid; grid-template-columns: 380px 1fr; gap: 30px; align-items: start; }
+        
+        /* PANELS */
+        .panel { background: #fff; border-radius: 8px; border: 1px solid #eee; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 30px; }
+        .panel-title { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #13100e; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;}
+        .panel-title i { color: #e31e24; }
+
+        /* FORMS */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: #444; margin-bottom: 5px; text-transform: uppercase; }
+        .form-control, .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+        .form-row { display: flex; gap: 10px; }
+        .form-row .form-group { flex: 1; }
+        
+        .btn-primary { background: #e31e24; color: #fff; border: none; padding: 12px 20px; font-weight: 700; cursor: pointer; border-radius: 4px; transition: 0.3s; width: 100%; text-transform: uppercase; display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px;}
+        .btn-primary:hover { background: #c2181f; }
+        .btn-secondary { background: #13100e; color: #fff; border: none; padding: 6px 12px; font-weight: 600; cursor: pointer; border-radius: 4px; transition: 0.3s; font-size: 0.8rem; }
+        .btn-secondary:hover { background: #333; }
+        .btn-danger { background: #fff; color: #e31e24; border: 1px solid #e31e24; padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 0.8rem; font-weight: bold; }
+        .btn-danger:hover { background: #e31e24; color: #fff; }
+
+        .presets { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
+        .checkbox-row { background:#f9f9f9; padding:10px; border-radius:4px; display:flex; flex-direction: column; gap:10px; margin-bottom: 15px; border: 1px solid #eee;}
+        .checkbox-item { display:flex; align-items:center; gap:8px; cursor:pointer; }
+        .checkbox-item input { width:16px; height:16px; cursor:pointer; }
+        .checkbox-item label { margin:0; cursor:pointer; text-transform: none; font-size: 0.9rem; }
+        
+        /* DASHBOARD */
+        .metrics-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .metric-box { background: #13100e; color: #fff; padding: 15px; border-radius: 8px; text-align: center; position: relative; overflow: hidden; }
+        .metric-box::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #e31e24; }
+        .metric-box.error { background: #e31e24; }
+        .metric-box.error::before { background: #fff; }
+        .metric-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: #aaa; margin-bottom: 5px; }
+        .metric-value { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 900; }
+        
+        /* 3D ENGINE */
+        .view-toggles { display: flex; gap: 10px; margin-bottom: 15px; }
+        .view-btn { flex: 1; padding: 10px; text-align: center; background: #eee; font-weight: 700; cursor: pointer; border-radius: 4px; transition: 0.3s; color: #555; }
+        .view-btn.active { background: #13100e; color: #fff; }
+
+        .scene-3d-wrapper { width: 100%; height: 500px; background: #eee; border-radius: 8px; overflow: hidden; position: relative; cursor: grab; perspective: 2000px; display: none; align-items: center; justify-content: center; }
+        .scene-3d-wrapper.active { display: flex; }
+        .scene-3d-wrapper:active { cursor: grabbing; }
+
+        .trailer-3d { position: relative; transform-style: preserve-3d; }
+        .floor-3d { position: absolute; background: rgba(0,0,0,0.1); border: 2px solid #333; border-right: 4px dashed #e31e24; transform-style: preserve-3d; }
+        .cargo-3d-wrapper { position: absolute; transform-style: preserve-3d; }
+
+        /* KULOODPORNE BRYŁY 3D */
+        .cargo-3d { position: absolute; transform-style: preserve-3d; }
+        .face { position: absolute; box-sizing: border-box; border: 1px solid rgba(0,0,0,0.4); backface-visibility: hidden; }
+        .face-top { filter: brightness(1.15); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: bold; text-shadow: 1px 1px 1px #000; overflow: hidden; }
+        .face-bottom { filter: brightness(0.3); }
+        .face-front { filter: brightness(0.9); }
+        .face-back { filter: brightness(0.8); }
+        .face-left { filter: brightness(0.7); }
+        .face-right { filter: brightness(0.6); }
+
+        /* 2D */
+        .scene-2d { position: relative; width: 100%; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee; display: none; overflow-x: auto; }
+        .scene-2d.active { display: block; }
+        .trailer-bed-2d { position: relative; min-width: 800px; background: #e9ecef; border: 4px solid #333; border-right: 6px dashed #e31e24; }
+        .cargo-item-2d { position: absolute; border: 1px solid rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.7rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.5); box-shadow: inset 0 0 10px rgba(0,0,0,0.2); }
+
+        /* TABLE */
+        .cargo-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .cargo-table th, .cargo-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .cargo-table th { background: #f9f9f9; font-weight: 700; }
+        .color-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+
+        /* OSTRZEŻENIA */
+        .alert { padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; font-weight: 600; }
+        .alert-error { background: #fde8e8; color: #c2181f; border: 1px solid #f5c6c6; display: block; }
+
+        /* CTA */
+        .planner-cta { background: #13100e; color: #fff; padding: 50px 30px; border-radius: 8px; margin-top: 40px; text-align: center; border-bottom: 5px solid #e31e24; }
+        .planner-cta h3 { font-size: 2.2rem; margin-bottom: 15px; font-family: 'Inter', sans-serif; }
+        .planner-cta p { color: #aaa; margin-bottom: 30px; font-size: 1.1rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .btn-cta-primary { background: #e31e24; color: #fff; text-decoration: none; padding: 15px 30px; border-radius: 4px; font-weight: 900; text-transform: uppercase; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; margin: 10px; }
+        .btn-cta-primary:hover { background: #c2181f; transform: translateY(-3px); }
+        
+        #custom-vehicle-fields { display: none; background: #f9f9f9; padding: 15px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #eee; }
+
+        @media (max-width: 1200px) { .planner-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="main-header" id="navbar">
+        <div class="container header-flex" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
+            <a href="index.html" class="logo" style="font-size: 1.5rem;">M.KULCZYK</a>
+            <nav>
+                <ul class="nav-links" style="display: flex; list-style: none; gap: 30px; align-items: center;">
+                    <li class="lang-switcher">
+                        <a href="planer2.html"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a>
+                        <a href="en-planer2.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
+                        <a href="de-planer2.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
+                    </li>
+                    <li><a href="index.html#onas">O MNIE</a></li>
+                    <li><a href="doradztwo.html">USŁUGI</a></li>
+                    <li><a href="artykuly.html">ARTYKUŁY</a></li>
+                    <li><a href="planer2.html" style="color: #e31e24; font-weight: 700;">PLANER</a></li>
+                    <li><a href="index.html#kontakt" class="btn-cta">KONTAKT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2 class="badge">INTELIGENTNA OPTYMALIZACJA FTL</h2>
+                <h1 class="page-title">Load Planner 3D & <span class="red-text">Analiza LDM</span></h1>
+                <p class="hero-lead">Zaprojektuj swój załadunek z dokładnością co do centymetra. Algorytm automatycznie obraca palety, sztapluje towar i minimalizuje zajęte metry ładowne, dając Ci gotowy manifest przewozowy.</p>
+            </div>
+        </section>
+
+        <section class="planner-section">
+            <div class="container planner-grid">
+                
+                <div>
+                    <div class="panel">
+                        <h3 class="panel-title"><i class="fa-solid fa-truck"></i> Wybierz Pojazd</h3>
+                        <div class="form-group">
+                            <select id="vehicle-type" class="form-select" onchange="changeVehicle()">
+                                <option value="van42">Van 8 EP (4.2m x 2.2m x 2.2m | 1.2t)</option>
+                                <option value="van48">Van 10 EP (4.8m x 2.2m x 2.2m | 1.2t)</option>
+                                <option value="sol75">Solówka 7.5t (6.2m x 2.45m x 2.4m | 3.0t)</option>
+                                <option value="sol12">Solówka 12t (7.2m x 2.45m x 2.4m | 5.5t)</option>
+                                <option value="sol18">Solówka 18t (8.5m x 2.45m x 2.5m | 9.0t)</option>
+                                <option value="sol26">Solówka 26t (9.6m x 2.45m x 2.5m | 14.0t)</option>
+                                <option value="semi" selected>Naczepa 13.6 (13.6m x 2.45m x 2.75m | 24.0t)</option>
+                                <option value="custom">-- Własne wymiary... --</option>
+                            </select>
+                        </div>
+                        <div id="custom-vehicle-fields">
+                            <div class="form-row">
+                                <div class="form-group"><label>Dł. (cm)</label><input type="number" id="v-len" class="form-control" value="1360" max="2500"></div>
+                                <div class="form-group"><label>Szer. (cm)</label><input type="number" id="v-wid" class="form-control" value="245" max="400"></div>
+                                <div class="form-group"><label>Wys. (cm)</label><input type="number" id="v-hei" class="form-control" value="275" max="400"></div>
+                            </div>
+                            <div class="form-group"><label>Max Waga (kg)</label><input type="number" id="v-weight" class="form-control" value="24000"></div>
+                            <button class="btn-secondary" style="width:100%" onclick="applyCustomVehicle()">Zastosuj parametry</button>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3 class="panel-title"><i class="fa-solid fa-box-open"></i> Parametry Ładunku</h3>
+                        <div class="presets">
+                            <button class="btn-secondary" onclick="setPreset('euro')">Euro</button>
+                            <button class="btn-secondary" onclick="setPreset('fin')">FIN</button>
+                            <button class="btn-secondary" onclick="setPreset('ibc')">IBC</button>
+                            <button class="btn-secondary" onclick="setPreset('other')">Własne</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Nazwa towaru</label>
+                            <input type="text" id="c-name" class="form-control" placeholder="np. Palety Euro">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Dł. (cm)</label><input type="number" id="c-len" class="form-control" value="120"></div>
+                            <div class="form-group"><label>Szer. (cm)</label><input type="number" id="c-wid" class="form-control" value="80"></div>
+                            <div class="form-group"><label>Wys. (cm)</label><input type="number" id="c-hei" class="form-control" value="150"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Waga 1szt. (kg)</label><input type="number" id="c-weight" class="form-control" value="400"></div>
+                            <div class="form-group"><label>Ilość sztuk</label><input type="number" id="c-qty" class="form-control" value="1" min="1"></div>
+                        </div>
+                        
+                        <div class="checkbox-row">
+                            <div class="checkbox-item" onclick="document.getElementById('c-rotate').click()">
+                                <input type="checkbox" id="c-rotate" checked>
+                                <label><strong>Auto-Obrót:</strong> Dopasuj ułożenie by zminimalizować LDM</label>
+                            </div>
+                            <div class="checkbox-item" onclick="document.getElementById('c-stack').click()">
+                                <input type="checkbox" id="c-stack" checked>
+                                <label><strong>Piętrowanie:</strong> Zezwalaj na układanie w stos</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kolor na wizualizacji</label>
+                            <input type="color" id="c-color" class="form-control" value="#e31e24" style="height:40px; padding:2px;">
+                        </div>
+                        <button class="btn-primary" onclick="addCargoBatch()"><i class="fa-solid fa-plus"></i> Dodaj do pojazdu</button>
+                        <button class="btn-secondary" style="width:100%; margin-top:10px;" onclick="clearAll()"><i class="fa-solid fa-trash"></i> Wyczyść pojazd</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div id="capacity-alert" class="alert"></div>
+
+                    <div class="metrics-dashboard">
+                        <div class="metric-box" id="box-ldm">
+                            <div class="metric-title">Zajęte LDM</div>
+                            <div class="metric-value"><span id="val-ldm">0.00</span></div>
+                        </div>
+                        <div class="metric-box" id="box-weight">
+                            <div class="metric-title">Waga (t)</div>
+                            <div class="metric-value"><span id="val-weight">0.0</span></div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-title">Sztuki</div>
+                            <div class="metric-value"><span id="val-qty">0</span></div>
+                        </div>
+                        <div class="metric-box" style="background:#2b8a3e;" id="box-space">
+                            <div class="metric-title">Wolne LDM</div>
+                            <div class="metric-value"><span id="val-free">0.00</span></div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="view-toggles">
+                            <div class="view-btn active" id="btn-view-3d" onclick="switchView('3d')"><i class="fa-solid fa-cube"></i> Symulacja 3D</div>
+                            <div class="view-btn" id="btn-view-2d" onclick="switchView('2d')"><i class="fa-solid fa-layer-group"></i> Plan z góry (2D)</div>
+                        </div>
+
+                        <div class="scene-3d-wrapper active" id="scene-3d">
+                            <p style="position:absolute; top:10px; left:15px; font-size:0.8rem; color:#888; z-index:100; font-weight:700;"><i class="fa-solid fa-hand-pointer"></i> Przeciągnij myszką, aby obrócić kamerę</p>
+                            <div class="trailer-3d" id="trailer-3d-container">
+                                <div class="floor-3d" id="floor-3d"></div>
+                                <div class="cargo-3d-wrapper" id="cargo-3d-wrapper"></div>
+                            </div>
+                        </div>
+
+                        <div class="scene-2d" id="scene-2d">
+                            <div class="trailer-bed-2d" id="trailer-2d-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3 class="panel-title"><i class="fa-solid fa-clipboard-list"></i> Lista ładunków</h3>
+                        <table class="cargo-table">
+                            <thead><tr><th>Towar</th><th>Wymiary (LxWxH)</th><th>Ilość</th><th>Waga</th><th>Ułożenie</th><th>Akcja</th></tr></thead>
+                            <tbody id="cargo-list"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="planner-cta">
+                        <h3>Plan załadunku gotowy?</h3>
+                        <p>Przeslij plan mailowo a sprawdze dostepnosc pojadzow. Zawzyj wszytkie niezdebne informacje zaptyania.</p>
+                        <div class="btn-group">
+                            <a href="mailto:mariusz200701@gmail.com?subject=Wycena%20Frachtu%20-%20Z%20Planera" class="btn-cta-primary"><i class="fa-solid fa-envelope"></i> Wyślij zapytanie e-mail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="kontakt" style="background: #13100e; color: #fff; padding: 60px 0 40px; border-top: 10px solid #e31e24; text-align: center;">
+        <div class="container">
+            <p style="margin-bottom: 15px; font-weight: 700; font-size:1.2rem;">Mariusz Kulczyk - Strategic Logistics Partner</p>
+            <p style="margin-bottom: 5px;">E-mail: <strong>mariusz200701@gmail.com</strong></p>
+            <p style="font-size: 0.85rem; color: #666; margin-top:20px;">© 2026 Wszelkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+
+    <script>
+        const vehicles = {
+            'van42': { l: 420, w: 220, h: 220, mw: 1200 },
+            'van48': { l: 480, w: 220, h: 220, mw: 1200 },
+            'sol75': { l: 620, w: 245, h: 240, mw: 3000 },
+            'sol12': { l: 720, w: 245, h: 240, mw: 5500 },
+            'sol18': { l: 850, w: 245, h: 250, mw: 9000 },
+            'sol26': { l: 960, w: 245, h: 250, mw: 14000 },
+            'semi':  { l: 1360, w: 245, h: 275, mw: 24000 }
+        };
+
+        let currentVehicle = { ...vehicles['semi'] };
+        let batches = [];
+        let activeView = '3d';
+        let rotZ = -45, rotX = 60;
+
+        function setPreset(t) {
+            if(t==='euro') { v('c-len',120); v('c-wid',80); v('c-hei',150); v('c-name','Paleta Euro'); d('c-stack',true); d('c-rotate',true); v('c-color','#e31e24');}
+            if(t==='fin') { v('c-len',120); v('c-wid',100); v('c-hei',150); v('c-name','Paleta FIN'); d('c-stack',true); d('c-rotate',true); v('c-color','#1f5f99');}
+            if(t==='ibc') { v('c-len',120); v('c-wid',100); v('c-hei',120); v('c-name','Zbiornik IBC'); d('c-stack',false); d('c-rotate',true); v('c-color','#e67e22');}
+            if(t==='other') { v('c-len',100); v('c-wid',100); v('c-hei',100); v('c-name','Niestandardowe'); d('c-stack',false); d('c-rotate',false); v('c-color','#34495e');}
+        }
+        function v(id, val) { document.getElementById(id).value = val; }
+        function d(id, state) { document.getElementById(id).checked = state; }
+
+        function changeVehicle() {
+            let val = document.getElementById('vehicle-type').value;
+            if(val==='custom') document.getElementById('custom-vehicle-fields').style.display='block';
+            else { document.getElementById('custom-vehicle-fields').style.display='none'; currentVehicle = {...vehicles[val]}; recalculate(); }
+        }
+
+        function applyCustomVehicle() {
+            let l = parseInt(document.getElementById('v-len').value) || 0;
+            let w = parseInt(document.getElementById('v-wid').value) || 0;
+            let h = parseInt(document.getElementById('v-hei').value) || 0;
+            let mw = parseInt(document.getElementById('v-weight').value) || 0;
+            
+            if(l > 3000) l = 3000;
+            if(w > 500) w = 500;
+            if(h > 500) h = 500;
+
+            if(l>0 && w>0 && h>0 && mw>0) { currentVehicle = { l, w, h, mw }; recalculate(); }
+            else alert("Wprowadź poprawne parametry (powyżej zera).");
+        }
+
+        function switchView(v) {
+            activeView = v;
+            document.querySelectorAll('.view-btn, .scene-3d-wrapper, .scene-2d').forEach(el=>el.classList.remove('active'));
+            document.getElementById('btn-view-'+v).classList.add('active');
+            document.getElementById('scene-'+v).classList.add('active');
+            recalculate();
+        }
+
+        function addCargoBatch() {
+            let l = parseInt(document.getElementById('c-len').value);
+            let w = parseInt(document.getElementById('c-wid').value);
+            let h = parseInt(document.getElementById('c-hei').value);
+            let qty = parseInt(document.getElementById('c-qty').value);
+            
+            if(l<=0 || w<=0 || h<=0 || qty<=0) return alert("Podaj poprawne wymiary.");
+            
+            let minSide = Math.min(l, w);
+            if(minSide > currentVehicle.w || h > currentVehicle.h) {
+                return alert(`BŁĄD: Pojedynczy ładunek (${l}x${w}x${h} cm) przekracza światło ładowni pojazdu!`);
+            }
+
+            batches.push({
+                id: Date.now(),
+                name: document.getElementById('c-name').value || 'Towar',
+                l: l, w: w, h: h,
+                weight: parseInt(document.getElementById('c-weight').value),
+                qty: qty,
+                stackable: document.getElementById('c-stack').checked,
+                rotate: document.getElementById('c-rotate').checked,
+                color: document.getElementById('c-color').value
+            });
+            recalculate();
+        }
+
+        function clearAll() { batches = []; recalculate(); }
+        function removeBatch(id) { batches = batches.filter(b=>b.id!==id); recalculate(); }
+
+        // ALGORYTM PAKOWANIA Z INTELIGENTNYM OBROTEM
+        function recalculate() {
+            let placed = [];
+            let tx = 0, ty = 0, tz = 0;
+            let rowL = 0; 
+            let colW = 0;  
+            let tw=0, tq=0, loaded=0, over=false;
+            let curStackable = true;
+
+            for(let b of batches) {
+                for(let i=0; i<b.qty; i++) {
+                    tw += b.weight; tq++;
+                    
+                    let prefL, prefW, altL, altW;
+                    if (b.rotate) {
+                        // Cel: najkrótszy bok idzie na długość (X) by oszczędzać LDM
+                        if (b.l <= b.w) { prefL = b.l; prefW = b.w; altL = b.w; altW = b.l; } 
+                        else { prefL = b.w; prefW = b.l; altL = b.l; altW = b.w; }
+                    } else {
+                        prefL = b.l; prefW = b.w; altL = b.l; altW = b.w;
+                    }
+
+                    // Sortujemy opcje. Zawsze próbujemy najpierw ten wariant, który zajmuje mniej X.
+                    // Oczywiście, jeśli fizycznie mieści się w naczepie na szerokość!
+                    let opts = [ {l: prefL, w: prefW}, {l: altL, w: altW} ];
+                    opts = opts.filter(o => o.w <= currentVehicle.w);
+                    if(opts.length > 1 && opts[0].l === opts[1].l) opts.pop();
+
+                    let fit = false;
+
+                    // 1. Sztaplowanie (Oś Z)
+                    if (tz > 0 && curStackable && b.stackable) {
+                        for(let o of opts) {
+                            if (tz + b.h <= currentVehicle.h && o.w <= colW && o.l <= rowL) {
+                                placed.push({...b, l: o.l, w: o.w, x: tx, y: ty, z: tz});
+                                tz += b.h; loaded++; fit = true; break;
+                            }
+                        }
+                    }
+                    
+                    if (fit) continue;
+                    tz = 0; curStackable = b.stackable;
+
+                    // 2. Szukanie w aktualnym rzędzie (Oś Y)
+                    for(let o of opts) {
+                        if (ty + colW + o.w <= currentVehicle.w && tx + o.l <= currentVehicle.l) {
+                            ty += colW; colW = o.w;
+                            if (o.l > rowL) rowL = o.l;
+                            placed.push({...b, l: o.l, w: o.w, x: tx, y: ty, z: tz});
+                            tz += b.h; loaded++; fit = true; break;
+                        }
+                    }
+
+                    if (fit) continue;
+
+                    // 3. Nowy rząd (Oś X)
+                    for(let o of opts) {
+                        if (tx + rowL + o.l <= currentVehicle.l && o.w <= currentVehicle.w) {
+                            ty = 0; tx += rowL; rowL = o.l; colW = o.w;
+                            placed.push({...b, l: o.l, w: o.w, x: tx, y: ty, z: tz});
+                            tz += b.h; loaded++; fit = true; break;
+                        }
+                    }
+
+                    if (!fit) over = true;
+                }
+            }
+
+            let uLdm = (tx + rowL)/100;
+            if(uLdm > currentVehicle.l/100) uLdm = currentVehicle.l/100;
+            if(batches.length===0) uLdm=0;
+
+            document.getElementById('val-ldm').innerText = uLdm.toFixed(2);
+            document.getElementById('val-weight').innerText = (tw/1000).toFixed(1);
+            document.getElementById('val-qty').innerText = tq;
+            document.getElementById('val-free').innerText = Math.max(0, (currentVehicle.l/100) - uLdm).toFixed(2);
+
+            let al = document.getElementById('capacity-alert');
+            let bSpace = document.getElementById('box-space');
+            
+            bSpace.style.background = over ? '#e31e24' : '#2b8a3e';
+            al.style.display = 'none';
+
+            if(tw > currentVehicle.mw) {
+                al.style.display = 'block';
+                al.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> UWAGA! Przekroczono dopuszczalną wagę o ${tw - currentVehicle.mw} kg.`;
+                al.className = 'alert alert-error';
+            }
+            if(over) {
+                al.style.display = 'block';
+                al.innerHTML += `<br><i class="fa-solid fa-boxes-stacked"></i> Brak miejsca na podłodze. ${tq - loaded} szt. fizycznie nie weszło na auto.`;
+                al.className = 'alert alert-error';
+            }
+
+            updateTable();
+            if(activeView==='2d') render2D(placed); else render3D(placed);
+        }
+
+        function render2D(items) {
+            let c = document.getElementById('trailer-2d-container');
+            c.innerHTML = '';
+            c.style.aspectRatio = `${currentVehicle.l} / ${currentVehicle.w}`;
+            c.style.backgroundSize = `calc(100% / ${(currentVehicle.l/100)}) calc(100% / ${(currentVehicle.w/100)})`;
+
+            items.sort((a,b) => a.z - b.z).forEach(item => {
+                let d = document.createElement('div');
+                d.className = 'cargo-item-2d';
+                d.style.left = (item.x / currentVehicle.l * 100) + '%'; 
+                d.style.top = (item.y / currentVehicle.w * 100) + '%';
+                d.style.width = (item.l / currentVehicle.l * 100) + '%'; 
+                d.style.height = (item.w / currentVehicle.w * 100) + '%';
+                d.style.backgroundColor = item.color;
+                if(item.z > 0) d.style.boxShadow = "inset 0 0 0 2px rgba(255,255,255,0.5), 2px 2px 10px rgba(0,0,0,0.5)";
+                if(item.l > 40) d.innerText = `${item.l}x${item.w}`;
+                c.appendChild(d);
+            });
+        }
+
+        // PERFEKCYJNY SILNIK 3D (GEOMETRYCZNE CENTROWANIE)
+        function render3D(items) {
+            let s = 450 / currentVehicle.l;
+            let c = document.getElementById('trailer-3d-container');
+            let w_el = document.getElementById('cargo-3d-wrapper');
+            let f = document.getElementById('floor-3d');
+            w_el.innerHTML = '';
+            
+            c.style.transform = `rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${s})`;
+            
+            f.style.width = currentVehicle.l+'px'; f.style.height = currentVehicle.w+'px';
+            f.style.transform = `translate(-50%, -50%)`;
+            w_el.style.width = currentVehicle.l+'px'; w_el.style.height = currentVehicle.w+'px';
+            w_el.style.transform = `translate(-50%, -50%)`;
+
+            items.forEach(i => {
+                let box = document.createElement('div');
+                box.className = 'cargo-3d';
+                
+                // Ustawiamy kontener pudła dokładnie tam, gdzie pokazuje 2D
+                box.style.left = i.x + 'px';
+                box.style.top = i.y + 'px';
+                
+                // Środek geometryczny pudła
+                let cx = i.l / 2;
+                let cy = i.w / 2;
+                let cz = i.h / 2;
+
+                // Box ustawiony w X, Y. Musi zostać wyrzucony do góry na oś Z.
+                box.style.transform = `translate3d(${cx}px, ${cy}px, ${i.z + cz}px)`;
+
+                // Tworzenie każdej z 6 ścian z idealnego środka bryły (cx=0, cy=0, cz=0 względem boxa)
+                function createFace(fw, fh, rx, ry, rz, tz, cls) {
+                    let face = document.createElement('div');
+                    face.className = 'face ' + cls;
+                    face.style.width = fw + 'px';
+                    face.style.height = fh + 'px';
+                    // Centrowanie ściany w punkcie 0,0,0 boxa
+                    face.style.left = (-fw / 2) + 'px';
+                    face.style.top = (-fh / 2) + 'px';
+                    // Najpierw obracamy ścianę odpowiednio, potem wypychamy z centrum o wartość tz
+                    face.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) translateZ(${tz}px)`;
+                    face.style.backgroundColor = i.color;
+                    return face;
+                }
+
+                let top = createFace(i.l, i.w, 0, 0, 0, cz, 'face-top');
+                if(i.l > 60) top.innerText = `${i.l}x${i.w}`;
+                
+                box.appendChild(top);
+                box.appendChild(createFace(i.l, i.w, 180, 0, 0, cz, 'face-bottom')); // Dół
+                box.appendChild(createFace(i.l, i.h, -90, 0, 0, cy, 'face-front'));  // Przód (+Y)
+                box.appendChild(createFace(i.l, i.h, 90, 0, 0, cy, 'face-back'));    // Tył (-Y)
+                box.appendChild(createFace(i.w, i.h, 0, 90, -90, cx, 'face-right')); // Prawa (+X)
+                box.appendChild(createFace(i.w, i.h, 0, -90, 90, cx, 'face-left'));  // Lewa (-X)
+
+                w_el.appendChild(box);
+            });
+        }
+
+        function updateTable() {
+            let h = '';
+            batches.forEach(b => {
+                let rotateText = b.rotate ? "Auto" : "Zablok.";
+                let stackText = b.stackable ? '<span style="color:#2b8a3e;">Tak</span>' : '<span style="color:#e31e24;">Nie</span>';
+                h += `<tr><td><span class="color-dot" style="background:${b.color}"></span>${b.name}</td>
+                <td>${b.l}x${b.w}x${b.h} cm</td><td>${b.qty}</td><td>${b.weight*b.qty} kg</td>
+                <td>Obrót: ${rotateText} | Stos: ${stackText}</td>
+                <td><button class="btn-danger" onclick="removeBatch(${b.id})">Usuń</button></td></tr>`;
+            });
+            document.getElementById('cargo-list').innerHTML = h || '<tr><td colspan="6" style="text-align:center; color:#999;">Brak dodanych ładunków.</td></tr>';
+        }
+
+        let drag = false, px, py;
+        document.getElementById('scene-3d').onmousedown = (e) => { drag=true; px=e.clientX; py=e.clientY; };
+        window.onmouseup = () => drag=false;
+        window.onmousemove = (e) => {
+            if(!drag || activeView!=='3d') return;
+            rotZ += (e.clientX - px) * 0.5;
+            rotX -= (e.clientY - py) * 0.5;
+            rotX = Math.max(20, Math.min(85, rotX));
+            px=e.clientX; py=e.clientY;
+            render3D(batches);
+        };
+
+        recalculate();
+    </script>
+</body>
+</html>

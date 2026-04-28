@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaawansowane Narzędzia TSL | M.KULCZYK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=43">
+    
+    <style>
+        body { background-color: #f4f6f8; color: #13100e; }
+        .logo { text-decoration: none !important; color: inherit; font-weight: 900; }
+        .header-flex { display: flex !important; justify-content: space-between; align-items: center; padding: 20px 0; }
+        
+        .page-header { padding: 100px 0 40px; background: #fff; text-align: center; border-bottom: 1px solid #eee; }
+        .grid-tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 40px 0; }
+
+        /* Karta Narzędzia */
+        .t-card { background: #fff; border-radius: 8px; padding: 20px; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; }
+        .t-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-color: #e31e24; }
+        .t-card i { color: #e31e24; font-size: 1.5rem; margin-bottom: 15px; }
+        .t-card h3 { font-size: 1.1rem; margin-bottom: 10px; font-weight: 700; }
+        .t-card p { font-size: 0.85rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
+
+        /* Inputy i wyniki */
+        .t-input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .t-res { background: #f9f9f9; padding: 10px; border-radius: 4px; font-weight: 700; font-size: 0.9rem; color: #e31e24; min-height: 20px; margin-top: auto; border-left: 3px solid #13100e; }
+        
+        .btn-calc { background: #13100e; color: #fff; border: none; padding: 8px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: 700; margin-bottom: 10px; transition: 0.3s; }
+        .btn-calc:hover { background: #e31e24; }
+
+        @media (max-width: 768px) { .grid-tools { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="main-header" id="navbar">
+        <div class="container header-flex">
+            <a href="index.html" class="logo" style="font-size: 1.5rem;">M.KULCZYK</a>
+            <nav>
+                <ul class="nav-links" style="display: flex; list-style: none; gap: 20px;">
+                    <li><a href="index.html">START</a></li>
+                    <li><a href="narzedzia.html">NARZĘDZIA 1-10</a></li>
+                    <li><a href="narzedzia2.html" style="color:#e31e24">NARZĘDZIA 11-30</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <div class="container">
+            <h2 class="badge">EKSPERT TSL</h2>
+            <h1 class="page-title">Zestaw 20 Narzędzi <span class="red-text">Analitycznych</span></h1>
+            <p class="hero-lead">Kompletne wsparcie operacyjne dla spedytorów i logistyków.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid-tools">
+
+            <div class="t-card">
+                <i class="fa-solid fa-gas-pump"></i>
+                <h3>Kalkulator Paliwa</h3>
+                <p>Wylicz szacowany koszt paliwa na podstawie spalania i dystansu.</p>
+                <input type="number" id="c11-km" class="t-input" placeholder="Kilometry">
+                <input type="number" id="c11-avg" class="t-input" placeholder="Spalanie l/100km" value="30">
+                <input type="number" id="c11-price" class="t-input" placeholder="Cena za litr">
+                <button class="btn-calc" onclick="calc11()">Oblicz koszt</button>
+                <div id="res11" class="t-res">Wynik: ---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-plane-up"></i>
+                <h3>Waga Wolumetryczna AIR</h3>
+                <p>Standard IATA (1:6000). Przelicz wymiary na kg.</p>
+                <input type="number" id="c12-l" class="t-input" placeholder="Dł (cm)">
+                <input type="number" id="c12-w" class="t-input" placeholder="Szer (cm)">
+                <input type="number" id="c12-h" class="t-input" placeholder="Wys (cm)">
+                <button class="btn-calc" onclick="calc12()">Oblicz</button>
+                <div id="res12" class="t-res">kg wolumetryczne</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-arrows-left-right"></i>
+                <h3>CBM -> LDM</h3>
+                <p>Przybliżone przeliczenie objętości na metry ładowne.</p>
+                <input type="number" id="c13-cbm" class="t-input" placeholder="Objętość (m3)">
+                <button class="btn-calc" onclick="calc13()">Przelicz</button>
+                <div id="res13" class="t-res">LDM: ---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-calendar-days"></i>
+                <h3>Dni Robocze (Transit Time)</h3>
+                <p>Ile dni roboczych dzieli załadunek od rozładunku.</p>
+                <input type="date" id="c14-s" class="t-input">
+                <input type="date" id="c14-e" class="t-input">
+                <button class="btn-calc" onclick="calc14()">Licz dni</button>
+                <div id="res14" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Stawka za 1 km</h3>
+                <p>Szybka analiza rentowności frachtu.</p>
+                <input type="number" id="c15-p" class="t-input" placeholder="Kwota frachtu">
+                <input type="number" id="c15-k" class="t-input" placeholder="Całkowite km">
+                <button class="btn-calc" onclick="calc15()">Oblicz</button>
+                <div id="res15" class="t-res">--- / km</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-ship"></i>
+                <h3>Ładowność Kontenera</h3>
+                <p>Wybierz typ i sprawdź limity.</p>
+                <select id="c16-t" class="t-input">
+                    <option value="21800">20' Standard</option>
+                    <option value="26500">40' Standard</option>
+                    <option value="26300">40' HC</option>
+                </select>
+                <div id="res16" class="t-res">Max towar: 21800 kg</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-percent"></i>
+                <h3>Kalkulator Brutto (23%)</h3>
+                <p>Szybkie wyliczanie kwoty z podatkiem dla usług krajowych.</p>
+                <input type="number" id="c17-n" class="t-input" placeholder="Netto">
+                <button class="btn-calc" onclick="calc17()">Licz Brutto</button>
+                <div id="res17" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <h3>Kg <-> Lbs</h3>
+                <p>Szybka konwersja dla rynków UK/USA.</p>
+                <input type="number" id="c18-v" class="t-input" placeholder="Wartość">
+                <select id="c18-u" class="t-input">
+                    <option value="k">Kg na Lbs</option>
+                    <option value="l">Lbs na Kg</option>
+                </select>
+                <button class="btn-calc" onclick="calc18()">Konwertuj</button>
+                <div id="res18" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-bridge"></i>
+                <h3>Standardy Wysokości</h3>
+                <p>Sprawdź dopuszczalne wysokości w krajach.</p>
+                <select class="t-input" onchange="document.getElementById('res19').innerText = this.value">
+                    <option value="Standard UE: 4.00m">Polska</option>
+                    <option value="Brak limitu (zalecane 4.80m)">Wielka Brytania</option>
+                    <option value="Standard UE: 4.00m">Niemcy</option>
+                    <option value="Limit: 4.30m">Francja (niektóre trasy)</option>
+                </select>
+                <div id="res19" class="t-res">Standard UE: 4.00m</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-bed"></i>
+                <h3>Planer Czasu Jazdy</h3>
+                <p>Kiedy wypada następna pauza 45min?</p>
+                <input type="time" id="c20-t" class="t-input" value="08:00">
+                <button class="btn-calc" onclick="calc20()">Wylicz</button>
+                <div id="res20" class="t-res">Pauza o: ---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-cube"></i>
+                <h3>Gęstość (kg/m3)</h3>
+                <p>Sprawdź czy towar jest ciężki czy objętościowy.</p>
+                <input type="number" id="c21-w" class="t-input" placeholder="Waga kg">
+                <input type="number" id="c21-v" class="t-input" placeholder="Objętość m3">
+                <button class="btn-calc" onclick="calc21()">Oblicz</button>
+                <div id="res21" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-box-archive"></i>
+                <h3>Palety w 20' DV</h3>
+                <p>Ile Euro palet wejdzie do małego kontenera?</p>
+                <div id="res22" class="t-res" style="border:none">Odpowiedź: 11 Euro palet (podłogowo)</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-ruler-combined"></i>
+                <h3>Feet <-> Metry</h3>
+                <p>Dla transportu morskiego i kontenerów.</p>
+                <input type="number" id="c23-v" class="t-input" placeholder="Wartość">
+                <button class="btn-calc" onclick="calc23()">Licz</button>
+                <div id="res23" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <h3>Marża Spedytorska</h3>
+                <p>Wylicz zysk na zleceniu.</p>
+                <input type="number" id="c24-buy" class="t-input" placeholder="Kupno (przewoźnik)">
+                <input type="number" id="c24-sell" class="t-input" placeholder="Sprzedaż (klient)">
+                <button class="btn-calc" onclick="calc24()">Oblicz zysk</button>
+                <div id="res24" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-pallet"></i>
+                <h3>Paleta FIN (UK)</h3>
+                <p>Powierzchnia palety 120x100.</p>
+                <div id="res25" class="t-res">1.2 m2 | 0.5 LDM</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-road"></i>
+                <h3>Miles <-> KM</h3>
+                <p>Dla tras w UK i USA.</p>
+                <input type="number" id="c26-v" class="t-input">
+                <button class="btn-calc" onclick="calc26()">Przelicz</button>
+                <div id="res26" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3>Punkty ADR (1000 pkt)</h3>
+                <p>Uproszczony kalkulator zwolnienia 1.1.3.6.</p>
+                <input type="number" id="c27-v" class="t-input" placeholder="Ilość litrów/kg">
+                <select id="c27-cat" class="t-input">
+                    <option value="50">Kategoria 1 (x50)</option>
+                    <option value="3">Kategoria 2 (x3)</option>
+                    <option value="1">Kategoria 3 (x1)</option>
+                </select>
+                <button class="btn-calc" onclick="calc27()">Licz punkty</button>
+                <div id="res27" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+                <h3>Pojemność m3 (FTL)</h3>
+                <p>Standard 13.6 x 2.45 x 2.70</p>
+                <div id="res28" class="t-res">~ 90 m3</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+                <h3>Kiedy przelew?</h3>
+                <p>Wpisz datę dokumentów i termin.</p>
+                <input type="date" id="c29-d" class="t-input">
+                <input type="number" id="c29-t" class="t-input" placeholder="Dni (np. 45)">
+                <button class="btn-calc" onclick="calc29()">Sprawdź datę</button>
+                <div id="res29" class="t-res">---</div>
+            </div>
+
+            <div class="t-card">
+                <i class="fa-solid fa-gauge-high"></i>
+                <h3>Realna Prędkość</h3>
+                <p>Średnia z trasy z uwzględnieniem korków.</p>
+                <div id="res30" class="t-res">Autostrady: 72-78 km/h<br>Krajówki: 55-62 km/h</div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function calc11(){
+            let km = document.getElementById('c11-km').value;
+            let avg = document.getElementById('c11-avg').value;
+            let pr = document.getElementById('c11-price').value;
+            let res = (km/100) * avg * pr;
+            document.getElementById('res11').innerText = res.toFixed(2) + " PLN";
+        }
+        function calc12(){
+            let l = document.getElementById('c12-l').value;
+            let w = document.getElementById('c12-w').value;
+            let h = document.getElementById('c12-h').value;
+            let res = (l*w*h)/6000;
+            document.getElementById('res12').innerText = res.toFixed(2) + " kg";
+        }
+        function calc13(){
+            let cbm = document.getElementById('c13-cbm').value;
+            document.getElementById('res13').innerText = (cbm / 6.6).toFixed(2) + " LDM";
+        }
+        function calc14(){
+            let s = new Date(document.getElementById('c14-s').value);
+            let e = new Date(document.getElementById('c14-e').value);
+            let count = 0;
+            while(s < e){
+                s.setDate(s.getDate() + 1);
+                if(s.getDay() !== 0 && s.getDay() !== 6) count++;
+            }
+            document.getElementById('res14').innerText = count + " dni roboczych";
+        }
+        function calc15(){
+            let p = document.getElementById('c15-p').value;
+            let k = document.getElementById('c15-k').value;
+            document.getElementById('res15').innerText = (p/k).toFixed(2) + " / km";
+        }
+        function calc17(){
+            let n = document.getElementById('c17-n').value;
+            document.getElementById('res17').innerText = (n * 1.23).toFixed(2) + " PLN";
+        }
+        function calc18(){
+            let v = document.getElementById('c18-v').value;
+            let u = document.getElementById('c18-u').value;
+            if(u==='k') document.getElementById('res18').innerText = (v * 2.204).toFixed(2) + " Lbs";
+            else document.getElementById('res18').innerText = (v / 2.204).toFixed(2) + " Kg";
+        }
+        function calc20(){
+            let t = document.getElementById('c20-t').value;
+            let parts = t.split(':');
+            let date = new Date();
+            date.setHours(parseInt(parts[0]) + 4, parseInt(parts[1]) + 30);
+            document.getElementById('res20').innerText = "Pauza o: " + date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
+        }
+        function calc21(){
+            let w = document.getElementById('c21-w').value;
+            let v = document.getElementById('c21-v').value;
+            document.getElementById('res21').innerText = (w/v).toFixed(1) + " kg/m3";
+        }
+        function calc23(){
+            let v = document.getElementById('c23-v').value;
+            document.getElementById('res23').innerText = (v * 0.3048).toFixed(2) + " m";
+        }
+        function calc24(){
+            let b = document.getElementById('c24-buy').value;
+            let s = document.getElementById('c24-sell').value;
+            document.getElementById('res24').innerText = (s-b) + " (Marża: " + (((s-b)/s)*100).toFixed(1) + "%)";
+        }
+        function calc26(){
+            let v = document.getElementById('c26-v').value;
+            document.getElementById('res26').innerText = (v * 1.609).toFixed(2) + " KM";
+        }
+        function calc27(){
+            let v = document.getElementById('c27-v').value;
+            let m = document.getElementById('c27-cat').value;
+            document.getElementById('res27').innerText = (v * m) + " pkt";
+        }
+        function calc29(){
+            let d = new Date(document.getElementById('c29-d').value);
+            let t = parseInt(document.getElementById('c29-t').value);
+            d.setDate(d.getDate() + t);
+            document.getElementById('res29').innerText = d.toLocaleDateString();
+        }
+    </script>
+</body>
+</html>

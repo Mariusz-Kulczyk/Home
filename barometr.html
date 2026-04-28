@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barometr Transportowy Live | M.KULCZYK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --red: #e31e24; --yellow: #fbbc04; --green: #2b8a3e; --dark: #13100e; --gray: #f4f6f8; }
+        body { background-color: var(--gray); margin: 0; font-family: 'Inter', sans-serif; color: var(--dark); }
+        
+        /* HEADER */
+        .header-nav { background: #fff; padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: var(--dark); letter-spacing: -1px; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; font-weight: 600; font-size: 0.9rem; }
+        .nav-links a { text-decoration: none; color: var(--dark); transition: 0.3s; }
+        .nav-links a:hover { color: var(--red); }
+
+        /* LAYOUT */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .page-title { text-align: center; font-weight: 900; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 40px; line-height: 1.6; max-width: 900px; margin-left: auto; margin-right: auto; }
+
+        /* CENTROWANIE MAPY */
+        .map-section { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+        
+        .card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; width: 100%; box-sizing: border-box; }
+        .card h2 { margin-top: 0; font-size: 1.2rem; border-bottom: 2px solid var(--red); padding-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; }
+        
+        .map-wrapper { width: 100%; max-width: 1000px; margin: 0 auto; border-radius: 6px; overflow: hidden; background: #fff; }
+        .map-wrapper iframe { width: 100%; height: 600px; border: none; display: block; }
+
+        /* LEGENDA Z GRADIENETEM */
+        .legend-wrapper { width: 100%; max-width: 800px; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin: 0 auto; }
+        .legend-title { font-weight: 900; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 15px; text-align: center; }
+        .gradient-bar { width: 100%; height: 20px; background: linear-gradient(to right, var(--red), var(--yellow), var(--green)); border-radius: 4px; margin-bottom: 8px; }
+        .legend-labels { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #555; }
+        
+        /* INFO BOXES */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; margin-top: 20px; }
+        .info-box { background: var(--dark); color: #fff; padding: 20px; border-radius: 8px; font-size: 0.9rem; line-height: 1.6; }
+        .info-box i { color: var(--red); font-size: 1.5rem; margin-bottom: 10px; }
+        .info-box-title { font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+
+        @media (max-width: 900px) { 
+            .map-wrapper iframe { height: 400px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .legend-labels { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-nav">
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin:0 auto; padding:0;">
+            <a href="index.html" class="logo">M.KULCZYK <span style="color:var(--red)">LOGISTICS</span></a>
+            <ul class="nav-links">
+                <li><a href="planer2.html">Planer 3D</a></li>
+                <li><a href="generator.html">Zlecenia</a></li>
+                <li><a href="barometr.html" style="color: var(--red);">Barometr Live</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Barometr Podaży <span style="color:var(--red)">Ładunków</span></h1>
+        <p class="subtitle">Aktualny wskaźnik równowagi rynkowej. Dane pobierane bezpośrednio z systemu analitycznego Arkuszy Google, prezentujące stosunek dostępnego towaru do wolnych pojazdów.</p>
+
+        <div class="map-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-earth-europe"></i> Mapa Rynku Europejskiego</h2>
+                
+                <div class="map-wrapper">
+                    <iframe 
+                        seamless 
+                        frameborder="0" 
+                        scrolling="no" 
+                        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTqGj4ZlMq5no814Ws1oFwm5yuXbnNmZlSYootuLNPHbEYEyrziSBcs01YEkUIC1KX_dspRpGdayyxO/pubchart?oid=1990834288&amp;format=interactive">
+                    </iframe>
+                </div>
+
+                <div class="legend-wrapper">
+                    <div class="legend-title">Wskaźnik dostępności (Heatmap)</div>
+                    <div class="gradient-bar"></div>
+                    <div class="legend-labels">
+                        <span><i class="fa-solid fa-truck"></i> Nadmiar aut (Rynek trudny)</span>
+                        <span><i class="fa-solid fa-scale-balanced"></i> Równowaga</span>
+                        <span><i class="fa-solid fa-boxes-stacked"></i> Nadmiar ładunków (Rynek optymalny)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div class="info-box-title">Kolor Czerwony</div>
+                    Oznacza regiony, w których liczba dostępnych ciężarówek przewyższa liczbę ładunków. W tych krajach konkurencja o towar jest największa, co sprzyja negocjacjom niskich stawek.
+                </div>
+                <div class="info-box" style="background: #fff; color: var(--dark); border: 1px solid #eee;">
+                    <i class="fa-solid fa-chart-line" style="color: var(--green);"></i>
+                    <div class="info-box-title">Kolor Zielony</div>
+                    Wskazuje na dużą podaż ładunków przy małej ilości wolnych aut. To idealne warunki dla przewoźników i czas, w którym dostępność pojazdów "od ręki" jest ograniczona.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
