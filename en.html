@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.KULCZYK | Strategic Logistics Partner | Freight Forwarding & Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=29">
+    
+    <style>
+        /* No underline in logo */
+        .logo { text-decoration: none !important; color: inherit; }
+
+        .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
+        .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
+        .nav-links li { display: inline-block !important; }
+        
+        /* SERVICES & ADVISOR BANNER */
+        .services-extrego { padding-bottom: 0 !important; }
+        
+        .advisor-banner { 
+            margin-top: 40px !important; 
+            margin-bottom: 0 !important; 
+            padding-bottom: 60px !important; 
+            border-bottom: none !important;
+        }
+
+        /* FLEET SECTION */
+        .fleet-dark { 
+            padding: 80px 0 !important; 
+            margin-top: 0 !important;
+        }
+        .fleet-dark .title-light { margin-bottom: 20px !important; }
+        .quality-list { margin-top: 25px !important; }
+
+        /* SECTORS GRID - 6 PER ROW */
+        .sectors-grid { 
+            display: grid !important; 
+            grid-template-columns: repeat(6, 1fr) !important; 
+            gap: 15px !important; 
+        }
+        .sector-item { padding: 25px 10px !important; }
+        .sector-item h5 { font-size: 0.85rem !important; }
+
+        /* Footer */
+        footer#kontakt { background-color: #13100E !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding-bottom: 50px !important; }
+        footer#kontakt p, footer#kontakt a, footer#kontakt span { color: #aaaaaa !important; text-decoration: none; }
+        footer#kontakt a:hover { color: #e31e24 !important; }
+        footer#kontakt h5 { color: #e31e24 !important; }
+        
+        .footer-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr !important; gap: 40px !important; align-items: stretch; }
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 10px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; text-align: right; white-space: nowrap; }
+
+        @media (max-width: 992px) {
+            .footer-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+            .f-legal { align-items: flex-start; justify-content: flex-start; }
+            .iso-text { text-align: left !important; white-space: normal; }
+            .sectors-grid { grid-template-columns: repeat(3, 1fr) !important; }
+            .advisor-banner { margin-top: 30px !important; }
+        }
+        @media (max-width: 768px) {
+            .sectors-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-ticker">
+        <div class="container">
+            <span>URGENT REQUEST? VEHICLE READY IN 2-5H ACROSS THE EU</span>
+            <a href="#kontakt" class="btn-sm">SEND INQUIRY</a>
+        </div>
+    </div>
+
+    <header class="main-header" id="navbar">
+        <div class="container header-flex">
+            <a href="en.html" class="logo">M.KULCZYK</a>
+            <nav>
+                <ul class="nav-links">
+                    <li class="lang-switcher">
+                        <a href="index.html"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a>
+                        <a href="en.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
+                        <a href="de.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
+                    </li>
+                    <li><a href="#onas">ABOUT ME</a></li>
+                    <li><a href="#uslugi">SERVICES</a></li>
+                    <li><a href="#sektory">SECTORS</a></li>
+                    <li><a href="en-artykuly.html">ARTICLES</a></li>
+                    <li><a href="#kontakt" class="btn-cta">CONTACT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-personal" id="onas">
+            <div class="container grid-2">
+                <div class="hero-text">
+                    <h1 class="hero-title">Your Freight<br><span class="red-text">Our Priority</span></h1>
+                    
+                    <p class="hero-lead">For 7 years, I have been proving that modern freight forwarding is not just about transport, but above all about partnership based on data. Your logistics is my responsibility.</p>
+                    <div class="hero-stats-mini">
+                        <div class="mini-stat"><strong>4500+</strong> <span>shipments</span></div>
+                        <div class="mini-stat"><strong>1000+</strong> <span>trusted clients</span></div>
+                        <div class="mini-stat"><strong>1.9M+</strong> <span>kilometers driven</span></div>
+                        <div class="mini-stat"><strong>7</strong> <span>years of exp</span></div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80" alt="Mariusz Kulczyk">
+                </div>
+            </div>
+        </section>
+
+        <section id="uslugi" class="services-extrego">
+            <div class="container">
+                <div class="section-head center">
+                    <h2 class="badge">SERVICES</h2>
+                    <h3 class="title-dark">Forwarding & Logistics Consulting</h3>
+                </div>
+                <div class="services-grid">
+                    <div class="s-card">
+                        <i class="fa-solid fa-bolt icon-red"></i>
+                        <h4>EXPRESS TRANSPORT</h4>
+                        <p>Dedicated solutions for cargo where every minute counts. Rapid vehicle placement. 24/7 service.</p>
+                    </div>
+                    <div class="s-card">
+                        <i class="fa-solid fa-truck-ramp-box icon-red"></i>
+                        <h4>FULL TRUCKLOAD (FTL)</h4>
+                        <p>Comprehensive handling of FTL shipments across Europe while maintaining full cost control and the highest standards.</p>
+                    </div>
+                    <div class="s-card">
+                        <i class="fa-solid fa-biohazard icon-red"></i>
+                        <h4>ADR TRANSPORT</h4>
+                        <p>Transport of dangerous goods in accordance with strict safety standards and full documentation.</p>
+                    </div>
+                    <div class="s-card">
+                        <i class="fa-solid fa-snowflake icon-red"></i>
+                        <h4>COLD CHAIN / GDP</h4>
+                        <p>Transport of medicinal and food products under controlled temperatures. Guaranteed supply chain integrity.</p>
+                    </div>
+                </div>
+
+                <div class="advisor-banner">
+                    <div class="advisor-text">
+                        <h4>Looking for tailor-made solutions?</h4>
+                        <p>As an independent advisor and project organizer, I optimize supply chains. Click below to discover the complete cooperation model and check the full range of services.</p>
+                    </div>
+                    <a href="en-doradztwo.html" class="btn-cta">LEARN MORE</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="flota" class="fleet-dark">
+            <div class="container grid-2">
+                <div class="fleet-content">
+                    <h3 class="title-light">Our fleet knows no borders</h3>
+                    <p>Operating throughout all of Europe. I have access to over 600 verified transport units ready to go at any moment.</p>
+                    <ul class="quality-list">
+                        <li><i class="fa-solid fa-check"></i> 24/7 GPS Monitoring</li>
+                        <li><i class="fa-solid fa-check"></i> High availability</li>
+                        <li><i class="fa-solid fa-check"></i> All body types available</li>
+                        <li><i class="fa-solid fa-check"></i> Specialized equipment</li>
+                        <li><i class="fa-solid fa-check"></i> CARGO Insurance in 15 mins</li>
+                    </ul>
+                </div>
+                <div class="fleet-visual">
+                    <div class="fleet-card">
+                        <span class="f-num">01</span>
+                        <h5>Vans</h5>
+                        <p>GVW 3.5t - Ideal for urban and cross-border express deliveries.</p>
+                    </div>
+                    <div class="fleet-card">
+                        <span class="f-num">02</span>
+                        <h5>Rigid Trucks</h5>
+                        <p>GVW 7.5t, 12t, 18t and 26t - Flexible solutions with tail lifts, ideal for distribution.</p>
+                    </div>
+                    <div class="fleet-card">
+                        <span class="f-num">03</span>
+                        <h5>Semi-Trailers</h5>
+                        <p>GVW up to 40t - Full truckload and oversized shipments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sektory" class="sectors-section">
+            <div class="container">
+                <div class="section-head center">
+                    <h2 class="badge">SECTORS</h2>
+                    <h3 class="title-dark">Industries that trust me</h3>
+                </div>
+                <div class="sectors-grid">
+                    <div class="sector-item"><i class="fa-solid fa-car"></i><h5>Automotive</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-microchip"></i><h5>High-Tech / Electronics</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-plane"></i><h5>Aviation (AOG)</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-helmet-safety"></i><h5>Construction</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-shield-halved"></i><h5>High-Value Goods</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-industry"></i><h5>Manufacturing</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-cart-shopping"></i><h5>FMCG</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-shirt"></i><h5>Fashion & Luxury</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-couch"></i><h5>Furniture Industry</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-bolt"></i><h5>Energy & RES</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-tractor"></i><h5>Agriculture</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-flask"></i><h5>Chemical Industry</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-box-open"></i><h5>E-commerce</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-boxes-packing"></i><h5>Paper & Packaging</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-gears"></i><h5>Machinery & Service</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-cubes"></i><h5>Plastics</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-utensils"></i><h5>Food Industry</h5></div>
+                    <div class="sector-item"><i class="fa-solid fa-tent"></i><h5>Event Logistics</h5></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="kontakt">
+        <div class="container footer-grid">
+            <div class="f-brand">
+                <div class="logo">M.KULCZYK</div>
+                <p>Strategic Logistics Partner</p>
+                <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:mariusz200701@gmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+            <div class="f-contact">
+                <h5>Contact</h5>
+                <p>E-mail: <strong>mariusz200701@gmail.com</strong></p>
+                <p>Phone: <strong>+48 722 270 532</strong></p>
+            </div>
+            <div class="f-legal">
+                <span class="iso-text">Operational standards based on ISO and GDP norms</span>
+                <p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onscroll = function() {
+            var navbar = document.getElementById("navbar");
+            if (navbar && window.pageYOffset > 50) {
+                navbar.classList.add("scrolled");
+            } else if (navbar) {
+                navbar.classList.remove("scrolled");
+            }
+        };
+    </script>
+</body>
+</html>
