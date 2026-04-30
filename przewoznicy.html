@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oferta dla Przewoźników | M.KULCZYK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --red: #e31e24; --dark: #13100e; --gray: #f4f6f8; --border: #e0e4e8; --green: #2b8a3e; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--gray); margin: 0; font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.6; }
+        
+        /* HEADER */
+        .header-nav { background: #fff; padding: 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: var(--dark); letter-spacing: -1px; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; font-weight: 600; font-size: 0.9rem; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--dark); transition: 0.3s; }
+        .nav-links a:hover { color: var(--red); }
+        .nav-links .btn-cta { background: var(--red); color: #fff; padding: 8px 18px; border-radius: 4px; text-transform: uppercase; font-weight: 900; }
+        .nav-links .btn-cta:hover { background: #c2181f; color: #fff; transform: translateY(-2px); }
+
+        /* LAYOUT & TYPOGRAPHY */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 60px 0; }
+        .section-title { font-weight: 900; font-size: 2.2rem; text-transform: uppercase; margin: 0 0 15px 0; text-align: center; }
+        .section-subtitle { color: #666; font-size: 1.1rem; text-align: center; max-width: 800px; margin: 0 auto 40px auto; }
+        
+        .text-red { color: var(--red); }
+
+        /* HERO */
+        .hero { background: var(--dark); color: #fff; text-align: center; padding: 80px 20px; }
+        .hero h1 { font-weight: 900; font-size: 3rem; margin-bottom: 20px; text-transform: uppercase; }
+        .hero p { font-size: 1.2rem; color: #ccc; max-width: 700px; margin: 0 auto; }
+
+        /* KORZYŚCI GRID - WYMUSZONE 4 W RZĘDZIE */
+        .benefits-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .benefit-card { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid var(--border); text-align: center; transition: 0.3s; }
+        .benefit-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--red); }
+        .benefit-card i { font-size: 2.5rem; color: var(--red); margin-bottom: 15px; }
+        .benefit-card h3 { font-size: 1.1rem; margin-bottom: 10px; font-weight: 700; }
+
+        /* PROCES WDROŻENIA */
+        .process-steps { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; position: relative; }
+        .step { flex: 1; text-align: center; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid var(--border); position: relative; z-index: 2; }
+        .step-number { width: 40px; height: 40px; background: var(--red); color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 1.2rem; margin: -40px auto 15px auto; border: 4px solid var(--gray); }
+        .step h4 { margin: 0 0 10px 0; font-size: 1rem; }
+        .step p { font-size: 0.85rem; color: #666; margin: 0; }
+        
+        /* MODELE WSPÓŁPRACY */
+        .models-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .model-card { background: #fff; padding: 40px 30px; border-radius: 8px; border: 1px solid var(--border); position: relative; display: flex; flex-direction: column; }
+        .model-card.recommended { border: 2px solid var(--red); box-shadow: 0 10px 30px rgba(227, 30, 36, 0.1); }
+        .badge-rec { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: 5px 20px; border-radius: 20px; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; }
+        .model-card h3 { font-size: 1.5rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .pros-cons { display: flex; gap: 20px; margin-top: auto; font-size: 0.9rem; padding-top: 20px; }
+        .pros-cons div { flex: 1; background: #f9f9f9; padding: 15px; border-radius: 6px; }
+        .pros-cons h5 { margin: 0 0 10px 0; display: flex; align-items: center; gap: 5px; }
+        .pros-cons .pros h5 { color: var(--green); }
+        .pros-cons .cons h5 { color: #d32f2f; }
+        
+        .rate-box { background: var(--gray); padding: 15px; border-radius: 6px; margin-top: 15px; border-left: 4px solid var(--dark); }
+        .rate-box strong { display: block; margin-bottom: 5px; color: var(--red); }
+        .rate-box span { display: block; font-size: 0.85rem; color: #555; }
+        
+        .global-note { background: #e3f2fd; color: #0d47a1; padding: 15px 20px; border-radius: 8px; text-align: center; margin-top: 30px; font-weight: 600; border: 1px solid #bbdefb; }
+
+        /* WYNIKI TABELA */
+        .res-group-title { font-size: 1.3rem; margin: 40px 0 20px 0; padding-left: 15px; border-left: 4px solid var(--red); text-transform: uppercase; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .res-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .res-header { background: var(--dark); color: #fff; padding: 15px; font-weight: 700; text-align: center; }
+        .res-body { padding: 0; }
+        .res-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .res-row:last-child { border-bottom: none; }
+        .res-year { font-weight: 900; color: var(--red); width: 50px; }
+        .res-data { text-align: right; }
+        .res-data span { display: block; color: #666; font-size: 0.8rem; }
+
+        /* FINANSE */
+        .info-box { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid var(--border); max-width: 800px; margin: 0 auto; }
+        .info-box h3 { margin-top: 0; color: var(--red); display: flex; align-items: center; gap: 10px; font-size: 1.5rem; justify-content: center; margin-bottom: 20px; }
+        .info-list { list-style: none; padding: 0; margin: 0; }
+        .info-list li { padding: 15px 0; border-bottom: 1px solid #eee; display: flex; align-items: flex-start; gap: 15px; }
+        .info-list li i { color: var(--green); margin-top: 4px; font-size: 1.2rem; }
+        .info-list li:last-child { border-bottom: none; }
+
+        /* CONTACT CTA */
+        .cta-section { background: var(--red); color: #fff; text-align: center; padding: 60px 20px; border-radius: 8px; margin: 60px auto; max-width: 1200px; }
+        .cta-section h2 { font-size: 2rem; font-weight: 900; margin-top: 0; }
+        .cta-section p { font-size: 1.1rem; margin-bottom: 30px; opacity: 0.9; }
+        .contact-details { display: inline-block; text-align: left; background: rgba(0,0,0,0.1); padding: 30px; border-radius: 8px; }
+        .contact-details p { margin: 5px 0; font-size: 1.1rem; }
+        .contact-details i { width: 25px; text-align: center; opacity: 0.8; }
+
+        @media (max-width: 900px) {
+            .benefits-grid { grid-template-columns: 1fr 1fr; }
+            .process-steps { flex-direction: column; gap: 40px; }
+            .step-number { margin: -10px auto 10px 0; position: absolute; top: -15px; left: -15px; }
+            .step { width: 100%; box-sizing: border-box; text-align: left; }
+            .models-grid { grid-template-columns: 1fr; }
+            .pros-cons { flex-direction: column; }
+        }
+        @media (max-width: 600px) {
+            .benefits-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-nav">
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:0;">
+            <a href="index.html" class="logo">M.KULCZYK <span class="text-red">LOGISTICS</span></a>
+            <ul class="nav-links">
+                <li><a href="planer2.html">Planer 3D</a></li>
+                <li><a href="barometr.html">Barometr Live</a></li>
+                <li><a href="przewoznicy.html" class="text-red">Dla Przewoźników</a></li>
+                <li><a href="#kontakt" class="btn-cta">Kontakt</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Wspólnie dążymy do celu</h1>
+            <p>Z przyjemnością przedstawiam ofertę współpracy skierowaną do przewoźników, którzy cenią stabilność, przejrzystość i nowoczesne zarządzanie flotą.</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title">Co <span class="text-red">zyskujesz</span>?</h2>
+        <p class="section-subtitle">Nasza oferta to nie tylko kilometry. Zapewniamy kompleksowy ekosystem wsparcia, który pomaga w efektywnym zarządzaniu flotą i bezstresowej realizacji zleceń.</p>
+
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                <h3>Przejrzystość w rozliczeniach</h3>
+                <p style="font-size: 0.9rem; color: #666;">Jasne zasady, brak ukrytych kosztów i czytelne raporty finansowe.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-user-tie"></i>
+                <h3>Doradca floty</h3>
+                <p style="font-size: 0.9rem; color: #666;">Analiza kosztów i optymalizacja tras dla lepszej rentowności.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-file-invoice"></i>
+                <h3>Wsparcie administracyjne</h3>
+                <p style="font-size: 0.9rem; color: #666;">Pomoc w dokumentacji, przeprawach i formalnościach drogowych.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-headset"></i>
+                <h3>Dedykowany spedytor</h3>
+                <p style="font-size: 0.9rem; color: #666;">Jeden punkt kontaktu. Osoba, która zna Twoje auta i preferencje.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: var(--gray);">
+        <div class="container">
+            <h2 class="section-title">Proces <span class="text-red">Wdrożenia</span></h2>
+            <p class="section-subtitle">Rozpoczęcie współpracy jest szybkie i wymaga minimum formalności.</p>
+
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Rejestracja</h4>
+                    <p>Przewoźnik wypełnia krótki formularz i przesyła niezbędne dokumenty firmowe.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Zatwierdzenie</h4>
+                    <p>Po weryfikacji dosłanie formularza pojazdu oraz zgłoszenie gotowości do wyjazdu.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Start</h4>
+                    <p>Dedykowany spedytor ma maksymalnie 2 dni robocze na wyprowadzenie auta w trasę.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title">Modele <span class="text-red">Współpracy</span></h2>
+        <p class="section-subtitle">Wybierz wariant, który najlepiej odpowiada strukturze kosztów w Twojej firmie.</p>
+
+        <div class="models-grid">
+            <!-- ZWYKŁA OFERTA -->
+            <div class="model-card">
+                <h3>Zwykła oferta</h3>
+                <p>Standardowa oferta, w której oferuję stałą stawkę za km od bazy do bazy i określam minimalną długość trasy w danym okresie. W przypadku nie spełnienia warunków zostaje dokonana nadpłata zgodnie z umową.</p>
+                
+                <div style="font-size: 0.85rem; color: #555; margin-bottom: 20px;">
+                    <strong>Standardy operacyjne:</strong> Dając gwarancję sumy operacyjnej, oczekuję rzetelnej realizacji zleceń oraz określonego systemu pracy.
+                </div>
+
+                <div class="rate-box">
+                    <strong>VAN C/S EU</strong>
+                    <span><strong>Dystans:</strong> Średnio 501 km dziennie • Min. 400 km dziennie</span>
+                    <span><strong>Stawka:</strong> od 0,60 EUR/km (od bazy do bazy)</span>
+                </div>
+                <div class="rate-box">
+                    <strong>Solo 7,5t EU</strong>
+                    <span><strong>Dystans:</strong> Średnio 457 km dziennie • Min. 380 km dziennie</span>
+                    <span><strong>Stawka:</strong> od 0,80 EUR/km</span>
+                </div>
+
+                <div style="font-size: 0.8rem; color: #888; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    * Obowiązują szczegółowe, pełne warunki współpracy dla tego modelu.
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5><i class="fa-solid fa-plus-circle"></i> Zalety</h5>
+                        Stała stawka<br>Gwarantowany przychód
+                    </div>
+                    <div class="cons">
+                        <h5><i class="fa-solid fa-minus-circle"></i> Wady</h5>
+                        Określone standardy operacyjne i systemowe<br>Mało rozbudowana interpretacja kosztów, jakie poniesiesz
+                    </div>
+                </div>
+            </div>
+
+            <!-- SPEDYTOR NA WYŁĄCZNOŚĆ -->
+            <div class="model-card recommended">
+                <div class="badge-rec">Zalecane</div>
+                <h3>Spedytor na wyłączność</h3>
+                <p>
+                    Jest to nowoczesny i mój najbardziej opracowany model współpracy. Jest dopasowany do profilu kosztów przewoźnika, co pozwala generować lepsze zyski.
+                    Model nie określa z góry sztywnej stawki za km – jeżeli chcesz poznać pełne wyniki, spójrz na zakładkę historii poniżej.
+                </p>
+                <p style="margin-top: 0;">
+                    Tutaj na wynik finansowy bardziej patrzymy przez pryzmat: <strong>koszty stałe + koszty trasy (km, toll, amortyzacja) + dodatkowe koszty + koszty miejsca końcowego (powrotu) + marża.</strong>
+                </p>
+                <p style="margin-top: 0;">
+                    System ten jest podobny do "spedytora na procent", ale tutaj realnie mam na celu osiągnięcie przez Ciebie optymalnego zysku netto, a nie tylko nabicie dużego, pustego obrotu.
+                </p>
+                
+                <div style="font-size: 0.85rem; color: #555; margin-bottom: 20px;">
+                    <strong>Elastyczny system pracy:</strong> To podejście jest znacznie bardziej elastyczne. Poza momentami, gdzie fizycznie trzeba dowieźć towar na określony czas, możemy ustalić np. dłuższe pauzy domowe, brak jazdy w nocy czy odrzucić wybrane kraje.
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5><i class="fa-solid fa-plus-circle"></i> Zalety</h5>
+                        Pełna elastyczność pracy<br>Realna maksymalizacja zysku netto<br>Partnerstwo operacyjne
+                    </div>
+                    <div class="cons">
+                        <h5><i class="fa-solid fa-minus-circle"></i> Wady</h5>
+                        Brak sztywnej stawki za kilometr<br>Większa dynamika przychodów
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="global-note">
+            <i class="fa-solid fa-circle-info"></i> Do powyższych modeli standardowo dochodzą dodatkowe koszty operacyjne, takie jak winiety, hotele, promy czy tunele.
+        </div>
+    </section>
+
+    <section style="background: var(--gray);">
+        <div class="container">
+            <h2 class="section-title">Historyczne <span class="text-red">Wyniki</span></h2>
+            <p class="section-subtitle">Realne uśrednione dane osiągnięte przez flotę w modelu "Spedytor na wyłączność".</p>
+
+            <h3 class="res-group-title">Vany Międzynarodowe</h3>
+            <div class="results-grid">
+                <div class="res-card">
+                    <div class="res-header">VAN C/S</div>
+                    <div class="res-body">
+                        <div class="res-row">
+                            <div class="res-year">2026</div>
+                            <div class="res-data"><strong>0,62 EUR/km</strong><span>Średnio 526 km</span></div>
+                        </div>
+                        <div class="res-row">
+                            <div class="res-year">2025</div>
+                            <div class="res-data"><strong>0,55 EUR/km</strong><span>Średnio 521 km</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="res-card">
+                    <div class="res-header">Van C/S (Wysoki/Szeroki)</div>
+                    <div class="res-body">
+                        <div class="res-row">
+                            <div class="res-year">2026</div>
+                            <div class="res-data"><strong>0,64 EUR/km</strong><span>Średnio 540 km</span></div>
+                        </div>
+                        <div class="res-row">
+                            <div class="res-year">2025</div>
+                            <div class="res-data"><strong>0,56 EUR/km</strong><span>Średnio 505 km</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="res-card">
+                    <div class="res-header">Van C/S 10 EP</div>
+                    <div class="res-body">
+                        <div class="res-row">
+                            <div class="res-year">2026</div>
+                            <div class="res-data"><strong>0,63 EUR/km</strong><span>Średnio 531 km</span></div>
+                        </div>
+                        <div class="res-row">
+                            <div class="res-year">2025</div>
+                            <div class="res-data"><strong>0,56 EUR/km</strong><span>Średnio 522 km</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="res-group-title">Vany Krajowe</h3>
+            <div class="results-grid">
+                <div class="res-card">
+                    <div class="res-header">Van C/S Krajówka</div>
+                    <div class="res-body">
+                        <div class="res-row">
+                            <div class="res-year">2026</div>
+                            <div class="res-data"><strong>1,92 PLN/km</strong><span>Dystans 488 km</span></div>
+                        </div>
+                        <div class="res-row">
+                            <div class="res-year">2025</div>
+                            <div class="res-data"><strong>1,85 PLN/km</strong><span>Dystans 501 km</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="res-group-title">Pojazdy Ciężarowe</h3>
+            <div class="results-grid">
+                <div class="res-card">
+                    <div class="res-header">Solo 7,5t</div>
+                    <div class="res-body">
+                        <div class="res-row">
+                            <div class="res-year">2026</div>
+                            <div class="res-data"><strong>0,85 EUR/km</strong><span>Średnio 475 km</span></div>
+                        </div>
+                        <div class="res-row">
+                            <div class="res-year">2025</div>
+                            <div class="res-data"><strong>0,80 EUR/km</strong><span>Średnio 488 km</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="res-card">
+                    <div class="res-header">Mega</div>
+                    <div class="res-body">
+                        <div class="res-row">
+                            <div class="res-year">2026</div>
+                            <div class="res-data"><strong>1,49 EUR/km</strong><span>Średnio 450 km</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="info-box">
+            <h3><i class="fa-solid fa-coins"></i> Warunki Finansowe</h3>
+            <ul class="info-list">
+                <li><i class="fa-solid fa-check"></i> <div><strong>Stawki "Pusto/Pełno"</strong><br><span style="font-size: 0.85rem; color:#666;">Płacimy za każdy przejechany kilometr w trakcie realizacji zlecenia.</span></div></li>
+                <li><i class="fa-solid fa-check"></i> <div><strong>Płatność Standardowa</strong><br><span style="font-size: 0.85rem; color:#666;">Po 30 dniach od otrzymania skanów dokumentów.</span></div></li>
+                <li><i class="fa-solid fa-bolt"></i> <div><strong>Skonto (Szybka płatność)</strong><br><span style="font-size: 0.85rem; color:#666;">Możliwość płatności w 3 dni potrącając 3% skonta.</span></div></li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="cta-section" id="kontakt">
+        <h2>Gotowy na współpracę?</h2>
+        <p>Zapraszam do kontaktu, aby omówić szczegóły i odpowiedzieć na wszelkie pytania.<br>Jestem gotowy, aby wspierać Państwa w każdym aspekcie działalności transportowej.</p>
+        
+        <div class="contact-details">
+            <p>Z poważaniem,</p>
+            <p style="font-weight: 900; font-size: 1.3rem; margin-top: 15px;">Mariusz Kulczyk</p>
+            <p style="font-size: 0.9rem; color: #fdfdfd; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Strategic Logistics Partner</p>
+            
+            <p><i class="fa-solid fa-envelope"></i> mariusz200701@gmail.com</p>
+            <p><i class="fa-solid fa-phone"></i> +48 000 000 000</p>
+        </div>
+    </div>
+
+</body>
+</html>
