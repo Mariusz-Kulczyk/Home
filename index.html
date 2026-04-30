@@ -47,20 +47,23 @@
         footer#kontakt { background-color: #13100E !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding-bottom: 50px !important; }
         footer#kontakt p, footer#kontakt a, footer#kontakt span { color: #aaaaaa !important; text-decoration: none; }
         footer#kontakt a:hover { color: #e31e24 !important; }
-        footer#kontakt h5 { color: #e31e24 !important; }
+        footer#kontakt h5 { color: #e31e24 !important; margin-bottom: 15px; }
         
-        .footer-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr !important; gap: 40px !important; align-items: stretch; }
+        /* Zmiana siatki z 3 na 4 kolumny w stopce */
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr !important; gap: 40px !important; align-items: stretch; }
         .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 10px; }
         .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; text-align: right; white-space: nowrap; }
+        .f-links p { margin: 5px 0; font-size: 0.9rem; }
 
         @media (max-width: 992px) {
-            .footer-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+            .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 30px !important; }
             .f-legal { align-items: flex-start; justify-content: flex-start; }
             .iso-text { text-align: left !important; white-space: normal; }
             .sectors-grid { grid-template-columns: repeat(3, 1fr) !important; }
             .advisor-banner { margin-top: 30px !important; }
         }
         @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
             .sectors-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
     </style>
@@ -226,11 +229,20 @@
                     <a href="mailto:mariusz200701@gmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
                 </div>
             </div>
+            
+            <div class="f-links">
+                <h5>Strefa Partnera</h5>
+                <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p>
+                <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p>
+                <p><a href="przewoznicy.html"><i class="fa-solid fa-truck-fast"></i> Oferta dla Przewoźników</a></p>
+            </div>
+
             <div class="f-contact">
                 <h5>Kontakt</h5>
                 <p>E-mail: <strong>mariusz200701@gmail.com</strong></p>
                 <p>Telefon: <strong>+48 722 270 532</strong></p>
             </div>
+
             <div class="f-legal">
                 <span class="iso-text">Standardy operacyjne oparte na normach ISO i GDP</span>
                 <p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p>
