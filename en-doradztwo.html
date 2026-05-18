@@ -83,9 +83,11 @@
         footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
         footer#kontakt h5 { color: #e31e24 !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
         .footer-grid { display: grid; grid-template-columns: 1fr 1.5fr 1.2fr !important; gap: 40px; }
-        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; }
-        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin-bottom: 8px; }
-        .copy { font-size: 0.75rem; color: #666; margin: 0; }
+        
+        /* Adjusted legal text formatting */
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 5px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin: 0; line-height: 1.2; display: block; }
+        .copy { font-size: 0.75rem; color: #666; margin: 0; line-height: 1.2; }
 
         /* Mobility */
         @media (max-width: 1200px) { .capabilities-grid { grid-template-columns: repeat(2, 1fr) !important; } }
@@ -245,15 +247,15 @@
                 <a href="en.html" class="logo">M.KULCZYK</a>
                 <p>Strategic Logistics Partner</p>
                 <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
-                    <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
                     <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
-                    <a href="mailto:mariusz200701@gmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
                 </div>
             </div>
             <div class="f-contact">
                 <h5>Contact</h5>
-                <p>E-mail: <strong>mariusz200701@gmail.com</strong></p>
-                <p>Phone: <strong>+48 722 270 532</strong></p>
+                <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
+                <p style="white-space: nowrap;">Phone: <strong>+48 722 270 532</strong></p>
             </div>
             <div class="f-legal">
                 <span class="iso-text">Operational standards based on ISO and GDP norms</span>

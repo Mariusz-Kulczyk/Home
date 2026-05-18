@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fahrzeugtypen & Technische Spezifikationen | M.KULCZYK</title>
+    <title>Fleet Types & Technical Specifications | M.KULCZYK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css?v=34">
     <style>
         .logo { text-decoration: none !important; color: inherit; font-weight: 900; }
         
+        /* Max width layout */
+        .article-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
         .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
         .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
         .nav-links li { display: inline-block !important; }
 
-        /* Layout szerokości - maksymalne wykorzystanie miejsca */
-        .article-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-        
-        /* Nagłówek artykułu - wyrównany */
+        /* Article hero */
         .article-hero { 
             padding: 160px 0 80px; 
             background: #fdfdfd; 
@@ -41,7 +41,7 @@
             line-height: 1.6;
         }
 
-        /* Spis treści - rozciągnięty na 2 kolumny */
+        /* TOC - 2 columns */
         .toc { 
             background: #f9f9f9; 
             padding: 40px; 
@@ -58,7 +58,7 @@
         .toc a { color: #333; text-decoration: none; font-weight: 600; transition: 0.2s; font-size: 1.05rem; }
         .toc a:hover { color: #e31e24; padding-left: 5px; }
 
-        /* Karty taboru - układ siatki dla oszczędności miejsca */
+        /* Fleet cards - Grid */
         .fleet-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px; }
         .fleet-card { 
             background: #fff; 
@@ -77,31 +77,37 @@
         .spec-item strong { color: #13100e; font-weight: 700; }
         .spec-item .red-label { color: #e31e24; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
 
-        /* Tabela DMC */
+        /* GVW Table */
         .gvw-table { width: 100%; border-collapse: collapse; margin: 40px 0; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
         .gvw-table th, .gvw-table td { padding: 20px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
         .gvw-table th { background: #13100e; color: #fff; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; border: none; }
         .gvw-table tr:last-child td { border-bottom: none; }
         .gvw-table tr:nth-child(even) { background: #fafafa; }
 
-        /* Stopka artykułu */
-        .article-footer { 
-            margin-top: 100px; 
-            padding: 80px 40px; 
-            background: #13100e; 
-            color: #fff; 
-            border-radius: 8px; 
-            text-align: center; 
-        }
-        .article-footer h2 { font-family: 'Inter', sans-serif; font-size: 2.2rem; margin-bottom: 20px; }
-
-        /* Nagłówki sekcji */
+        /* Section Headings */
         .section-heading { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 900; margin: 80px 0 40px; border-left: 8px solid #e31e24; padding-left: 20px; color: #13100e; }
+
+        /* FOOTER */
+        footer#kontakt { background-color: #13100e !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding: 60px 0 40px !important; }
+        footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
+        footer#kontakt a:hover { color: #e31e24 !important; }
+        footer#kontakt h5 { color: #e31e24 !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 1fr !important; gap: 30px; align-items: stretch; }
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 5px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin: 0; line-height: 1.2; display: block; }
+        .copy { font-size: 0.75rem; color: #666; margin: 0; line-height: 1.2; }
+        .f-links p { margin: 5px 0; font-size: 0.9rem; }
 
         @media (max-width: 992px) {
             .fleet-section, .toc { grid-template-columns: 1fr; }
             .article-hero h1 { font-size: 2.5rem; }
             .gvw-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 30px !important; }
+            .f-legal { align-items: flex-start; justify-content: flex-start; }
+            .iso-text { text-align: left !important; white-space: normal; }
+        }
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
@@ -109,7 +115,7 @@
 
     <header class="main-header" id="navbar">
         <div class="container header-flex" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
-            <a href="de.html" class="logo" style="font-size: 1.5rem;">M.KULCZYK</a>
+            <a href="en.html" class="logo" style="font-size: 1.5rem;">M.KULCZYK</a>
             <nav>
                 <ul class="nav-links" style="display: flex; list-style: none; gap: 30px; align-items: center;">
                     <li class="lang-switcher">
@@ -117,10 +123,10 @@
                         <a href="en-artykul-flota.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
                         <a href="de-artykul-flota.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
                     </li>
-                    <li><a href="de.html#onas">ÜBER MICH</a></li>
-                    <li><a href="de-doradztwo.html">LEISTUNGEN</a></li>
-                    <li><a href="de-artykuly.html" style="color: #e31e24; font-weight: 700;">ARTIKEL</a></li>
-                    <li><a href="de.html#kontakt" class="btn-cta">KONTAKT</a></li>
+                    <li><a href="en.html#onas">ABOUT ME</a></li>
+                    <li><a href="en-doradztwo.html">SERVICES</a></li>
+                    <li><a href="en-artykuly.html" style="color: #e31e24; font-weight: 700;">ARTICLES</a></li>
+                    <li><a href="en.html#kontakt" class="btn-cta">CONTACT</a></li>
                 </ul>
             </nav>
         </div>
@@ -128,261 +134,268 @@
 
     <section class="article-hero">
         <div class="container">
-            <h2 class="badge">TSL WISSENSKOMPENDIUM</h2>
-            <h1>Fahrzeugtypen & <span class="red-text">Technische Spezifikationen</span></h1>
-            <p class="hero-lead">Der folgende Artikel bietet einen umfassenden Überblick über die auf dem Markt verfügbare Transportflotte. Sie werden die strukturellen Unterschiede zwischen den Fahrzeugtypen verstehen und lernen, wie Sie die Ausrüstung optimal an Ihre Fracht anpassen, um Logistikkosten zu senken.</p>
+            <h2 class="badge">TSL KNOWLEDGE COMPENDIUM</h2>
+            <h1>Fleet Types & <span class="red-text">Technical Specifications</span></h1>
+            <p class="hero-lead">The following article provides a comprehensive overview of the transport fleet available on the market. You will understand the structural differences between vehicle types and learn how to properly match the equipment to the specifics of your cargo to optimize logistics costs.</p>
         </div>
     </section>
 
     <main class="article-container">
         
         <div class="toc">
-            <h2>Inhaltsverzeichnis:</h2>
+            <h2>Table of Contents:</h2>
             <ul>
-                <li><a href="#body-types">1. Aufbautypen (Body Types)</a></li>
-                <li><a href="#gvw">2. zGG-Klassifizierung (DMC/GVW)</a></li>
+                <li><a href="#body-types">1. Body Types</a></li>
+                <li><a href="#gvw">2. GVW Classification</a></li>
             </ul>
             <ul>
-                <li><a href="#systems">3. Lade- & Mechanische Systeme</a></li>
-                <li><a href="#equipment">4. Zusatzausstattung</a></li>
+                <li><a href="#systems">3. Loading & Mechanical Systems</a></li>
+                <li><a href="#equipment">4. Additional Equipment</a></li>
             </ul>
         </div>
 
         <section id="body-types">
-            <h2 class="section-heading">1. Aufbautypen</h2>
+            <h2 class="section-heading">1. Body Types</h2>
             
             <div class="fleet-section">
                 
                 <div class="fleet-card">
-                    <h3><span>01.</span> Tautliner (Schiebeplanenauflieger)</h3>
-                    <p class="spec-item">Das Rückgrat des europäischen Straßengüterverkehrs. Der Auflieger ist mit flexiblen Schiebeplanen aus verstärktem PVC ausgestattet, was die Flexibilität des Fahrzeugs maximiert.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Extreme Vielseitigkeit. Ermöglicht gleichzeitiges Beladen von beiden Seiten, von hinten und meist auch durch ein Schiebedach (für Kranbeladung). Höchste Verfügbarkeit auf dem Spotmarkt.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Das Schienensystem der Plane verringert die seitliche Durchladehöhe um ca. 5–10 cm im Vergleich zur Innenhöhe. Zudem ist die Plane anfällig für Diebstahlversuche ("Planenschlitzen").</div>
-                    <div class="spec-item"><span class="red-label">Standardbeladung:</span>Seite, Heck, Dach.</div>
+                    <h3><span>01.</span> Curtainsider</h3>
+                    <p class="spec-item">The cornerstone of European road transport. The trailer is equipped with flexible, sliding side curtains made of reinforced PVC tarpaulin, maximizing the vehicle's utility.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Extreme versatility. Allows simultaneous loading from both sides, the rear, and in most cases, through a sliding roof (for overhead cranes). It boasts the highest availability on the spot market.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>The curtain rail design reduces the side loading clearance by about 5–10 cm compared to the internal height. Additionally, the flexible tarpaulin is susceptible to theft attempts (so-called "tarpaulin slashing").</div>
+                    <div class="spec-item"><span class="red-label">Standard Loading:</span>Side, Rear, Top.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>02.</span> Standard-Plane (Pritschenanhänger)</h3>
-                    <p class="spec-item">Eine klassische Konstruktion, die langsam vom Tautliner abgelöst wird. Die Plane gleitet nicht auf Rollen, sondern wird manuell mit Ösen und Zollseil an starren Aluminium-Bordwänden befestigt.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Sehr solide Bordwandkonstruktion. Bietet hervorragende Ladungssicherung für Güter, die seitlichen Druck ausüben könnten (z. B. lose Big-Bags).</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Die Handhabung ist sehr arbeitsintensiv. Für eine Seitenbeladung muss der Fahrer die Plane komplett lösen, aufs Dach werfen sowie Rungen und Bordwände abmontieren, was die Ladezeiten drastisch verlängert.</div>
-                    <div class="spec-item"><span class="red-label">Verfügbarkeit:</span>Hoch (besonders beliebt auf Osteuropa-Routen).</div>
+                    <h3><span>02.</span> Standard Trailer (Drop-side)</h3>
+                    <p class="spec-item">A classic design that is slowly giving way to curtainsiders. The tarpaulin does not slide on rollers but is manually fastened to eyelets and a TIR cable around rigid aluminum sideboards.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Very solid sideboard construction. Ensures excellent stabilization for loads that might exert lateral pressure on the walls (e.g., loose big-bags).</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Handling is highly labor-intensive. To load goods from the side, the driver must completely unfasten the tarpaulin, throw it over the roof, and dismantle the stanchions and sideboards, drastically extending loading times at warehouses.</div>
+                    <div class="spec-item"><span class="red-label">Availability:</span>High (especially popular on Eastern routes).</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>03.</span> Megatrailer (Megaliner)</h3>
-                    <p class="spec-item">Ein spezieller Tautliner, der auf maximales Ladevolumen ausgelegt ist. Durch den Einsatz von "Low-Deck"-Sattelzugmaschinen (niedrige Sattelkupplung, Niederquerschnittsreifen) ist der Ladeboden abgesenkt.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Beeindruckende Innenhöhe von 3,00 Metern, was ein Ladevolumen von ca. 100 m³ ermöglicht. Unverzichtbar in der Automobilindustrie (erlaubt das Stapeln von Gitterboxen auf 3 Ebenen) sowie beim Transport von Dämmstoffen. Verfügt oft über ein Hubdach zum Beladen.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Die geringe Bodenfreiheit macht das Fahrzeug anfällig für Schäden auf unebenem Gelände, Baustellen oder schlechten Parkplätzen.</div>
+                    <h3><span>03.</span> Mega Trailer</h3>
+                    <p class="spec-item">A specialized curtainsider designed to maximize cargo volume. Thanks to the use of "low-deck" tractor units (low fifth wheel, low-profile tires), the trailer floor is lowered.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Impressive internal height reaching 3.00 meters, allowing for a volume of around 100 m³. Indispensable in the Automotive industry (allows stacking of gitterboxes on 3 levels) and in the transport of insulation materials and packaging. Often features a lifting roof for loading.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Very low ground clearance makes the combination prone to damage on uneven terrain, construction sites, or bumpy parking lots.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>04.</span> Jumbo-Gliederzug (Volumenzug)</h3>
-                    <p class="spec-item">Eine Konstruktion mit sogenanntem "Step-Deck" (gekröpftem Boden). Der vordere Bereich ist höher, während der Hauptladeboden maximal abgesenkt ist.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Der abgesenkte Boden bietet massiven Platz und überdurchschnittliche Innenhöhe (über 3 Meter), ohne die strengen europäischen Höhenvorgaben für Fahrzeuge (4,00 m) zu verletzen. Ideal für hohe Landmaschinen oder Tanks.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Die Stufe im Innenraum verhindert das Laden von sehr langen, starren Elementen. Erfordert geschickte Planung der Palettenverteilung.</div>
+                    <h3><span>04.</span> Jumbo (Step-deck / Road Train)</h3>
+                    <p class="spec-item">A design utilizing a "step-deck" floor. The front section (above the kingpin) is higher, while the main cargo deck is dropped as low as possible.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>The lowered deck offers massive space and above-standard internal height (over 3 meters) without violating strict European limits on maximum external vehicle height (4.00 m). Ideal for tall agricultural machinery or tanks.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>The internal step prevents the loading of very long, rigid elements that would rest on the edge. Requires clever planning of pallet distribution.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>05.</span> Kühlauflieger (Frigo)</h3>
-                    <p class="spec-item">Ein Aufbau mit harten, dicken und wärmeisolierten Wänden, der in ein professionelles Kühlaggregat (z. B. Thermo King, Carrier) integriert ist.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Ermöglicht strenge Temperaturkontrolle von Tiefkühlung (-25°C) bis Heizung (+25°C). Unverzichtbar für Pharma (GDP-Zertifikate) und frische Lebensmittel. Starre Wände eliminieren das Risiko von Planenschlitzen. In vielen EU-Ländern sind Lebensmitteltransporte von Wochenendfahrverboten befreit.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Das Aggregat und die dicken Wände erhöhen das Leergewicht (geringere Nutzlast von ca. 22-22,5t statt 24t). Die Innenbreite ist durch die Isolierung oft etwas geringer (meist 2,46m statt 2,48m).</div>
-                    <div class="spec-item"><span class="red-label">Beladung:</span>Ausschließlich von hinten (Hecktüren).</div>
+                    <h3><span>05.</span> Refrigerated Truck (Reefer)</h3>
+                    <p class="spec-item">A body with hard, thick, and thermally insulated walls, integrated with a professional cooling unit (e.g., Thermo King, Carrier).</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Allows rigorous temperature control of the cargo, from deep freezing (-25°C) to heating (+25°C). Essential for pharmaceuticals (GDP certificates) and fresh food. Rigid walls eliminate the risk of cargo slashing and theft. Additionally, in many European countries, food transports are exempt from weekend and holiday driving bans.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>The unit and thickened walls increase the vehicle's unladen weight (lower payload of around 22-22.5t instead of 24t). Due to insulation thickness, the internal width may be slightly narrower (usually 2.46m instead of 2.48m).</div>
+                    <div class="spec-item"><span class="red-label">Loading:</span>Rear only, via bumper and doors.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>06.</span> Kofferauflieger (Isotherm)</h3>
-                    <p class="spec-item">Ein geschlossener, starrer Auflieger ohne aktives Kühlsystem. Dient ausschließlich dem Schutz vor äußeren Witterungseinflüssen.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Höchste Frachtsicherheit. Bevorzugt von Technologieunternehmen (Transport von Elektronik) und der Modeindustrie (oft mit Kleiderstangen für Hängewaren ausgestattet). Perfekter Schutz vor Feuchtigkeit und Diebstahl.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Genau wie beim Frigo ist die Beladung nur von hinten möglich, was den seitlichen oder Kran-Umschlag langer Güter ausschließt. Hohes Eigengewicht.</div>
+                    <h3><span>06.</span> Box Trailer (Isotherm)</h3>
+                    <p class="spec-item">A closed, rigid trailer without an active cooling system. Serves exclusively to protect against external weather conditions.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Armor-like cargo security. This is the preferred choice of tech companies (electronics, appliances transport) and the fashion industry (often fitted with garment rails for hanging clothes). Protection against moisture and intruders.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Similar to a reefer, loading is only possible from the rear, which completely excludes handling long and heavy goods loaded by crane or from the side. High unladen weight limits maximum payload.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>07.</span> Tankauflieger</h3>
-                    <p class="spec-item">Spezialisierte zylindrische Einheiten für den Massentransport von Flüssigkeiten, wodurch Paletten oder IBC-Container (Mausers) überflüssig werden.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Konkurrenzlose Effizienz beim Transport von Kraftstoffen, Industriechemikalien oder – in speziell zertifizierten Lebensmitteltanks – Milch, flüssiger Schokolade oder Ölen.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Erfordert teure Zertifizierungen (oft ADR), spezielles Fahrpersonal und eine strenge, dokumentierte chemische Innenreinigung der Kammern nach absolut jedem Transport. Geringe Spot-Verfügbarkeit.</div>
+                    <h3><span>07.</span> Tanker</h3>
+                    <p class="spec-item">Specialized cylindrical units used for bulk transport of liquids, eliminating the need for pallets or IBC tanks (Mausers).</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Unrivaled efficiency in volumetric transport of liquids such as fuels, industrial chemicals, or – in the case of specially certified food tankers – milk, liquid chocolate, or oils.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Requires expensive certifications (often ADR), specific driver qualifications, and rigorous, documented chemical cleaning of the interior compartments after absolutely every transport performed. Low spot availability on freight exchanges.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>08.</span> Plateauauflieger (Offen)</h3>
-                    <p class="spec-item">Ein komplett offener Auflieger, ohne Wände, Dach oder Gestell. Eine reine Ladefläche.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Keine physischen Einschränkungen durch den "Kasten". Zwingend erforderlich für lange Stahlprofile, Betonfertigteile oder Industriemaschinen, die leicht über die Fahrzeugkontur hinausragen können. Meist mit starken Rungentaschen ausgestattet.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Die Ladung ist Witterungseinflüssen (Regen, Streusalz) direkt ausgesetzt. Erfordert meisterhafte Fähigkeiten in der Ladungssicherung mit zertifizierten Schwerlastketten und -gurten.</div>
+                    <h3><span>08.</span> Flatbed</h3>
+                    <p class="spec-item">A completely open trailer, devoid of walls, roof, or frame. A clean loading deck.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>No physical constraints resulting from the trailer's "box" skeleton. This is a strict requirement when transporting long steel profiles, concrete prefabricates, or industrial machines that may slightly protrude beyond the vehicle's outline. Usually equipped with heavy-duty securing sockets.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>The cargo is directly exposed to weather conditions (rain, road salt). Requires masterful lashing skills (cargo securing) using certified high-capacity chains and straps.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>09.</span> Tieflader</h3>
-                    <p class="spec-item">Auflieger mit extrem abgesenktem Hauptdeck, speziell für Schwermaschinenbau und übergroße Ladungen (OOG) konzipiert.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Extrem geringe Bodenfreiheit (oft 30-60 cm über dem Asphalt) und ein tiefer Schwerpunkt ermöglichen das Verladen massiver Bagger oder Transformatoren ohne Gefahr bei Brücken oder Überführungen. Verfügen über eigene hydraulische Rampen.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Verursacht sehr hohe Fixkosten. Aufgrund von Abmessungen und Gewicht fallen diese Transporte oft in die OOG-Kategorie (Sondertransporte) und erfordern behördliche Genehmigungen, Nachtfahrten und Begleitfahrzeuge (BF2/BF3).</div>
+                    <h3><span>09.</span> Lowbed</h3>
+                    <p class="spec-item">Trailers with an extremely lowered main deck, designed specifically for heavy engineering and oversized (OOG) cargo.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Extremely low ground clearance (often 30-60 cm above the asphalt) and a lowered center of gravity allow for loading massive combine harvesters, crawler excavators, and transformers without fear of hitting bridges or overpasses. Equipped with their own heavy-duty hydraulic ramps.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Operating such transports generates very high fixed costs. Due to cargo dimensions and trailer weight, these transports often fall into the OOG (Out of Gauge) category, requiring official permits, night driving, and escort (pilot) vehicles.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>10.</span> Pritsche mit Bordwänden</h3>
-                    <p class="spec-item">Ein Hybrid aus Plateau und klappbaren (meist Aluminium-) Bordwänden um die Ladefläche.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Die Bordwände verhindern physisch ein seitliches Verrutschen der Ladung. Ideal für den Transport von Hohlblocksteinen, PVC-Rohren, Gerüstelementen oder losem Material (mit Netz gesichert).</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Das zusätzliche Gewicht der Bordwände verringert die Nutzlast. Zudem schließt das fehlende Dach feuchtigkeitsempfindliche Fracht aus, es sei denn, der Fahrer deckt die Ware mühsam per Hand ab.</div>
+                    <h3><span>10.</span> Dropside</h3>
+                    <p class="spec-item">A hybrid of a flatbed with a system of foldable, mostly aluminum sideboards around the deck.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>The sideboards physically prevent lateral cargo shifting, making this trailer ideal for transporting pallets of hollow blocks, PVC pipes, scaffolding elements, or loose material secured with a net.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>The additional weight of the sideboard system lowers the available payload. Moreover, the lack of a tarpaulin excludes moisture-sensitive cargo, unless manual tarping by the driver is applied, which is cumbersome.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>11.</span> Autotransporter</h3>
-                    <p class="spec-item">Spezialisierte mehrstöckige Struktur, die ausschließlich für den Fahrzeugtransport konzipiert ist.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Dank eines komplexen Systems aus beweglichen, hydraulischen Decks kann er je nach Modell mehrere SUVs bis hin zu 9-10 kleineren PKWs gleichzeitig transportieren, was die Distributionskosten der Hersteller optimiert.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Starkes Nischenequipment. Industriepaletten können nicht transportiert werden, sodass Spediteure in diesem Segment in einem sehr geschlossenen Markt agieren.</div>
+                    <h3><span>11.</span> Car Transporter</h3>
+                    <p class="spec-item">Specialized multi-level structure designed exclusively for vehicle transport.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Thanks to a complex system of movable, hydraulic decks (ramps and traps), it can accommodate from a few SUVs to even 9-10 smaller passenger cars on a single run, optimizing distribution costs from factories to dealers.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>This is one-way and highly niche equipment. You cannot transport standard industrial pallets on a car transporter, meaning forwarders dealing in this market must operate in a very hermetic environment.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>12.</span> Kipper</h3>
-                    <p class="spec-item">Ein Auflieger in "Wannen"-Bauweise, integriert mit einem starken Teleskopzylinder, der die Vorderseite der Mulde anhebt, um die Ladung per Schwerkraft abzukippen.</p>
-                    <div class="spec-item"><span class="red-label">Anwendung (Aluminium):</span>Dank des geringen Eigengewichts dominieren Alu-Kipper den Volumentransport von leichten und mittelschweren Materialien: Getreide, landwirtschaftliche Erzeugnisse, Biomasse oder Düngemittelgranulat.</div>
-                    <div class="spec-item"><span class="red-label">Anwendung (Stahl):</span>Deutlich schwerer, aber extrem widerstandsfähig gegen Stöße und Verformungen. Unerlässlich auf Baustellen für den Transport von Kies, Bauschutt, Kohle und heißem Asphalt.</div>
+                    <h3><span>12.</span> Tipper / Dumper</h3>
+                    <p class="spec-item">A "bathtub" style trailer integrated with a powerful telescopic cylinder lifting the front of the box, allowing for gravity unloading.</p>
+                    <div class="spec-item"><span class="red-label">Application (Aluminum):</span>Due to their low unladen weight, aluminum tippers dominate the volumetric transport of light and medium-heavy materials: grains, agricultural produce, biomass, or fertilizer granules.</div>
+                    <div class="spec-item"><span class="red-label">Application (Steel):</span>Much heavier, but exceptionally resistant to impacts and deformation. Essential on construction sites for transporting gravel, demolition rubble, coal, and hot asphalt.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>13.</span> Wechselbrücke (BDF)</h3>
-                    <p class="spec-item">Ein System modularer Ladebehälter. Der LKW (meist Gliederzug) kann die Wechselbrücke auf ihren eigenen Stützbeinen abstellen.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Die Essenz der Logistikeffizienz ("Drop & Swap"). Der LKW fährt ans Verteilzentrum, stellt die volle Brücke ab, nimmt eine leere (oder bereits beladene) mit und fährt in 15 Minuten wieder los. Ein Konzept, das massiv von Paketdiensten und im kombinierten Verkehr (Schiene/Straße) genutzt wird.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Erfordert eine stark spezialisierte Flotte und Standardisierung zwischen den Partnern. Selten als "freier LKW" an öffentlichen Frachtenbörsen zu finden.</div>
+                    <h3><span>13.</span> Swap Body (BDF)</h3>
+                    <p class="spec-item">A system of modular cargo boxes. The truck (usually a rigid or tandem) can "drop" the cargo box directly onto its own support legs.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>The essence of logistics efficiency ("Drop & Swap"). The driver pulls up to a distribution center, detaches the full box (which will be slowly unloaded by warehouse staff), attaches an empty (or pre-loaded) box waiting nearby, and drives off in 15 minutes. A concept heavily utilized by courier companies and in intermodal transport (transfer to railway wagons).</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Requires a highly specialized, cohesive truck fleet and standardization among partners. Rarely found as a "free truck" on public freight exchanges.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>14.</span> Siloauflieger</h3>
-                    <p class="spec-item">Ein geschlossener, druckbeaufschlagter Metalltank für den Transport von Schüttgütern, Mehlen und Stäuben.</p>
-                    <div class="spec-item"><span class="red-label">Vorteile:</span>Schutz vor Feuchtigkeit (die z. B. Zement in Gestein verwandeln würde). Der größte Vorteil ist das Entladesystem: Starke Kompressoren "blasen" die Ware durch Rohre direkt in die Zielsilos in Fabriken oder auf Baustellen.</div>
-                    <div class="spec-item"><span class="red-label">Nachteile:</span>Begrenzter Pool an Spediteuren. Silos sind schwer gründlich zu reinigen (Kreuzkontaminationsrisiko, z. B. Mehl nach Chemie), was eine strikte Aufteilung in Food- und Technik-Flotten erzwingt.</div>
+                    <h3><span>14.</span> Silo Trailer</h3>
+                    <p class="spec-item">A sealed, pressurized metal tank designed for transporting bulk materials, flours, and dusts.</p>
+                    <div class="spec-item"><span class="red-label">Advantages:</span>Protection against moisture (which could, for example, turn transported cement into rock). The biggest advantage is the unloading system: powerful compressors "blow" the goods from the trailer through pipes directly into vertical destination silos at factories or construction sites.</div>
+                    <div class="spec-item"><span class="red-label">Disadvantages:</span>Limited pool of carriers. Silos are difficult to clean thoroughly (risk of cross-contamination, e.g., flour after chemicals, which forces a strict division of the fleet into food-grade and technical).</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>15.</span> Teleskopauflieger & Abrollkipper</h3>
-                    <div class="spec-item"><span class="red-label">Teleskopauflieger (Tele-trailer):</span>Ein Spezialplateau mit ausziehbarem Teleskopträger. Er kann von 13,6 m auf bis zu 30-40 Meter verlängert werden. Unerlässlich für Rotorblätter von Windkraftanlagen oder Brückenbauteile. Erfordert perfekte Streckenplanung.</div>
-                    <div class="spec-item"><span class="red-label">Abrollkipper (Hooklift):</span>Ein LKW-Fahrgestell (kein Auflieger) mit einem hydraulischen Hakenarm. Zieht standardisierte Rollcontainer (Mulden) auf sich. Ein System, das weit verbreitet in der Abfallwirtschaft, beim Schrotttransport und im Baustellenrecycling ist.</div>
+                    <h3><span>15.</span> Tele-trailer & Hooklift</h3>
+                    <div class="spec-item"><span class="red-label">Tele-trailer:</span>A specialized flatbed equipped with an extendable telescopic beam. Its frame allows the structure to stretch lengthwise from a basic 13.6 m to even 30-40 meters. Essential for transporting wind turbine blades, steel bridge spans, or long industrial pipes. The operation requires perfect road logistics.</div>
+                    <div class="spec-item"><span class="red-label">Hooklift:</span>A truck chassis (not a trailer) fitted with a hydraulic arm ending in a hook. It pulls standardized roll-off containers (skips) onto its back. A system widely used in waste management, scrap transport, recycling, and construction rubble handling. The container exchange operation takes just a few minutes.</div>
                 </div>
             </div>
         </section>
 
-        <section id="klasyfikacja-dmc">
-            <h2 class="section-heading">2. zGG-Klassifizierung (zulässiges Gesamtgewicht)</h2>
+        <section id="gvw">
+            <h2 class="section-heading">2. GVW Classification (Gross Vehicle Weight)</h2>
             <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #444;">
-                Das zulässige Gesamtgewicht (zGG / GVW) ist das Gewicht des Fahrzeugs inklusive Ladung, Fahrgästen und Betriebsflüssigkeiten. In der Logistik bestimmt es nicht nur die Nutzlast, sondern auch, welche Verkehrsvorschriften, Mautgebühren (Toll Collect / Viatoll) und städtischen Einfahrtsbeschränkungen für das Fahrzeug gelten.
+                GVW (Gross Vehicle Weight) is the total weight of the vehicle including cargo, passengers, and operating fluids. In logistics, it determines not only how much goods we can load (Payload), but also what road regulations, toll fees (Maut/Viatoll), and urban restrictions apply to a given vehicle. The breakdown below presents market standards in a practical context:
             </p>
             
             <table class="gvw-table">
                 <thead>
                     <tr>
-                        <th>Fahrzeugtyp</th>
-                        <th>zGG Kategorie</th>
-                        <th>Ca. Nutzlast</th>
-                        <th>Standardkapazität (Europaletten)</th>
-                        <th>Zentrale Geschäftsanwendung</th>
+                        <th>Fleet Type</th>
+                        <th>GVW Category</th>
+                        <th>Approx. Payload</th>
+                        <th>Standard Capacity (Euro Pallets)</th>
+                        <th>Key Business Application</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Transporter (Vans / Sprinter)</strong></td>
-                        <td>bis 3,5 t</td>
-                        <td>0,6 t - 1,2 t</td>
-                        <td>8, 10 oder 12 EP</td>
-                        <td><strong>Express-Transport.</strong> Fahrzeuge haben meist keine digitalen Fahrtenschreiber (mehr Flexibilität) und unterliegen nicht den LKW-Wochenendfahrverboten. Ideal für schnelle Lieferungen quer durch Europa. Dürfen frei in Innenstädte fahren.</td>
+                        <td><strong>Vans (LCV - Light Commercial Vehicles)</strong></td>
+                        <td>up to 3.5 t</td>
+                        <td>0.6 t - 1.2 t</td>
+                        <td>8, 10, or 12 EP</td>
+                        <td><strong>Express Transport.</strong> Vehicles do not have digital tachographs (greater flexibility in driver working hours for dedicated transport) and are not subject to weekend and holiday truck driving bans. Ideal for rapid deliveries across Europe ("for yesterday"). They can freely enter city centers.</td>
                     </tr>
                     <tr>
-                        <td><strong>Leichte Motorwagen (LKW)</strong></td>
-                        <td>3,5 t bis 7,5 t</td>
-                        <td>2,5 t - 3,0 t</td>
+                        <td><strong>Small Rigid Trucks</strong></td>
+                        <td>3.5 t to 7.5 t</td>
+                        <td>2.5 t - 3.0 t</td>
                         <td>10 - 15 EP</td>
-                        <td><strong>Lokale Distribution ("Letzte Meile").</strong> Eine Kompromisslösung, wenn es zu viele Paletten für einen Van gibt, aber ein schwerer LKW für die Strecke zu teuer ist. Aufgrund des geringeren Gewichts können Tonnagebeschränkungen oft umgangen werden.</td>
+                        <td><strong>"Last Mile" local distribution.</strong> A compromise solution when there are too many pallets for a van, but a classic heavy truck is too large and expensive for a given route. Due to lower weight, these vehicles can often bypass tonnage restrictions on lower category roads.</td>
                     </tr>
                     <tr>
-                        <td><strong>Mittelschwere Motorwagen (LKW)</strong></td>
-                        <td>7,5 t - 12 t</td>
-                        <td>5,0 t - 6,0 t</td>
+                        <td><strong>Medium Rigid Trucks</strong></td>
+                        <td>7.5 t - 12 t</td>
+                        <td>5.0 t - 6.0 t</td>
                         <td>15 - 18 EP</td>
-                        <td><strong>Regionale LTL-Distribution (Stückgut).</strong> Die beste betriebliche Balance zwischen Maut-/Spritkosten und Platz für die Verteilung von Waren zwischen Logistikhubs und Großhändlern.</td>
+                        <td><strong>LTL (Less Than Truckload) regional distribution.</strong> The best operational balance between fuel/toll costs and space for arranging goods distributed between logistics hubs and larger wholesalers.</td>
                     </tr>
                     <tr>
-                        <td><strong>Schwere Motorwagen (LKW)</strong></td>
+                        <td><strong>Large Rigid Trucks</strong></td>
                         <td>12 t - 18 t</td>
-                        <td>9,0 t - 10,0 t</td>
+                        <td>9.0 t - 10.0 t</td>
                         <td>18 - 22 EP</td>
-                        <td><strong>Hohe Tonnage, geringes Volumen.</strong> Gebaut für schwerere Lasten, z. B. Getränkeindustrie (Wasserpaletten) oder Bauwesen, wo die Gewichtsgrenze erreicht ist, bevor die Stellplätze voll sind.</td>
+                        <td><strong>High tonnage, low volumetric tonnage.</strong> Built for heavier loads, e.g., in construction, machinery, or beverage industry (water pallets), where the weight limit is reached before physical floor space runs out.</td>
                     </tr>
                     <tr>
-                        <td><strong>Schwerste Motorwagen</strong></td>
+                        <td><strong>Heavy Rigid Trucks</strong></td>
                         <td>18 t - 26 t</td>
-                        <td>bis 15,0 t</td>
+                        <td>up to 15.0 t</td>
                         <td>20 - 24 EP</td>
-                        <td>Meist Dreiachser, ausgelegt für schwerste Verteileraufgaben ohne Anhänger. Oft die Basis für Kommunalfahrzeuge oder Baustofftransporte.</td>
+                        <td>Usually three-axle vehicles, adapted for the heaviest distribution work without a trailer. Often the base for municipal vehicles or transporting heavy materials over short distances within cities.</td>
                     </tr>
                     <tr>
-                        <td><strong>Sattelzüge / Gliederzüge (LKW 40t)</strong></td>
+                        <td><strong>Articulated Vehicles (LKW / Semi-Trucks)</strong></td>
                         <td>40 t</td>
-                        <td>24,0 t - 25,0 t</td>
-                        <td>33 EP (Standard) bis 38 EP (Jumbo)</td>
-                        <td><strong>Das Rückgrat der FTL-Spedition (Komplettladungen).</strong> Kombination aus Sattelzugmaschine und Auflieger. Die wirtschaftlichste Form, große Materialmengen über lange Strecken europaweit zu transportieren. Im Kombinierten Verkehr teilweise bis 44 Tonnen zugelassen.</td>
+                        <td>24.0 t - 25.0 t</td>
+                        <td>33 EP (Standard) to 38 EP (Jumbo)</td>
+                        <td><strong>The backbone of FTL (Full Truckload) forwarding.</strong> A combination of a tractor unit and a semi-trailer. The most economically optimized form of transporting large batches of material over long distances on a pan-European scale. In some countries and in intermodal transport, regulations allow an increase of GVW to 44 tons.</td>
                     </tr>
                 </tbody>
             </table>
         </section>
 
-        <section id="systemy">
-            <h2 class="section-heading">3. Lade- & Mechanische Systeme</h2>
-            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; color: #444;">Die Kenntnis verfügbarer technischer Erweiterungen ermöglicht es Spediteuren, erhebliche Wettbewerbsvorteile zu erzielen, indem sie infrastrukturelle Mängel in Kundenlagern ausgleichen. Hier die wichtigsten Systeme:</p>
+        <section id="systems">
+            <h2 class="section-heading">3. Loading & Mechanical Systems</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; color: #444;">Knowledge of available technical enhancements allows forwarders to gain a massive competitive edge, mitigating the client's warehouse infrastructure shortages and streamlining the flow of goods. Here are the key systems:</p>
             
             <div class="fleet-section">
                 <div class="fleet-card">
-                    <div class="spec-item"><span class="red-label">Schubboden (Walking Floor):</span>Ein innovatives, hydraulisch angetriebenes Bodenleistensystem, das sich abwechselnd vor- und zurückbewegt und die Ladung langsam verschiebt. Ermöglicht das vollständige Entladen von Schüttgut (Sägemehl, Erde, Abfall) ohne das gefährliche Anheben des Aufliegers (wie beim Kipper), ideal für niedrige Hallen und weichen Untergrund.</div>
+                    <div class="spec-item"><span class="red-label">Walking Floor:</span>An innovative system of floor slats powered by hydraulics that alternately extend and retract, slowly inching the cargo forward or backward. Allows for complete unloading of bulk goods (sawdust, soil, waste) without the need for dangerous lifting of the trailer (like in tippers), enabling work inside low halls and on soft, uneven ground.</div>
                     
-                    <div class="spec-item"><span class="red-label">Joloda (Rollensystem):</span>Ein in den Boden integriertes System aus Metallschienen und beweglichen Rollschuhen (Skates), die die Ladung per Druckluft oder manuell anheben. Absolut kritisch in der Papierindustrie zum Laden massiver, tonnenschwerer Papierrollen, die tief und sicher in den Auflieger geschoben werden müssen.</div>
+                    <div class="spec-item"><span class="red-label">Joloda (Skate System):</span>A system of metal channels (rails) built into the trailer floor and cooperating movable skates that gently lift the load when connected to compressed air or operated manually. The system is absolutely critical in the paper industry for loading massive, multi-ton rolls of newsprint, allowing them to be pushed deep and safely into the trailer.</div>
                 </div>
                 
                 <div class="fleet-card">
-                    <div class="spec-item"><span class="red-label">Ladebordwand (Tail Lift):</span>Eine ausklappbare, hydraulische Plattform am Heck des LKWs. Entlastet den Versender von der Notwendigkeit einer Laderampe oder eines Gabelstaplers. Waren können mit einem Handhubwagen auf die Bühne gerollt und auf Bodenhöhe abgesenkt werden (klassische Klappen oder unterfaltbare Ladebordwände).</div>
+                    <div class="spec-item"><span class="red-label">Tail Lift:</span>A fold-out, hydraulic platform mounted on the rear overhang of the truck. Relieves the shipper from the need to have a loading dock or a forklift. Goods (usually on Euro pallets) can be easily rolled onto the lift using a manual pallet jack and lowered to ground level. We distinguish classic lifts (cantilever – closing the rear of the vehicle) and tuck-away lifts (retractable underneath, invisible while driving).</div>
                     
-                    <div class="spec-item"><span class="red-label">Doppelstock (Double Deck):</span>Ein System mit zwei Ladeebenen, das hauptsächlich in Kühlaufliegern zu finden ist. Durch Wandschienen und Querbalken wird eine zweite Ebene geschaffen. Schützt empfindliche und nicht stapelbare Waren vor dem Zerdrücken und verdoppelt die Kapazität von 33 auf bis zu 66 Europaletten.</div>
+                    <div class="spec-item"><span class="red-label">Double Deck / Dopple-Stock:</span>A double-level loading system found mainly in reefers. Using built-in wall tracks and crossbeams, a "second floor" is created in the trailer, independent of the main floor. This solution protects delicate and non-stackable goods from crushing and doubles the capacity from 33 to 66 Euro pallets on one truck, halving the carbon footprint per cargo unit.</div>
                 </div>
             </div>
         </section>
 
-        <section id="wyposazenie">
-            <h2 class="section-heading">4. Zusatzausstattung</h3>
+        <section id="equipment">
+            <h2 class="section-heading">4. Additional Equipment</h2>
             <div class="fleet-card" style="margin-bottom: 0;">
-                <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Die Organisation einer Fracht endet nicht mit der Bestellung eines Fahrzeugs. Es muss sichergestellt werden, dass es über Elemente verfügt, die die rechtliche Konformität und physische Sicherheit garantieren:</p>
-                <div class="spec-item">
-                    <ul style="padding-left: 20px; line-height: 1.8;">
-                        <li><strong>Palletenkasten:</strong> Eine unter dem Auflieger hängende Metallkiste. Lagert leere Tauschpaletten, was im Handel für den 1-zu-1-Palettentausch beim Entladen unerlässlich ist.</li>
-                        <li><strong>Mitnahmestapler (Moffett / Crai):</strong> LKW mit einem eigenen, kleinen Gabelstapler am Heck. Ein geniales Werkzeug für die eigenständige Endzustellung von Baustoffen oder Rollrasen direkt auf Privatgrundstücke.</li>
-                        <li><strong>Spanngurte & Zurrmittel:</strong> Ein vollständiger Satz zertifizierter Gurte mit Ratschen (oft werden 16-20 Stück gefordert).</li>
-                        <li><strong>Antirutschmatten (ARM):</strong> Gummimatten, die unter Paletten gelegt werden, um den Reibungskoeffizienten zu erhöhen und das Verrutschen der Ladung beim Bremsen drastisch zu reduzieren.</li>
-                        <li><strong>ADR-Ausrüstung:</strong> Notwendige Rettungs- und Schutzausrüstung, Feuerlöscher, Schutzbrillen, Schaufeln und Besen, die nach dem Europäischen Übereinkommen für den Transport gefährlicher Güter vorgeschrieben sind.</li>
-                    </ul>
-                </div>
+                <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Organizing a freight does not end with ordering a vehicle. It is also about matching the right equipment to ensure safety and efficiency.</p>
             </div>
         </section>
-
-        <div class="article-footer">
-            <h2>Ihre Logistik, meine Verantwortung.</h2>
-            <p style="color: #aaa; margin: 20px auto 40px; font-size: 1.1rem; max-width: 700px; line-height: 1.6;">
-                Das Verständnis der technischen Feinheiten der Flotte ist der Schlüssel zum Erfolg und zur Senkung unnötiger Ausgaben. Benötigen Sie Beratung und Preisgestaltung, um das für Ihren Prozess optimale Equipment auszuwählen? Kontaktieren Sie mich für eine maßgeschneiderte Lösung.
-            </p>
-            <a href="de.html#kontakt" class="btn-cta" style="padding: 15px 30px; font-size: 1.1rem;">BERATUNGSANFRAGE SENDEN</a>
-        </div>
-
     </main>
 
-    <footer id="kontakt" style="background: #13100e; color: #fff; padding: 60px 0; border-top: 10px solid #e31e24; text-align: center;">
-        <div class="container">
-            <p style="margin-bottom: 15px; font-weight: 700;">Mariusz Kulczyk - Strategischer Logistikpartner</p>
-            <p style="font-size: 0.85rem; color: #666;">© 2026 Alle Rechte vorbehalten.</p>
+    <footer id="kontakt">
+        <div class="container footer-grid">
+            <div class="f-brand">
+                <a href="en.html" class="logo">M.KULCZYK</a>
+                <p>Strategic Logistics Partner</p>
+                <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="f-links">
+                <h5>Partner Zone</h5>
+                <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p>
+                <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p>
+                <p><a href="przewoznicy.html"><i class="fa-solid fa-truck-fast"></i> For Carriers</a></p>
+            </div>
+
+            <div class="f-contact">
+                <h5>Contact</h5>
+                <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
+                <p style="white-space: nowrap;">Phone: <strong>+48 722 270 532</strong></p>
+            </div>
+            
+            <div class="f-legal">
+                <span class="iso-text">Operational standards based on ISO and GDP norms</span>
+                <p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
     <script>
         window.onscroll = function() {
             var navbar = document.getElementById("navbar");
-            if (window.pageYOffset > 50) {
+            if (navbar && window.pageYOffset > 50) {
                 navbar.classList.add("scrolled");
-            } else {
+            } else if (navbar) {
                 navbar.classList.remove("scrolled");
             }
         };

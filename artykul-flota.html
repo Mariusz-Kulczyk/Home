@@ -9,66 +9,25 @@
     <link rel="stylesheet" href="style.css?v=34">
     <style>
         .logo { text-decoration: none !important; color: inherit; font-weight: 900; }
-        
         .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
         .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; }
         .nav-links li { display: inline-block !important; }
 
-        /* Layout szerokości - maksymalne wykorzystanie miejsca */
         .article-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         
-        /* Nagłówek artykułu - wyrównany */
-        .article-hero { 
-            padding: 160px 0 80px; 
-            background: #fdfdfd; 
-            text-align: center; 
-            border-bottom: 1px solid #eee;
-        }
-        .article-hero h1 { 
-            font-family: 'Inter', sans-serif; 
-            font-size: 3.5rem; 
-            font-weight: 900; 
-            color: #13100e;
-            max-width: 1000px;
-            margin: 20px auto;
-            line-height: 1.2;
-        }
-        .article-hero .hero-lead {
-            font-size: 1.2rem;
-            color: #555;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
+        .article-hero { padding: 160px 0 80px; background: #fdfdfd; text-align: center; border-bottom: 1px solid #eee; }
+        .article-hero h1 { font-family: 'Inter', sans-serif; font-size: 3.5rem; font-weight: 900; color: #13100e; max-width: 1000px; margin: 20px auto; line-height: 1.2; }
+        .article-hero .hero-lead { font-size: 1.2rem; color: #555; max-width: 800px; margin: 0 auto; line-height: 1.6; }
 
-        /* Spis treści - rozciągnięty na 2 kolumny */
-        .toc { 
-            background: #f9f9f9; 
-            padding: 40px; 
-            border-left: 5px solid #e31e24; 
-            margin-bottom: 80px; 
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            border-radius: 4px;
-        }
+        .toc { background: #f9f9f9; padding: 40px; border-left: 5px solid #e31e24; margin-bottom: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-radius: 4px; }
         .toc h2 { grid-column: 1 / -1; font-size: 1.4rem; margin-bottom: 15px; font-family: 'Inter', sans-serif; }
         .toc ul { list-style: none; padding: 0; }
         .toc li { margin-bottom: 10px; }
         .toc a { color: #333; text-decoration: none; font-weight: 600; transition: 0.2s; font-size: 1.05rem; }
         .toc a:hover { color: #e31e24; padding-left: 5px; }
 
-        /* Karty taboru - układ siatki dla oszczędności miejsca */
         .fleet-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px; }
-        .fleet-card { 
-            background: #fff; 
-            border: 1px solid #eee; 
-            padding: 40px; 
-            border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            transition: 0.3s;
-        }
+        .fleet-card { background: #fff; border: 1px solid #eee; padding: 40px; border-radius: 6px; display: flex; flex-direction: column; transition: 0.3s; }
         .fleet-card:hover { border-color: #e31e24; box-shadow: 0 15px 30px rgba(0,0,0,0.06); transform: translateY(-3px); }
         .fleet-card h3 { font-family: 'Inter', sans-serif; font-size: 1.6rem; margin-bottom: 20px; border-bottom: 2px solid #f4f4f4; padding-bottom: 15px; }
         .fleet-card h3 span { color: #e31e24; font-weight: 900; margin-right: 10px; font-size: 1.4rem; }
@@ -77,31 +36,34 @@
         .spec-item strong { color: #13100e; font-weight: 700; }
         .spec-item .red-label { color: #e31e24; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
 
-        /* Tabela DMC */
         .gvw-table { width: 100%; border-collapse: collapse; margin: 40px 0; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
         .gvw-table th, .gvw-table td { padding: 20px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
         .gvw-table th { background: #13100e; color: #fff; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; border: none; }
         .gvw-table tr:last-child td { border-bottom: none; }
         .gvw-table tr:nth-child(even) { background: #fafafa; }
 
-        /* Stopka artykułu */
-        .article-footer { 
-            margin-top: 100px; 
-            padding: 80px 40px; 
-            background: #13100e; 
-            color: #fff; 
-            border-radius: 8px; 
-            text-align: center; 
-        }
-        .article-footer h2 { font-family: 'Inter', sans-serif; font-size: 2.2rem; margin-bottom: 20px; }
-
-        /* Nagłówki sekcji */
         .section-heading { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 900; margin: 80px 0 40px; border-left: 8px solid #e31e24; padding-left: 20px; color: #13100e; }
+
+        footer#kontakt { background-color: #13100e !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding: 60px 0 40px !important; }
+        footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
+        footer#kontakt a:hover { color: #e31e24 !important; }
+        footer#kontakt h5 { color: #e31e24 !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 1fr !important; gap: 30px; align-items: stretch; }
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 5px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin: 0; line-height: 1.2; display: block; }
+        .copy { font-size: 0.75rem; color: #666; margin: 0; line-height: 1.2; }
+        .f-links p { margin: 5px 0; font-size: 0.9rem; }
 
         @media (max-width: 992px) {
             .fleet-section, .toc { grid-template-columns: 1fr; }
             .article-hero h1 { font-size: 2.5rem; }
             .gvw-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 30px !important; }
+            .f-legal { align-items: flex-start; justify-content: flex-start; }
+            .iso-text { text-align: left !important; white-space: normal; }
+        }
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
@@ -135,7 +97,6 @@
     </section>
 
     <main class="article-container">
-        
         <div class="toc">
             <h2>Spis treści:</h2>
             <ul>
@@ -150,69 +111,244 @@
 
         <section id="rodzaje-zabudowy">
             <h2 class="section-heading">1. Rodzaje Zabudowy (Body Types)</h2>
-            
             <div class="fleet-section">
                 
                 <div class="fleet-card">
                     <h3><span>01.</span> Naczepa Kurtynowa (Curtainsider)</h3>
-                    <p class="spec-item">Stanowi fundament europejskiego transportu drogowego. Naczepa wyposażona jest w elastyczne, przesuwne kurtyny boczne wykonane ze wzmocnionej plandeki PVC, co maksymalizuje użyteczność pojazdu.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Ekstremalna wszechstronność. Umożliwia jednoczesny załadunek z obu boków, tyłu, a w większości przypadków również przez rozsuwany dach (suwnica). Charakteryzuje się najwyższą dostępnością na rynku giełdowym.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Konstrukcja oparta na szynach kurtynowych ogranicza boczny prześwit załadunkowy o około 5–10 cm w stosunku do wysokości wewnętrznej. Dodatkowo elastyczna plandeka jest podatna na próby włamania (tzw. "cięcie plandek").</div>
-                    <div class="spec-item"><span class="red-label">Standardowy załadunek:</span>Bok, Tył, Góra.</div>
+                    <p class="spec-item">Stanowi fundament europejskiego transportu drogowego. Naczepa wyposażona jest w elastyczne, przesuwne kurtyny boczne wykonane ze wzmocnionej plandeki PVC.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Ekstremalna wszechstronność. Umożliwia załadunek z obu boków, tyłu, a w większości przypadków również przez rozsuwany dach (suwnica). Najwyższa dostępność na giełdach.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Konstrukcja ogranicza boczny prześwit o 5–10 cm. Plandeka jest podatna na próby włamania (tzw. "cięcie plandek").</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>02.</span> Naczepa Plandekowa (Standard)</h3>
-                    <p class="spec-item">Klasyczna konstrukcja, która powoli ustępuje miejsca firankom. Plandeka nie przesuwa się na rolkach, lecz jest ręcznie zapinana na oczka i linkę celną wokół sztywnych aluminiowych burt.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Bardzo solidna konstrukcja burtowa. Gwarantuje doskonałą stabilizację ładunków, które mogłyby wywierać nacisk na ściany boczne (np. luźne worki typu big-bag).</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Obsługa jest wysoce pracochłonna. Aby załadować towar bokiem, kierowca musi całkowicie odpiąć plandekę, zarzucić ją na dach i zdemontować stelaże oraz burty, co drastycznie wydłuża czas okien czasowych na magazynie.</div>
-                    <div class="spec-item"><span class="red-label">Dostępność:</span>Wysoka (popularna zwłaszcza na kierunkach wschodnich).</div>
+                    <p class="spec-item">Klasyczna konstrukcja, która powoli ustępuje miejsca firankom. Plandeka jest ręcznie zapinana na oczka i linkę celną wokół sztywnych aluminiowych burt.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Bardzo solidna konstrukcja burtowa. Gwarantuje doskonałą stabilizację ładunków wywierających nacisk na ściany (np. worki big-bag).</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Wysoce pracochłonna obsługa boczna (demontaż plandeki, stelaży i burt) drastycznie wydłużająca czas załadunku.</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>03.</span> Mega Trailer</h3>
-                    <p class="spec-item">Specjalistyczna naczepa kurtynowa zaprojektowana do maksymalizacji objętości ładunkowej. Dzięki zastosowaniu ciągników typu "low-deck" (niskie siodło, opony o małym profilu), podłoga naczepy jest obniżona.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Imponująca wysokość wewnętrzna sięgająca 3.00 metra, co pozwala na uzyskanie objętości rzędu 100 m³. Niezastąpiona w branży Automotive (umożliwia sztaplowanie pojemników gitterbox na 3 poziomy) oraz w transporcie materiałów izolacyjnych i opakowań. Często posiada podnoszony dach do załadunku.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Bardzo mały prześwit podwozia sprawia, że zestaw jest podatny na uszkodzenia na nierównych terenach, budowach czy wyboistych parkingach.</div>
+                    <p class="spec-item">Naczepa kurtynowa zaprojektowana do maksymalizacji objętości ładunkowej dzięki ciągnikom typu "low-deck" (niskie siodło, obniżona podłoga).</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Wysokość wewnętrzna sięgająca 3.00 metra (objętość 100 m³). Niezastąpiona w Automotive (sztaplowanie gitterboxów) oraz transporcie opakowań.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Bardzo mały prześwit podwozia sprawia, że zestaw jest podatny na uszkodzenia na nierównych terenach.</div>
                 </div>
 
                 <div class="fleet-card">
-                    <h3><span>04.</span> Zestaw Przestrzenny (Jumbo / Road Train)</h3>
-                    <p class="spec-item">Konstrukcja wykorzystująca tzw. "łamaną" podłogę (step-deck). Sekcja przednia (nad sworzniem królewskim) znajduje się wyżej, podczas gdy główny pokład ładunkowy jest maksymalnie opuszczony.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Obniżony pokład oferuje potężną przestrzeń i ponadnormatywną wysokość wewnętrzną (ponad 3 metry) bez naruszania surowych europejskich norm dotyczących maksymalnej wysokości zewnętrznej pojazdu (4.00 m). Idealny do wysokich maszyn rolniczych czy zbiorników.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Schodek wewnątrz naczepy uniemożliwia załadunek bardzo długich, sztywnych elementów, które opierałyby się o uskok. Wymaga sprytnego planowania rozkładu palet.</div>
+                    <h3><span>04.</span> Zestaw Przestrzenny (Jumbo)</h3>
+                    <p class="spec-item">Konstrukcja z "łamaną" podłogą (step-deck). Główny pokład ładunkowy za sworzniem jest maksymalnie opuszczony.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Obniżony pokład oferuje potężną przestrzeń i wysokość ponad 3 metry bez naruszania norm (wysokość zew. 4.00 m). Idealny do wysokich maszyn.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Schodek wewnątrz naczepy uniemożliwia załadunek bardzo długich, sztywnych elementów, które opierałyby się o uskok.</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>05.</span> Chłodnia (Refrigerated Truck)</h3>
-                    <p class="spec-item">Zabudowa o twardych, grubych i izolowanych termicznie ścianach, zintegrowana z profesjonalnym agregatem chłodniczym (np. Thermo King, Carrier).</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Umożliwia rygorystyczną kontrolę temperatury ładunku, od głębokiego mrożenia (-25°C) do ogrzewania (+25°C). Niezbędna przy farmacji (certyfikaty GDP) i świeżej żywności. Sztywne ściany eliminują ryzyko przecięcia i kradzieży towaru. Dodatkowo, w wielu państwach europejskich transporty spożywcze są zwolnione z weekendowych i świątecznych zakazów ruchu.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Agregat oraz pogrubione ściany zwiększają masę własną pojazdu (niższa ładowność rzędu 22-22.5t zamiast 24t). Ze względu na grubość izolacji, szerokość wewnętrzna może być nieznacznie węższa (zwykle 2.46m zamiast 2.48m).</div>
-                    <div class="spec-item"><span class="red-label">Załadunek:</span>Wyłącznie od tyłu, przez zderzak i drzwi.</div>
+                    <p class="spec-item">Zabudowa o twardych, grubych i izolowanych termicznie ścianach, zintegrowana z agregatem chłodniczym.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Kontrola temperatury (-25°C do +25°C). Niezbędna przy farmacji (GDP) i świeżej żywności. Sztywne ściany eliminują ryzyko cięcia plandeki.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Wyższa masa własna obniża ładowność (do ok. 22-22.5t). Szerokość wewnętrzna bywa węższa (2.46m). Załadunek możliwy tylko tyłem.</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>06.</span> Izoterma / Kontener (Box Trailer)</h3>
-                    <p class="spec-item">Zamknięta, sztywna naczepa pozbawiona systemu aktywnego chłodzenia. Służy wyłącznie ochronie przed warunkami zewnętrznymi.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Pancerne zabezpieczenie ładunku. To ulubiony wybór firm technologicznych (transport elektroniki, AGD) oraz branży fashion (często montowane drążki do transportu odzieży na wisząco). Ochrona przed wilgocią i intruzami.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Podobnie jak w chłodni, załadunek jest możliwy wyłącznie z tyłu, co całkowicie wyklucza obsługę długich i ciężkich towarów ładowanych suwnicą lub bokiem. Masa własna ogranicza maksymalny tonaż payloadu.</div>
+                    <p class="spec-item">Zamknięta, sztywna naczepa pozbawiona aktywnego chłodzenia. Służy ochronie przed warunkami zewnętrznymi i kradzieżą.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Pancerne zabezpieczenie ładunku. Wybór firm z branży elektroniki i fashion (często montowane drążki na odzież).</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Załadunek wyłącznie tyłem, co wyklucza długie ładunki ładowane bokiem lub suwnicą. Wysoka masa własna.</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>07.</span> Cysterna (Tanker)</h3>
-                    <p class="spec-item">Wyspecjalizowane jednostki cylindryczne służące do transportu masowego cieczy, pozbawione konieczności stosowania palet czy zbiorników DPPL (Mausery).</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Niedościgniona efektywność przy transporcie wolumetrycznym płynów, takich jak paliwa, chemikalia przemysłowe, czy – w przypadku specjalnie certyfikowanych cystern spożywczych – mleka, płynnej czekolady czy olejów.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Wymaga kosztownych certyfikacji (często ADR), uprawnień dla kierowców oraz rygorystycznego, udokumentowanego mycia chemicznego wnętrza komór po absolutnie każdym wykonanym transporcie. Niska dostępność spotowa na giełdach.</div>
+                    <p class="spec-item">Wyspecjalizowane jednostki cylindryczne do transportu masowego cieczy (bez palet i paletopojemników).</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Niedościgniona efektywność przy transporcie paliw, chemikaliów przemysłowych, mleka, czekolady płynnej czy olejów.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Wymaga certyfikacji, specjalnych uprawnień oraz rygorystycznego, kosztownego mycia komór po każdym kursie.</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>08.</span> Platforma (Flatbed)</h3>
                     <p class="spec-item">Całkowicie otwarta naczepa, pozbawiona ścian, dachu czy stelaży. Czysty pokład ładunkowy.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Brak fizycznych ograniczeń wynikających ze szkieletu ("pudła") naczepy. Jest to wymóg konieczny przy transporcie długich profili stalowych, prefabrykatów betonowych czy maszyn przemysłowych, które mogą nieznacznie wystawać poza obrys pojazdu. Wyposażone zazwyczaj w mocne gniazda ryglowe.</div>
-                    <div class="spec-item"><span class="red-label">Wady:</span>Ładunek jest bezpośrednio narażony na czynniki atmosferyczne (deszcz, sól drogowa). Wymaga mistrzowskich umiejętności sztauowania (zabezpieczania ładunku) przy użyciu atestowanych łańcuchów i pasów transportowych o wysokim nominale.</div>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Brak fizycznych ograniczeń bocznych. Wymóg przy transporcie bardzo długich profili stalowych czy szerokich maszyn przemysłowych.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Ładunek narażony na deszcz i sól drogową. Wymaga mistrzowskich umiejętności sztauowania i zabezpieczania atestowanymi łańcuchami.</div>
                 </div>
 
                 <div class="fleet-card">
                     <h3><span>09.</span> Niskopodwoziowa (Lowbed)</h3>
-                    <p class="spec-item">Naczepy o skrajnie obniżonym pokładzie głównym, zaprojektowane specjalnie z myślą o inżynierii ciężkiej i ładunkach nienormatywnych.</p>
-                    <div class="spec-item"><span class="red-label">Zalety:</span>Ekstremalnie niski prześwit (często 30-60 cm nad asfaltem) i obniżony środek ciężkości pozwalają na załadunek potężnych kombajnów, koparek gą
+                    <p class="spec-item">Naczepy o skrajnie obniżonym pokładzie głównym, dedykowane inżynierii ciężkiej i ładunkom ponadgabarytowym.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Ekstremalnie niski prześwit pozwala na załadunek potężnych maszyn (kombajny, transformatory) bez obaw o wiadukty. Własne najazdy hydrauliczne.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Transporty często wpadają w kategorię OOG (Out of Gauge), wymagając zezwoleń, jazdy nocą i eskorty pilotów. Bardzo wysokie koszty operacyjne.</div>
+                </div>
+
+                <div class="fleet-card">
+                    <h3><span>10.</span> Burtówka (Dropside)</h3>
+                    <p class="spec-item">Hybryda platformy z systemem składanych aluminiowych burt wokół pokładu, najczęściej o wysokości 40-80 cm.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Burty fizycznie blokują boczne przesuwanie się ładunku (idealne do palet z pustakami, rur czy elementów rusztowań).</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Brak dachu wyklucza ładunki wrażliwe na wilgoć, a system burt dodatkowo obniża nieco dostępną ładowność zestawu.</div>
+                </div>
+
+                <div class="fleet-card">
+                    <h3><span>11.</span> Lora / Autotransporter</h3>
+                    <p class="spec-item">Wyspecjalizowana, wielopoziomowa konstrukcja przeznaczona wyłącznie do transportu pojazdów.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>System ruchomych pokładów potrafi zmieścić do 10 mniejszych samochodów, optymalizując koszty dystrybucji z fabryk.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Sprzęt wysoce niszowy ("one-way"). Brak możliwości załadunku standardowych palet przemysłowych na ładunki powrotne.</div>
+                </div>
+
+                <div class="fleet-card">
+                    <h3><span>12.</span> Wywrotka (Tipper)</h3>
+                    <p class="spec-item">Naczepa "wanna", zintegrowana z potężnym siłownikiem teleskopowym, umożliwiającym grawitacyjny rozładunek do tyłu.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Aluminiowe wywrotki świetnie sprawdzają się w lekkich materiałach sypkich (zboża, nawozy). Stalowe wanny to podstawa budownictwa (gruz, asfalt, węgiel).</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Podnoszenie naczepy wyklucza rozładunek wewnątrz niskich hal i wymaga stabilnego, płaskiego gruntu z uwagi na ryzyko przewrócenia auta.</div>
+                </div>
+
+                <div class="fleet-card">
+                    <h3><span>13.</span> Nadwozie Wymienne (BDF / Swap Body)</h3>
+                    <p class="spec-item">System modułowych skrzyń. Ciężarówka może "porzucić" puszkę ładunkową na jej własnych nogach podporowych.</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Kwintesencja wydajności ("Drop & Swap"). Kierowca zostawia pełną puszkę, zabiera pustą i odjeżdża w 15 minut. Złoty standard w kurierce.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Wymaga wysoce wyspecjalizowanej floty i idealnej standaryzacji między partnerami. Rzadko spotykane na giełdach spotowych.</div>
+                </div>
+
+                <div class="fleet-card">
+                    <h3><span>14.</span> Silos</h3>
+                    <p class="spec-item">Szczelny, ciśnieniowy zbiornik metalowy przeznaczony do transportu pyłów, cementu i sypkich surowców spożywczych (mąka).</p>
+                    <div class="spec-item"><span class="red-label">Zalety:</span>Potężne kompresory "wydmuchują" towar bezpośrednio do pionowych silosów docelowych w fabrykach. Pełna ochrona przed wilgocią.</div>
+                    <div class="spec-item"><span class="red-label">Wady:</span>Ekstremalnie trudne do umycia wewnątrz (ryzyko zanieczyszczeń krzyżowych), co zmusza do podziału floty na wyłącznie spożywczą i techniczną.</div>
+                </div>
+
+                <div class="fleet-card" style="grid-column: 1 / -1;">
+                    <h3><span>15.</span> Tele-naczepa i Hakowiec</h3>
+                    <div class="spec-item"><span class="red-label">Tele-naczepa:</span>Platforma wyposażona w teleskopową belkę, umożliwiającą rozciągnięcie naczepy wzdłużnie nawet do 40 metrów. Niezbędna do przewozu śmigieł wiatrowych czy stalowych przęseł mostów.</div>
+                    <div class="spec-item"><span class="red-label">Hakowiec:</span>Podwozie wyposażone w ramię z hakiem. Wciąga znormalizowane kontenery rolkowe (muldy) bezpośrednio na ciężarówkę. System kluczowy w gospodarce odpadami i recyklingu - wymiana kontenera trwa zaledwie parę minut.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="klasyfikacja-dmc">
+            <h2 class="section-heading">2. Klasyfikacja DMC (Gross Vehicle Weight)</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; color: #444;">
+                DMC to łączna masa pojazdu wraz z ładunkiem, pasażerami i płynami eksploatacyjnymi. W logistyce determinuje ona nie tylko, ile towaru możemy załadować (Payload), ale również to, jakie przepisy i opłaty (Maut) dotyczą danego auta.
+            </p>
+            <div style="overflow-x: auto;">
+                <table class="gvw-table">
+                    <thead>
+                        <tr>
+                            <th>Typ floty</th>
+                            <th>Kategoria DMC</th>
+                            <th>Ładowność (ok.)</th>
+                            <th>Pojemność (EP)</th>
+                            <th>Zastosowanie biznesowe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Busy (LCV)</strong></td>
+                            <td>do 3.5 t</td>
+                            <td>0.6 t - 1.2 t</td>
+                            <td>8 - 12 EP</td>
+                            <td><strong>Transport Ekspresowy.</strong> Brak cyfrowych tachografów i weekendowych zakazów jazdy. Szybkie dostawy ("na wczoraj") oraz wjazdy do centrów miast.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Małe Solówki</strong></td>
+                            <td>3.5 t do 7.5 t</td>
+                            <td>2.5 t - 3.0 t</td>
+                            <td>10 - 15 EP</td>
+                            <td><strong>Dystrybucja "Last Mile".</strong> Kompromis, gdy towaru jest zbyt dużo na busa. Mogą omijać restrykcje tonażowe na mniejszych drogach.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Średnie Solówki</strong></td>
+                            <td>7.5 t - 12 t</td>
+                            <td>5.0 t - 6.0 t</td>
+                            <td>15 - 18 EP</td>
+                            <td><strong>Dystrybucja regionalna LTL.</strong> Najlepszy stosunek opłat drogowych do ilości miejsca na rozwiezienie drobnicy między hubami.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Duże Solówki</strong></td>
+                            <td>12 t - 18 t</td>
+                            <td>9.0 t - 10.0 t</td>
+                            <td>18 - 22 EP</td>
+                            <td><strong>Wysoki tonaż, niska objętość.</strong> Zbudowane dla branży budowlanej lub napojowej, gdzie limit wagowy osiągany jest szybciej niż brak miejsca.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ciężkie Solówki</strong></td>
+                            <td>18 t - 26 t</td>
+                            <td>do 15.0 t</td>
+                            <td>20 - 24 EP</td>
+                            <td>Pojazdy 3-osiowe, często baza dla sprzętu komunalnego, asenizacyjnego lub przewozu bardzo ciężkich materiałów wewnątrz miast.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Zestawy (Ciągnik + Naczepa)</strong></td>
+                            <td>40 t</td>
+                            <td>24.0 t - 25.0 t</td>
+                            <td>33 - 38 EP</td>
+                            <td><strong>Kręgosłup spedycji FTL.</strong> Najbardziej zoptymalizowana forma transportu dużych wolumenów towarowych na dalekich trasach po Europie.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="systemy">
+            <h2 class="section-heading">3. Systemy Mechaniczne i Załadunkowe</h2>
+            <div class="fleet-section">
+                <div class="fleet-card">
+                    <div class="spec-item"><span class="red-label">Ruchoma Podłoga (Walking Floor):</span>System listew podłogowych zasilanych hydraulicznie, które naprzemiennie wysuwają się i wsuwają. Pozwala to na rozładunek towarów sypkich bez unoszenia naczepy (bezpieczna praca pod liniami napięcia czy w niskich halach).</div>
+                    <div class="spec-item"><span class="red-label">Joloda (Skate System):</span>System wbudowanych szyn w podłogę naczepy i ruchomych "rolek". Jest absolutnie krytyczny w branży papierniczej do ładowania masywnych, wielotonowych ról papieru, pozwalając na wtoczenie ich w głąb naczepy.</div>
+                </div>
+                <div class="fleet-card">
+                    <div class="spec-item"><span class="red-label">Winda Załadowcza (Tail Lift):</span>Hydrauliczna platforma z tyłu pojazdu. Uwalnia załadowcę z konieczności posiadania rampy czy wózka widłowego, pozwalając kierowcy opuścić palety na poziom gruntu za pomocą ręcznego paleciaka.</div>
+                    <div class="spec-item"><span class="red-label">Podwójna Podłoga (Dopple-Stock):</span>Dwupoziomowy system w chłodniach wykorzystujący belki poprzeczne. Pozwala na załadunek niesztaplowalnych palet na dwóch piętrach, podwajając ładowność do 66 europalet i drastycznie redukując ślad węglowy na paletę.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wyposazenie">
+            <h2 class="section-heading">4. Wyposażenie Dodatkowe</h2>
+            <div class="fleet-card" style="margin-bottom: 0;">
+                <div class="spec-item"><span class="red-label">Pasy z Ergo-Napinaczem:</span>Pasy dociskają ładunek do podłogi. Wersja ERGO posiada przedłużoną rączkę napinacza, ułatwiającą aplikację ogromnej siły np. na bloki stali.</div>
+                <div class="spec-item"><span class="red-label">Maty Antypoślizgowe:</span>Zwykłe, gumowe kwadraty, znacząco zwiększające współczynnik tarcia. Pozwalają one na redukcję liczby wymaganych pasów transportowych do zabezpieczenia.</div>
+                <div class="spec-item"><span class="red-label">Narożniki Ochronne:</span>Wykonane z plastiku lub wzmocnionej tektury. Chronią delikatny towar (np. kartony) przed zmiażdżeniem przez napięty pas transportowy.</div>
+                <div class="spec-item"><span class="red-label">Certyfikat XL (EN 12642 XL):</span>Norma wytrzymałości konstrukcyjnej naczepy. Przy pełnym załadunku od deski do deski (sztauowanie kształtowe), ściany i plandeki naczepy pochłaniają siłę kinetyczną, zwalniając kierowcę z konieczności zapinania dodatkowych pasów.</div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="kontakt">
+        <div class="container footer-grid">
+            <div class="f-brand">
+                <a href="index.html" class="logo">M.KULCZYK</a>
+                <p>Strategic Logistics Partner</p>
+                <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="f-links">
+                <h5>Strefa Partnera</h5>
+                <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p>
+                <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p>
+                <p><a href="przewoznicy.html"><i class="fa-solid fa-truck-fast"></i> Oferta dla Przewoźników</a></p>
+            </div>
+
+            <div class="f-contact">
+                <h5>Kontakt</h5>
+                <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
+                <p style="white-space: nowrap;">Telefon: <strong>+48 722 270 532</strong></p>
+            </div>
+
+            <div class="f-legal">
+                <span class="iso-text">Standardy operacyjne oparte na normach ISO i GDP</span>
+                <p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onscroll = function() {
+            var navbar = document.getElementById("navbar");
+            if (navbar && window.pageYOffset > 50) {
+                navbar.classList.add("scrolled");
+            } else if (navbar) {
+                navbar.classList.remove("scrolled");
+            }
+        };
+    </script>
+</body>
+</html>

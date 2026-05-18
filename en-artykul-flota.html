@@ -84,24 +84,30 @@
         .gvw-table tr:last-child td { border-bottom: none; }
         .gvw-table tr:nth-child(even) { background: #fafafa; }
 
-        /* Article footer */
-        .article-footer { 
-            margin-top: 100px; 
-            padding: 80px 40px; 
-            background: #13100e; 
-            color: #fff; 
-            border-radius: 8px; 
-            text-align: center; 
-        }
-        .article-footer h2 { font-family: 'Inter', sans-serif; font-size: 2.2rem; margin-bottom: 20px; }
-
         /* Section Headings */
         .section-heading { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 900; margin: 80px 0 40px; border-left: 8px solid #e31e24; padding-left: 20px; color: #13100e; }
+
+        /* FOOTER */
+        footer#kontakt { background-color: #13100e !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding: 60px 0 40px !important; }
+        footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
+        footer#kontakt a:hover { color: #e31e24 !important; }
+        footer#kontakt h5 { color: #e31e24 !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 1fr !important; gap: 30px; align-items: stretch; }
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 5px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin: 0; line-height: 1.2; display: block; }
+        .copy { font-size: 0.75rem; color: #666; margin: 0; line-height: 1.2; }
+        .f-links p { margin: 5px 0; font-size: 0.9rem; }
 
         @media (max-width: 992px) {
             .fleet-section, .toc { grid-template-columns: 1fr; }
             .article-hero h1 { font-size: 2.5rem; }
             .gvw-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 30px !important; }
+            .f-legal { align-items: flex-start; justify-content: flex-start; }
+            .iso-text { text-align: left !important; white-space: normal; }
+        }
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
@@ -345,6 +351,62 @@
         </section>
 
         <section id="equipment">
-            <h2 class="section-heading">4. Additional Equipment</h3>
+            <h2 class="section-heading">4. Additional Equipment</h2>
             <div class="fleet-card" style="margin-bottom: 0;">
-                <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Organizing a freight does not end with ordering a vehicle. It is
+                <p style="font-size: 1.1rem; line-height: 1.6; color: #444; margin-bottom: 20px;">Organizing a freight does not end with ordering a vehicle. It is also about matching the right equipment to ensure safety and efficiency.</p>
+                
+                <div class="spec-item"><span class="red-label">Lashing Straps with Ergo-Tensioner:</span>As a standard, every driver carries about 12-15 straps (with a tension force of 500 DaN). A properly applied strap relies on friction, pressing the cargo against the floor to prevent it from shifting during sudden braking. The ERGO version features an extended tensioner handle, which makes it easier to apply force when securing massive blocks, e.g., of wood or steel.</div>
+                
+                <div class="spec-item"><span class="red-label">Anti-Slip Mats:</span>Simple rubber squares that are one of the most crucial safety elements in transport. They significantly increase the friction coefficient between the pallet and the slippery wood-and-metal trailer floor. Using mats allows for reducing the number of required lashing straps by up to several dozen percent.</div>
+                
+                <div class="spec-item"><span class="red-label">Edge Protectors (Corners):</span>Made of hard plastic or reinforced cardboard. They protect delicate goods (e.g., cardboard boxes) from being crushed by a tightly pulled lashing strap, while evenly distributing its force across the entire edge of the cargo.</div>
+
+                <div class="spec-item"><span class="red-label">XL Certificate (EN 12642 XL):</span>A standard certifying that the trailer's structure (front wall, tarpaulin, rear doors) is robust enough that, with a full and tight form-fit load (from edge to edge), the trailer itself can absorb the kinetic forces of the cargo, relieving the driver from the need to fasten additional straps. Absolutely crucial in the transport of beverages, for instance.</div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="kontakt">
+        <div class="container footer-grid">
+            <div class="f-brand">
+                <a href="en.html" class="logo">M.KULCZYK</a>
+                <p>Strategic Logistics Partner</p>
+                <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="f-links">
+                <h5>Partner Zone</h5>
+                <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p>
+                <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p>
+                <p><a href="przewoznicy.html"><i class="fa-solid fa-truck-fast"></i> For Carriers</a></p>
+            </div>
+
+            <div class="f-contact">
+                <h5>Contact</h5>
+                <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
+                <p style="white-space: nowrap;">Phone: <strong>+48 722 270 532</strong></p>
+            </div>
+            
+            <div class="f-legal">
+                <span class="iso-text">Operational standards based on ISO and GDP norms</span>
+                <p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onscroll = function() {
+            var navbar = document.getElementById("navbar");
+            if (navbar && window.pageYOffset > 50) {
+                navbar.classList.add("scrolled");
+            } else if (navbar) {
+                navbar.classList.remove("scrolled");
+            }
+        };
+    </script>
+</body>
+</html>

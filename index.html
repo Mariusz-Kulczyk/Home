@@ -49,10 +49,13 @@
         footer#kontakt a:hover { color: #e31e24 !important; }
         footer#kontakt h5 { color: #e31e24 !important; margin-bottom: 15px; }
         
-        /* Zmiana siatki z 3 na 4 kolumny w stopce */
-        .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr !important; gap: 40px !important; align-items: stretch; }
-        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 10px; }
-        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; text-align: right; white-space: nowrap; }
+        /* Poprawiona siatka dająca więcej miejsca na kontakt */
+        .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 1fr !important; gap: 30px !important; align-items: stretch; }
+        
+        /* Skorygowane formatowanie prawne (zbite w jeden blok) */
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 5px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; text-align: right; white-space: nowrap; display: block; line-height: 1.2; }
+        .f-legal .copy { margin: 0; line-height: 1.2; font-size: 0.85rem; }
         .f-links p { margin: 5px 0; font-size: 0.9rem; }
 
         @media (max-width: 992px) {
@@ -111,7 +114,7 @@
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80" alt="Mariusz Kulczyk">
+                    <img src="https://blogger.googleusercontent.com/img/a/AVvXsEj8fLCvPiAsnKjE7kxKW5_vFXOaiSMVu9n7UU-_UuhvJ9zihFEXD_6s_3um3ZWC1HilzytBvzH6RGnYutbLRxb51rcnD5Iccr7xH0bfQB56v11BvyuPn2RQ6d91DA4OEKY5Md-4wdyFiAo2mNu6Q-zp4bDDYMiZkbAZiVMyM37ZqbPFGy_XfEVZt0c-7G1w" alt="Mariusz Kulczyk">
                 </div>
             </div>
         </section>
@@ -224,9 +227,10 @@
                 <div class="logo">M.KULCZYK</div>
                 <p>Strategic Logistics Partner</p>
                 <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
-                    <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
                     <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
-                    <a href="mailto:mariusz200701@gmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                    <!-- Zmieniony email w linku mailto -->
+                    <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
                 </div>
             </div>
             
@@ -239,8 +243,9 @@
 
             <div class="f-contact">
                 <h5>Kontakt</h5>
-                <p>E-mail: <strong>mariusz200701@gmail.com</strong></p>
-                <p>Telefon: <strong>+48 722 270 532</strong></p>
+                <!-- Dodany styl zakazujący łamania tekstu i nowy e-mail -->
+                <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
+                <p style="white-space: nowrap;">Telefon: <strong>+48 722 270 532</strong></p>
             </div>
 
             <div class="f-legal">
