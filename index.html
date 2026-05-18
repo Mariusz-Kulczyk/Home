@@ -222,48 +222,31 @@
     </main>
 
     <footer id="kontakt">
-        <div class="container footer-grid">
+        <div class="container footer-grid" style="display: grid; grid-template-columns: 1fr 1fr 1.2fr !important; gap: 40px;">
             <div class="f-brand">
-                <div class="logo">M.KULCZYK</div>
+                <a href="index.html" class="logo">M.KULCZYK</a>
                 <p>Strategic Logistics Partner</p>
                 <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
                     <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
                     <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
-                    <!-- Zmieniony email w linku mailto -->
                     <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
                 </div>
             </div>
-            
+
             <div class="f-links">
                 <h5>Strefa Partnera</h5>
                 <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p>
                 <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p>
-                <p><a href="przewoznicy.html"><i class="fa-solid fa-truck-fast"></i> Oferta dla Przewoźników</a></p>
             </div>
 
             <div class="f-contact">
                 <h5>Kontakt</h5>
-                <!-- Dodany styl zakazujący łamania tekstu i nowy e-mail -->
                 <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
                 <p style="white-space: nowrap;">Telefon: <strong>+48 722 270 532</strong></p>
             </div>
-
-            <div class="f-legal">
-                <span class="iso-text">Standardy operacyjne oparte na normach ISO i GDP</span>
-                <p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p>
-            </div>
+        </div>
+        <div class="container" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #221e1b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <span class="iso-text" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap;">Standardy operacyjne oparte na normach ISO i GDP</span>
+            <p class="copy" style="font-size: 0.75rem; color: #666; margin: 0;">© 2026 Mariusz Kulczyk. All rights reserved.</p>
         </div>
     </footer>
-
-    <script>
-        window.onscroll = function() {
-            var navbar = document.getElementById("navbar");
-            if (navbar && window.pageYOffset > 50) {
-                navbar.classList.add("scrolled");
-            } else if (navbar) {
-                navbar.classList.remove("scrolled");
-            }
-        };
-    </script>
-</body>
-</html>

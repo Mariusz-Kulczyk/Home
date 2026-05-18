@@ -3,19 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV | Mariusz Kulczyk - International Freight Advisor</title>
+    <title>CV | Mariusz Kulczyk - Spedytor</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=34">
+    
     <style>
         :root { --primary: #e31e24; --dark: #13100e; --light: #f9f9f9; --soft-gray: #bbb; }
         body { font-family: 'Barlow', sans-serif; margin: 0; color: #333; background-color: #fff; }
-        .cv-container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; display: grid; grid-template-columns: 320px 1fr; gap: 50px; }
         
-        /* Sidebar */
-        .cv-sidebar { background: var(--light); padding: 40px; border-radius: 12px; height: fit-content; position: sticky; top: 20px; }
+        /* GŁÓWNE STYLE STOPKI (ZGODNE ZE STRONĄ) */
+        .logo { text-decoration: none !important; color: inherit; font-weight: 900; }
+        
+        footer#kontakt { background-color: #13100e !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding: 60px 0 40px !important; }
+        footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
+        footer#kontakt a:hover { color: #e31e24 !important; }
+        footer#kontakt h5 { color: #e31e24 !important; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr !important; gap: 40px; align-items: stretch; }
+        .f-legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 5px; }
+        .iso-text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; margin: 0; line-height: 1.2; display: block; }
+        .copy { font-size: 0.75rem; color: #666; margin: 0; line-height: 1.2; }
+        
+        @media (max-width: 992px) {
+            .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 30px !important; }
+            .f-legal { align-items: flex-start; justify-content: flex-start; }
+            .iso-text { white-space: normal; text-align: left; }
+        }
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* UKŁAD CV */
+        .cv-container { max-width: 1100px; margin: 40px auto 80px; padding: 0 20px; display: grid; grid-template-columns: 320px 1fr; gap: 50px; }
+        
+        /* Sidebar (statyczny) */
+        .cv-sidebar { background: var(--light); padding: 40px; border-radius: 12px; height: fit-content; }
         .profile-img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; margin: 0 auto 25px; display: block; border: 5px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .cv-sidebar h2 { font-family: 'Inter', sans-serif; font-size: 1.6rem; margin-bottom: 5px; text-align: center; }
-        .tagline { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 30px; display: block; text-align: center; letter-spacing: 1px; }
+        .tagline { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 1rem; margin-bottom: 30px; display: block; text-align: center; letter-spacing: 1px; }
         
         .contact-info { list-style: none; padding: 0; margin-bottom: 35px; }
         .contact-info li { margin-bottom: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 12px; }
@@ -42,6 +67,13 @@
             border-color: var(--primary);
         }
 
+        /* Blokowe kafelki umiejętności (jedno pod drugim, dopasowane do tekstu) */
+        .skill-tag.block-tag {
+            display: block;
+            width: fit-content;
+            margin: 0 0 8px 0;
+        }
+
         /* Main Content */
         .cv-main h1 { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 900; margin: 0 0 10px; color: var(--dark); }
         .cv-section { margin-bottom: 50px; }
@@ -63,13 +95,14 @@
             padding: 4px 12px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            margin-left: -12px;
         }
         .exp-item:hover .exp-title {
             background: var(--primary);
             color: #fff;
         }
 
-        .exp-company { color: var(--primary); font-weight: 700; font-size: 1rem; margin-bottom: 12px; display: block; padding-left: 12px; }
+        .exp-company { color: var(--primary); font-weight: 700; font-size: 1rem; margin-bottom: 12px; display: block; padding-left: 0; }
         .exp-desc { font-size: 1rem; line-height: 1.6; color: #555; }
         .exp-desc ul { padding-left: 20px; margin-top: 10px; }
         .exp-desc li { margin-bottom: 6px; }
@@ -83,32 +116,39 @@
         .print-btn { background: var(--dark); color: #fff; border: none; padding: 14px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-top: 20px; }
         .print-btn:hover { background: var(--primary); box-shadow: 0 5px 15px rgba(227, 30, 36, 0.3); }
 
-        @media print { .print-btn { display: none !important; } .cv-container { padding: 0; display: block; } .cv-sidebar { border: 1px solid #eee; margin-bottom: 20px; } }
-        @media (max-width: 900px) { .cv-container { grid-template-columns: 1fr; } .cv-sidebar { position: static; } }
+        /* Ustawienia do wydruku (PDF) */
+        @media print { 
+            .print-btn, footer#kontakt { display: none !important; } 
+            .cv-container { padding: 0; display: block; margin: 0; } 
+            .cv-sidebar { border: 1px solid #eee; margin-bottom: 20px; position: static; page-break-inside: avoid; } 
+            .exp-item { page-break-inside: avoid; }
+        }
+        
+        @media (max-width: 900px) { .cv-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <main class="cv-container">
+        
         <aside class="cv-sidebar">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80" alt="Mariusz Kulczyk" class="profile-img">
+            <img src="https://blogger.googleusercontent.com/img/a/AVvXsEj8fLCvPiAsnKjE7kxKW5_vFXOaiSMVu9n7UU-_UuhvJ9zihFEXD_6s_3um3ZWC1HilzytBvzH6RGnYutbLRxb51rcnD5Iccr7xH0bfQB56v11BvyuPn2RQ6d91DA4OEKY5Md-4wdyFiAo2mNu6Q-zp4bDDYMiZkbAZiVMyM37ZqbPFGy_XfEVZt0c-7G1w" alt="Mariusz Kulczyk" class="profile-img">
             <h2>Mariusz Kulczyk</h2>
-            <span class="tagline">International Freight Advisor</span>
+            <span class="tagline">Spedytor</span>
             
             <ul class="contact-info">
                 <li><i class="fa-solid fa-phone"></i> +48 722 270 532</li>
-                <li><i class="fa-solid fa-envelope"></i> mariusz200701@gmail.com</li>
+                <li><i class="fa-solid fa-envelope"></i> m.kulczyk@hotmail.com</li>
                 <li><i class="fa-solid fa-location-dot"></i> 41-407 Imielin, Polska</li>
                 <li><i class="fa-brands fa-linkedin"></i> linkedin.com/in/mariusz-kulczyk</li>
             </ul>
 
             <div class="skill-group">
-                <h3>Business Development</h3>
-                <span class="skill-tag">Consultative Selling</span>
-                <span class="skill-tag">Persuasive Copywriting</span>
+                <h3>Kompetencje Komercyjne</h3>
+                <span class="skill-tag">Sprzedaż B2B i Rozwój Biznesu</span>
+                <span class="skill-tag">Perswazyjny Copywriting</span>
                 <span class="skill-tag">Negocjacje handlowe</span>
-                <span class="skill-tag">Relational Networking</span>
-                <span class="skill-tag">B2B Sales Funnels</span>
+                <span class="skill-tag">Networking Relacyjny</span>
             </div>
 
             <div class="skill-group">
@@ -125,9 +165,25 @@
                 <h3>Digital & IT</h3>
                 <span class="skill-tag">Master Excel</span>
                 <span class="skill-tag">Web Building (HTML/CSS)</span>
-                <span class="skill-tag">Advanced IT Tools</span>
-                <span class="skill-tag">Data Analysis</span>
+                <span class="skill-tag">Analiza Danych</span>
+                <span class="skill-tag">Automatyzacja procesów</span>
                 <span class="skill-tag">Google Workspace</span>
+            </div>
+
+            <div class="skill-group">
+                <h3>Języki</h3>
+                <span class="skill-tag">Polski (Ojczysty)</span>
+                <span class="skill-tag">Angielski (B2)</span>
+            </div>
+
+            <div class="skill-group">
+                <h3>Kompetencje Miękkie</h3>
+                <span class="skill-tag block-tag">Analitycznie myślący</span>
+                <span class="skill-tag block-tag">Podejście procesowe</span>
+                <span class="skill-tag block-tag">Dobrze zorganizowany</span>
+                <span class="skill-tag block-tag">Samodzielny</span>
+                <span class="skill-tag block-tag">Odpowiedzialny</span>
+                <span class="skill-tag block-tag">Łatwo podejmujący decyzje</span>
             </div>
 
             <button class="print-btn" onclick="window.print()">
@@ -139,7 +195,7 @@
             <section class="cv-section">
                 <h1>Profil <span style="color:var(--primary)">Zawodowy</span></h1>
                 <p class="exp-desc" style="font-size: 1.1rem; line-height: 1.7;">
-                    Doświadczony spedytor i doradca ds. transportu międzynarodowego z silnym nastawieniem na optymalizację procesów i budowanie trwałych relacji z klientem. Ekspert w zarządzaniu flotą i planowaniu skomplikowanych łańcuchów dostaw na rynku europejskim. Skutecznie łączę wiedzę techniczną z zakresu logistyki (Inżynier) z analitycznym podejściem finansowym oraz nowoczesnymi technikami pozyskiwania klientów B2B.
+                    Doświadczony spedytor z silnym nastawieniem na optymalizację procesów, analizę biznesu i budowanie trwałych relacji z klientem. Ekspert w zarządzaniu flotą i planowaniu złożonych łańcuchów dostaw. Skutecznie łączę wiedzę techniczną z zakresu logistyki (Inżynier) z analitycznym podejściem finansowym oraz nowoczesnymi technikami pozyskiwania klientów B2B.
                 </p>
             </section>
 
@@ -148,34 +204,34 @@
 
                 <div class="exp-item">
                     <span class="exp-date">04.2026 - Obecnie</span>
-                    <span class="exp-title">International Freight Advisor</span>
+                    <span class="exp-title">Spedytor</span>
                     <span class="exp-company">Motohouse Logistics</span>
                     <div class="exp-desc">
-                        Projektowanie strategii logistycznych dla kluczowych partnerów oraz optymalizacja rentowności frachtów przy użyciu zaawansowanej analityki danych.
-                    </div>
+                        Spedytor 360°: Projektowanie strategii logistycznych dla kluczowych partnerów. Wykorzystanie pełnego wsparcia operacyjnego (backoffice) do maksymalnego skupienia się na budowaniu portfela klientów, technikach negocjacyjnych i relacjach.
+</div>
                 </div>
 
                 <div class="exp-item">
                     <span class="exp-date">10.2024 - 04.2026</span>
-                    <span class="exp-title">International Freight Forwarder</span>
+                    <span class="exp-title">Spedytor Międzynarodowy</span>
                     <span class="exp-company">TZM Sp. z o.o.</span>
                     <div class="exp-desc">
-                        Aktywne budowanie portfela klientów i bazy przewoźników. Wykorzystanie technik doradczych w procesie sprzedaży usług transportowych na rynkach UE.
+                        Spedytor 360°: Aktywne budowanie portfela klientów i sieci przewoźników, marketing usług, analityka operacyjna, analiza rentowności, optymalizacja procesów poprzez narzędzia IT oraz nadzór nad fakturowaniem.
                     </div>
                 </div>
 
                 <div class="exp-item">
                     <span class="exp-date">06.2021 - 10.2024</span>
-                    <span class="exp-title">Freight Specialist / Dyspozytor</span>
+                    <span class="exp-title">Specjalista ds. Transportu / Dyspozytor</span>
                     <span class="exp-company">Jarzyna Trans</span>
                     <div class="exp-desc">
-                        Zarządzanie operacyjne flotą, planowanie tras międzynarodowych oraz bezpośrednie negocjacje warunków współpracy z kontrahentami zagranicznymi.
+                        Zarządzanie operacyjne flotą busów do 3,5t na trasach ekspresowych, planowanie tras międzynarodowych, koordynacja prac i kontakt z kierowcami oraz bezpośrednie negocjacje warunków współpracy z kontrahentami.
                     </div>
                 </div>
 
                 <div class="exp-item">
                     <span class="exp-date">02.2023 - 12.2023</span>
-                    <span class="exp-title">Spedytor - Projekt Amazon Relay</span>
+                    <span class="exp-title">Spedytor - Amazon Relay</span>
                     <span class="exp-company">VAN 7 Sp. z o.o.</span>
                     <div class="exp-desc">
                         Koordynacja floty 80 aut w systemie Amazon, monitorowanie wydajności operacyjnej oraz rozwiązywanie krytycznych problemów logistycznych.
@@ -187,7 +243,7 @@
                     <span class="exp-title">Spedytor Międzynarodowy</span>
                     <span class="exp-company">AW Polska Logistyka Sp. z o.o.</span>
                     <div class="exp-desc">
-                        Krótkoterminowy projekt skoncentrowany na intensywnej obsłudze giełd transportowych i optymalizacji procesów spedycyjnych.
+                        Krótkoterminowy projekt skoncentrowany na intensywnej obsłudze giełd transportowych i wypracowaniu zysku.
                     </div>
                 </div>
             </section>
@@ -238,6 +294,36 @@
             </section>
         </div>
     </main>
+
+    <footer id="kontakt">
+        <div class="container footer-grid" style="display: grid; grid-template-columns: 1fr 1fr 1.2fr !important; gap: 40px;">
+            <div class="f-brand">
+                <a href="index.html" class="logo">M.KULCZYK</a>
+                <p>Strategic Logistics Partner</p>
+                <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
+                    <a href="tel:+48722270532"><i class="fa-solid fa-phone" style="font-size: 1.5rem;"></i></a>
+                    <a href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-envelope" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="f-links">
+                <h5>Strefa Partnera</h5>
+                <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p>
+                <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p>
+            </div>
+
+            <div class="f-contact">
+                <h5>Kontakt</h5>
+                <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
+                <p style="white-space: nowrap;">Telefon: <strong>+48 722 270 532</strong></p>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #221e1b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <span class="iso-text" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap;">Standardy operacyjne oparte na normach ISO i GDP</span>
+            <p class="copy" style="font-size: 0.75rem; color: #666; margin: 0;">© 2026 Mariusz Kulczyk. All rights reserved.</p>
+        </div>
+    </footer>
 
 </body>
 </html>
