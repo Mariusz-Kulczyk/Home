@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barometr Transportowy Live | M.KULCZYK</title>
+    <title>Live Transport Barometer | M.KULCZYK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css?v=35">
@@ -12,7 +12,7 @@
         :root { --red: #e31e24; --yellow: #fbbc04; --green: #2b8a3e; --dark: #13100e; --gray: #f4f6f8; }
         body { background-color: var(--gray); margin: 0; font-family: 'Barlow', sans-serif; color: var(--dark); }
         
-        /* GŁÓWNE STYLE NAWIGACJI I STOPKI (ZGODNE ZE STRONĄ) */
+        /* HEADER & FOOTER STYLES */
         .logo { text-decoration: none !important; color: inherit; font-weight: 900; font-family: 'Inter', sans-serif;}
         .header-flex { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; }
         .nav-links { display: flex !important; flex-direction: row !important; gap: 25px !important; align-items: center !important; list-style: none !important; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -24,7 +24,7 @@
         .page-title { text-align: center; font-family: 'Inter', sans-serif; font-weight: 900; font-size: 2.8rem; text-transform: uppercase; margin-bottom: 10px; }
         .subtitle { text-align: center; color: #666; margin-bottom: 60px; line-height: 1.6; max-width: 900px; margin-left: auto; margin-right: auto; font-size: 1.1rem; }
 
-        /* MAPA */
+        /* MAP */
         .map-section { display: flex; flex-direction: column; align-items: center; gap: 30px; }
         
         .card { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee; width: 100%; box-sizing: border-box; }
@@ -33,7 +33,7 @@
         .map-wrapper { width: 100%; max-width: 1000px; margin: 0 auto 30px; border-radius: 6px; overflow: hidden; background: #fff; }
         .map-wrapper iframe { width: 100%; height: 600px; border: none; display: block; }
 
-        /* LEGENDA Z GRADIENETEM */
+        /* HEATMAP LEGEND */
         .legend-wrapper { width: 100%; max-width: 900px; background: #f9f9f9; padding: 25px; border-radius: 8px; border: 1px solid #eee; margin: 0 auto; }
         .legend-title { font-family: 'Inter', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 1rem; margin-bottom: 20px; text-align: center; }
         .gradient-bar { width: 100%; height: 24px; background: linear-gradient(to right, var(--red), var(--yellow), var(--green)); border-radius: 6px; margin-bottom: 15px; }
@@ -43,7 +43,7 @@
         .legend-block span:first-child { display: block; margin-bottom: 5px; }
         .legend-sub { font-size: 0.75rem; color: #777; font-weight: 400; font-family: 'Barlow', sans-serif; line-height: 1.3; }
 
-        /* INSTRUKCJA CZYTANIA BAROMETRU */
+        /* INSTRUCTIONS */
         .instruction-section { width: 100%; margin-top: 20px; margin-bottom: 40px; }
         .instruction-title { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 900; text-align: center; margin-bottom: 30px; text-transform: uppercase; }
         .instruction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; }
@@ -58,7 +58,7 @@
         .inst-text strong { display: block; margin-bottom: 4px; color: var(--dark); font-family: 'Inter', sans-serif; }
         .inst-text p { margin: 0; font-size: 0.95rem; color: #555; line-height: 1.5; }
 
-        /* CTA BANNER (SKRÓCONY) */
+        /* CTA BANNER */
         .cta-banner { 
             background: var(--dark); 
             color: #fff; 
@@ -73,7 +73,7 @@
         .cta-banner h3 { font-family: 'Inter', sans-serif; font-size: 1.8rem; margin-bottom: 15px; color: #fff; margin-top: 0; }
         .cta-banner p { font-size: 1.05rem; color: #bbb; max-width: 600px; margin: 0 auto 25px; line-height: 1.6; }
 
-        /* STOPKA */
+        /* FOOTER */
         footer#kontakt { background-color: #13100e !important; color: #ffffff !important; border-top: 10px solid #e31e24 !important; padding: 60px 0 40px !important; margin-top: 80px; }
         footer#kontakt p, footer#kontakt a { color: #aaaaaa !important; text-decoration: none; }
         footer#kontakt a:hover { color: #e31e24 !important; }
@@ -104,7 +104,7 @@
 
     <header class="main-header" id="navbar" style="background-color: #13100e; border-bottom: 1px solid #221e1b;">
         <div class="container header-flex" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
-            <a href="index.html" class="logo" style="font-size: 1.5rem; color: #ffffff !important; text-decoration: none; font-family: 'Inter', sans-serif; font-weight: 900;">M.KULCZYK</a>
+            <a href="en.html" class="logo" style="font-size: 1.5rem; color: #ffffff !important; text-decoration: none; font-family: 'Inter', sans-serif; font-weight: 900;">M.KULCZYK</a>
             <nav>
                 <ul class="nav-links" style="display: flex; list-style: none; gap: 30px; align-items: center; margin: 0;">
                     <li class="lang-switcher">
@@ -112,22 +112,22 @@
                         <a href="en-barometr.html"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a>
                         <a href="de-barometr.html"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a>
                     </li>
-                    <li><a href="index.html#onas" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">O MNIE</a></li>
-                    <li><a href="doradztwo.html" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">USŁUGI</a></li>
-                    <li><a href="artykuly.html" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">ARTYKUŁY</a></li>
-                    <li><a href="index.html#kontakt" class="btn-cta" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">KONTAKT</a></li>
+                    <li><a href="en.html#onas" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">ABOUT ME</a></li>
+                    <li><a href="en-doradztwo.html" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">SERVICES</a></li>
+                    <li><a href="en-artykuly.html" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">ARTICLES</a></li>
+                    <li><a href="en.html#kontakt" class="btn-cta" style="color: #ffffff; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.color='#e31e24'" onmouseout="this.style.color='#ffffff'">CONTACT</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <div class="container page-content">
-        <h1 class="page-title">Barometr Odchyleń <span style="color:var(--red)">Podaży</span></h1>
-        <p class="subtitle">Aktualny wskaźnik odchyleń rynkowych. Dane prezentujące w czasie rzeczywistym nietypowe wahania w dostępności aut względem ładunków eksportowych, co pozwala z wyprzedzeniem reagować na zmianę cen.</p>
+        <h1 class="page-title">Supply Deviation <span style="color:var(--red)">Barometer</span></h1>
+        <p class="subtitle">Current market deviation indicator. Real-time data showing unusual fluctuations in available trucks relative to export loads, allowing you to proactively respond to pricing shifts.</p>
 
         <div class="map-section">
             <div class="card">
-                <h2><i class="fa-solid fa-earth-europe"></i> Mapa Rynku Europejskiego</h2>
+                <h2><i class="fa-solid fa-earth-europe"></i> European Market Map</h2>
                 
                 <div class="map-wrapper">
                     <iframe 
@@ -139,67 +139,67 @@
                 </div>
 
                 <div class="legend-wrapper">
-                    <div class="legend-title">Wskaźnik odchyleń od normy (Heatmap)</div>
+                    <div class="legend-title">Deviation from normal indicator (Heatmap)</div>
                     <div class="gradient-bar"></div>
                     <div class="legend-labels">
                         <div class="legend-block" style="text-align: left;">
-                            <span><i class="fa-solid fa-truck"></i> Więcej aut (Rynek trudny)</span>
-                            <span class="legend-sub">Wyższa dostępność aut niż zazwyczaj, presja na obniżki stawek.</span>
+                            <span><i class="fa-solid fa-truck"></i> More trucks (Tough market)</span>
+                            <span class="legend-sub">Higher truck availability than usual, downward pressure on rates.</span>
                         </div>
                         
                         <div class="legend-block">
-                            <span><i class="fa-solid fa-scale-balanced"></i> W normie</span>
-                            <span class="legend-sub">Standardowy stosunek podaży do popytu dla tego regionu.</span>
+                            <span><i class="fa-solid fa-scale-balanced"></i> Normal</span>
+                            <span class="legend-sub">Standard supply-to-demand ratio for this specific region.</span>
                         </div>
                         
                         <div class="legend-block" style="text-align: right;">
-                            <span><i class="fa-solid fa-boxes-stacked"></i> Więcej ładunków (Rynek optymalny)</span>
-                            <span class="legend-sub">Niższa dostępność aut niż zazwyczaj, presja na wzrost stawek.</span>
+                            <span><i class="fa-solid fa-boxes-stacked"></i> More loads (Optimal market)</span>
+                            <span class="legend-sub">Lower truck availability than usual, upward pressure on rates.</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="instruction-section">
-                <h2 class="instruction-title">Jak czytać wahania w praktyce?</h2>
+                <h2 class="instruction-title">How to read fluctuations in practice?</h2>
                 <div class="instruction-grid">
                     
                     <div class="inst-card">
-                        <h3><i class="fa-solid fa-box-open" style="color:var(--dark)"></i> Dostępność aut (Gdzie ładujesz?)</h3>
-                        <p class="inst-desc">Przykład: Wysyłasz towar z Belgii.</p>
+                        <h3><i class="fa-solid fa-box-open" style="color:var(--dark)"></i> Truck availability (Where are you loading?)</h3>
+                        <p class="inst-desc">Example: You are shipping goods from Belgium.</p>
                         
                         <div class="inst-row">
                             <div class="inst-dot dot-green"></div>
                             <div class="inst-text">
-                                <strong>Belgia świeci na zielono?</strong>
-                                <p>Odchylenie na korzyść ładunków. Dostępność aut jest <b>niższa niż zazwyczaj</b> dla tego regionu. Przewoźnicy mogą przebierać w ofertach, przez co znalezienie auta może zająć więcej czasu.</p>
+                                <strong>Is Belgium glowing green?</strong>
+                                <p>Deviation favoring loads. Truck availability is <b>lower than usual</b> for this region. Carriers can cherry-pick offers, making it harder and more time-consuming to find an available truck.</p>
                             </div>
                         </div>
                         <div class="inst-row">
                             <div class="inst-dot dot-red"></div>
                             <div class="inst-text">
-                                <strong>Belgia świeci na czerwono?</strong>
-                                <p>Odchylenie na korzyść aut. Występuje tu <b>wyższa dostępność ciężarówek niż zwykle</b>. Na tym rynku łatwiej i szybciej znajdziesz wolnego przewoźnika pod swój ładunek.</p>
+                                <strong>Is Belgium glowing red?</strong>
+                                <p>Deviation favoring trucks. There is <b>higher truck availability than usual</b>. In this market, you will find an available carrier for your load much faster and easier.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="inst-card">
-                        <h3><i class="fa-solid fa-route" style="color:var(--dark)"></i> Koszt transportu (Dokąd wysyłasz?)</h3>
-                        <p class="inst-desc">Przykład: Kierunek docelowy dyktuje presję cenową.</p>
+                        <h3><i class="fa-solid fa-route" style="color:var(--dark)"></i> Transport cost (Where are you delivering?)</h3>
+                        <p class="inst-desc">Example: The destination dictates pricing pressure.</p>
                         
                         <div class="inst-row">
                             <div class="inst-dot dot-red"></div>
                             <div class="inst-text">
-                                <strong>Wysyłasz na czerwone pole?</strong>
-                                <p>Stawki rosną. Przewoźnicy mają świadomość, że w regionie docelowym jest trudniej o ładunek powrotny (nietypowy nadmiar aut), więc oczekują rekompensaty w postaci wyższej ceny frachtu.</p>
+                                <strong>Shipping to a red zone?</strong>
+                                <p>Rates go up. Carriers know it is harder to find a return load in the destination region (unusual excess of trucks), so they expect compensation through a higher freight rate.</p>
                             </div>
                         </div>
                         <div class="inst-row">
                             <div class="inst-dot dot-green"></div>
                             <div class="inst-text">
-                                <strong>Wysyłasz na zielone pole?</strong>
-                                <p>Presja na spadek stawek. To pożądany kierunek – przewoźnicy wiedzą, że czeka tam na nich więcej ofert niż zwykle, więc chętniej zgodzą się pojechać taniej za pewny powrót.</p>
+                                <strong>Shipping to a green zone?</strong>
+                                <p>Downward pressure on rates. This is a highly desirable destination – carriers know there are more offers waiting there than usual, so they are willing to go cheaper for a guaranteed return trip.</p>
                             </div>
                         </div>
                     </div>
@@ -208,10 +208,10 @@
             </div>
 
             <div class="cta-banner">
-                <h3>Brakuje wolnych aut lub stawki rosną?</h3>
-                <p>Nawet przy silnych wahaniach rynkowych i braku pojazdów w Twoim regionie potrafię zabezpieczyć tabor. Zorganizuję dedykowany transport opierając się na stałej bazie wypracowanych kontaktów.</p>
-                <a href="index.html#kontakt" class="btn-cta" style="background: var(--red); color: #fff; padding: 14px 28px; font-weight: 700; text-decoration: none; border-radius: 4px; font-family: 'Inter', sans-serif; display: inline-block; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-                    ZLEĆ MI TRANSPORT
+                <h3>Lacking available trucks or rates are rising?</h3>
+                <p>Even with strong market fluctuations and a lack of vehicles in your region, I can secure the required fleet. I will organize a dedicated transport based on a solid base of established carrier contacts.</p>
+                <a href="en.html#kontakt" class="btn-cta" style="background: var(--red); color: #fff; padding: 14px 28px; font-weight: 700; text-decoration: none; border-radius: 4px; font-family: 'Inter', sans-serif; display: inline-block; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    ORDER TRANSPORT
                 </a>
             </div>
         </div>
@@ -220,7 +220,7 @@
     <footer id="kontakt">
         <div class="container footer-grid" style="display: grid; grid-template-columns: 1fr 1fr 1.2fr !important; gap: 40px; margin: 0 auto;">
             <div class="f-brand">
-                <a href="index.html" class="logo" style="text-decoration: none; font-family: 'Inter', sans-serif;">M.KULCZYK</a>
+                <a href="en.html" class="logo" style="text-decoration: none; font-family: 'Inter', sans-serif;">M.KULCZYK</a>
                 <p>Strategic Logistics Partner</p>
                 <div class="socials" style="margin-top: 20px; display: flex; gap: 15px;">
                     <a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank"><i class="fa-brands fa-linkedin" style="font-size: 1.5rem;"></i></a>
@@ -230,19 +230,19 @@
             </div>
 
             <div class="f-links">
-                <h5>Strefa Partnera</h5>
-                <p><a href="planer2.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p>
-                <p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p>
+                <h5>Partner Zone</h5>
+                <p><a href="en-planer2.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p>
+                <p><a href="en-barometr.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p>
             </div>
 
             <div class="f-contact">
-                <h5>Kontakt</h5>
+                <h5>Contact</h5>
                 <p style="white-space: nowrap;">E-mail: <strong>m.kulczyk@hotmail.com</strong></p>
-                <p style="white-space: nowrap;">Telefon: <strong>+48 722 270 532</strong></p>
+                <p style="white-space: nowrap;">Phone: <strong>+48 722 270 532</strong></p>
             </div>
         </div>
         <div class="container" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #221e1b; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <span class="iso-text" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; font-family: 'Inter', sans-serif;">Standardy operacyjne oparte na normach ISO i GDP</span>
+            <span class="iso-text" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #aaaaaa; white-space: nowrap; font-family: 'Inter', sans-serif;">Operational standards based on ISO and GDP norms</span>
             <p class="copy" style="font-size: 0.75rem; color: #666; margin: 0;">© 2026 Mariusz Kulczyk. All rights reserved.</p>
         </div>
     </footer>
