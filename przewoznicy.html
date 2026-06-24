@@ -106,20 +106,19 @@
             .benefits-grid { grid-template-columns: 1fr; }
         }
     </style>
+  <link rel="stylesheet" href="nav-unified.css?v=77">
+
+<link rel="stylesheet" href="site-overrides-v77.css?v=77">
+<link rel="stylesheet" href="site-mobile.css?v=107">
 </head>
 <body>
 
-    <header class="header-nav">
-        <div class="container" style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:0;">
-            <a href="index.html" class="logo">M.KULCZYK <span class="text-red">LOGISTICS</span></a>
-            <ul class="nav-links">
-                <li><a href="planer2.html">Planer 3D</a></li>
-                <li><a href="barometr.html">Barometr Live</a></li>
-                <li><a href="przewoznicy.html" class="text-red">Dla Przewoźników</a></li>
-                <li><a href="#kontakt" class="btn-cta">Kontakt</a></li>
-            </ul>
-        </div>
-    </header>
+    <header class="main-header mk-nav" id="navbar">
+  <div class="container header-flex">
+    <a class="logo" href="index.html">M.KULCZYK</a>
+    <nav aria-label="Główna nawigacja"><ul class="nav-links"><li class="lang-switcher" aria-label="Language selector"><a href="przewoznicy.html" aria-label="PL" class="is-current" aria-current="page"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a><a href="en.html" aria-label="EN"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a><a href="de.html" aria-label="DE"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a></li><li data-nav-key="about"><a href="index.html#onas">O MNIE</a></li><li data-nav-key="projects"><a href="doradztwo.html" class="is-active">PROJEKTY</a></li><li data-nav-key="articles"><a href="artykuly.html">ARTYKUŁY</a></li><li data-nav-key="contact"><a href="index.html#kontakt" class="btn-cta">KONTAKT</a></li></ul></nav>
+  </div>
+</header>
 
     <section class="hero">
         <div class="container">
@@ -381,5 +380,60 @@
         </div>
     </div>
 
+
+<style id="v67-footer-certificates">
+/* v67/v68 — unified footer partner area with only the MotoHouse card on every page. */
+footer#kontakt .f-partner{display:flex!important;align-items:stretch!important;min-width:0!important;}
+footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!important;padding:16px 18px!important;justify-items:center!important;align-content:center!important;width:100%!important;}
+</style>
+
+<script id="v67-footer-certificates-script">
+(function(){
+  var footer = document.querySelector('footer#kontakt');
+  if(!footer) return;
+  var holder = footer.querySelector('.f-partner');
+  if(!holder) return;
+  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
+  var copyMap = {
+    pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },
+    en: { working: 'Currently at:', aria: 'Currently at MotoHouse' },
+    de: { working: 'Derzeit bei:', aria: 'Derzeit bei MotoHouse' }
+  };
+  var t = copyMap[lang] || copyMap.pl;
+  holder.innerHTML = '' +
+    '<a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="' + t.aria + '">' +
+      '<span class="footer-motohouse-copy"><strong>' + t.working + '</strong></span>' +
+      '<img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse">' +
+    '</a>';
+}());
+</script>
+
+
+<script id="v77-nav-section-tone">
+(function () {
+  var header = document.querySelector('.main-header.mk-nav');
+  if (!header) return;
+  var darkSelector = '.consult-hero, .services, .cta, .article-index-hero, .hero-signal-strip, .fleet-dark, .tools-section, footer#kontakt';
+  var ticking = false;
+  function updateNavTone() {
+    var y = Math.min(window.innerHeight - 2, Math.round(header.getBoundingClientRect().bottom + 5));
+    var node = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
+    var isDark = !!(node && node.closest && node.closest(darkSelector));
+    header.classList.toggle('nav-state-dark', isDark);
+    header.classList.toggle('nav-state-light', !isDark);
+    header.classList.toggle('nav-compact', window.scrollY > 14);
+    ticking = false;
+  }
+  function requestUpdate() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(updateNavTone); }
+  }
+  window.addEventListener('scroll', requestUpdate, { passive:true });
+  window.addEventListener('resize', requestUpdate);
+  requestUpdate();
+}());
+</script>
+
+<script src="site-mobile.js?v=107"></script>
 </body>
 </html>

@@ -148,3 +148,436 @@ footer { padding: 100px 0 50px; background: #fff; border-top: 10px solid var(--r
     .footer-grid { grid-template-columns: 1fr; gap: 40px; }
     .nav-links { gap: 10px; }
 }
+
+/* =========================================================
+   Premium refinements — original layout, original palette
+   ========================================================= */
+
+/* Subtle "architectural paper" surface for the white sections.
+   The grid is intentionally wide and low-contrast so it does not read as a pixel grid. */
+.hero-personal,
+.sectors-section,
+.faq-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--white);
+    background-image:
+        linear-gradient(90deg, rgba(19, 16, 14, 0.035) 1px, transparent 1px),
+        linear-gradient(rgba(19, 16, 14, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 12% 16%, rgba(227, 30, 36, 0.065), transparent 31%),
+        radial-gradient(circle at 86% 84%, rgba(19, 16, 14, 0.035), transparent 35%);
+    background-size: 112px 112px, 112px 112px, 100% 100%, 100% 100%;
+}
+
+.hero-personal::before,
+.sectors-section::before,
+.faq-section::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 380px;
+    height: 380px;
+    border: 1px solid rgba(227, 30, 36, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-personal::before { right: -170px; bottom: -210px; }
+.sectors-section::before { left: -240px; top: 90px; }
+.faq-section::before { right: -210px; top: -210px; }
+
+/* Keep the original hero, image and visual hierarchy; only sharpen spacing/details. */
+.hero-personal { padding: 116px 0 108px; }
+.hero-title { letter-spacing: -0.055em; }
+.hero-lead { max-width: 535px; }
+.hero-image { position: relative; }
+.hero-image::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    bottom: 20px;
+    left: 20px;
+    z-index: -1;
+    border: 1px solid rgba(19, 16, 14, 0.16);
+    border-radius: 30px;
+    background: linear-gradient(180deg, rgba(248,244,239,.88), rgba(234,227,219,.76));
+    box-shadow: 0 18px 40px rgba(19, 16, 14, 0.10);
+}
+.hero-image img { will-change: transform, filter; }
+.hero-image:hover img { transform: translate(-4px, -4px); }
+
+/* Counter cards stay recognisably yours but respond more confidently. */
+.hero-stats-mini { gap: 0; border-top-width: 2px; }
+.mini-stat {
+    position: relative;
+    min-width: 110px;
+    padding: 0 22px 0 0;
+    margin-right: 22px;
+    transition: transform .28s ease, color .28s ease;
+}
+.mini-stat:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 0;
+    width: 1px;
+    height: 42px;
+    background: rgba(19, 16, 14, 0.14);
+}
+.mini-stat:hover { transform: translateY(-4px); }
+.mini-stat:hover strong { color: var(--red); }
+.mini-stat strong { transition: color .28s ease; font-variant-numeric: tabular-nums; }
+
+/* Most interactive tiles receive a consistent, restrained hover highlight. */
+.s-card,
+.fleet-card,
+.sector-item,
+.advisor-banner {
+    position: relative;
+    overflow: hidden;
+}
+.s-card::after,
+.fleet-card::after,
+.sector-item::after {
+    content: "";
+    position: absolute;
+    inset: auto -44px -44px auto;
+    width: 112px;
+    height: 112px;
+    border: 1px solid rgba(227, 30, 36, 0.18);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: transform .4s ease, border-color .3s ease;
+}
+.s-card:hover::after,
+.fleet-card:hover::after,
+.sector-item:hover::after { transform: scale(1.35); }
+.s-card:hover {
+    border-top-color: var(--red);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 38px rgba(19, 16, 14, 0.09);
+}
+.s-card:hover .icon-red { transform: translateY(-3px) scale(1.06); }
+.icon-red { transition: transform .28s ease, color .28s ease; }
+
+.fleet-card {
+    border-left-width: 3px;
+    transition: transform .28s ease, background .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.fleet-card:hover {
+    background: #241f1c;
+    border-left-color: #fff;
+    transform: translateX(8px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.23);
+}
+.fleet-card:hover .f-num { opacity: .75; color: #fff; }
+.f-num { transition: color .28s ease, opacity .28s ease; }
+
+.sector-item {
+    border-radius: 8px;
+    transform: translateZ(0);
+    transition: transform .28s ease, background .28s ease, color .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+.sector-item:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+    transform: translateY(-6px);
+    box-shadow: 0 16px 28px rgba(227, 30, 36, 0.18);
+}
+.sector-item:hover i { color: #fff; transform: translateY(-2px); }
+.sector-item i { transition: color .28s ease, transform .28s ease; }
+.sector-item:hover::after { border-color: rgba(255,255,255,.42); }
+
+.advisor-banner {
+    border-top: 1px solid rgba(227, 30, 36, 0.24);
+    background: linear-gradient(105deg, rgba(255,255,255,.94) 0%, rgba(255,255,255,.74) 100%);
+    transition: box-shadow .28s ease, transform .28s ease, border-color .28s ease;
+}
+.advisor-banner:hover {
+    border-color: rgba(227, 30, 36, .50);
+    box-shadow: 0 18px 34px rgba(19,16,14,.07);
+    transform: translateY(-3px);
+}
+
+/* FAQ — adapted to the supplied example while retaining the site language, colours and typography. */
+.faq-section { padding: 108px 0 104px; }
+.faq-layout { display: grid; grid-template-columns: .84fr 1.16fr; gap: 78px; align-items: start; }
+.faq-intro { max-width: 440px; }
+.faq-kicker { color: var(--red); font-size: .8rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
+.faq-title { margin: 15px 0 18px; font-family: 'Inter', sans-serif; font-size: clamp(2.45rem, 4.3vw, 4.1rem); font-weight: 900; line-height: .96; letter-spacing: -0.055em; }
+.faq-intro p { max-width: 405px; color: var(--light-text); font-size: 1.04rem; }
+.faq-list { border-top: 1px solid rgba(19,16,14,.17); }
+.faq-item { border-bottom: 1px solid rgba(19,16,14,.17); }
+.faq-question {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    padding: 23px 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    font: 700 1.05rem/1.36 'Barlow', sans-serif;
+    text-align: left;
+    transition: color .22s ease;
+}
+.faq-question:hover { color: var(--red); }
+.faq-question .faq-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 1px solid rgba(19,16,14,.18);
+    border-radius: 50%;
+    color: var(--red);
+    font-size: .9rem;
+    line-height: 1;
+    transition: color .22s ease, background .22s ease, border-color .22s ease, transform .22s ease;
+}
+.faq-item.is-open .faq-icon { transform: rotate(45deg); background: var(--red); border-color: var(--red); color: #fff; }
+.faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+.faq-item.is-open .faq-answer { grid-template-rows: 1fr; }
+.faq-answer-inner { overflow: hidden; }
+.faq-answer p { max-width: 690px; margin: 0; padding: 0 0 24px; color: var(--light-text); font-size: .95rem; line-height: 1.75; }
+
+@media (max-width: 992px) {
+    .hero-personal { padding: 90px 0; }
+    .faq-layout { grid-template-columns: 1fr; gap: 38px; }
+    .faq-intro { max-width: 620px; }
+    .hero-stats-mini { flex-wrap: wrap; row-gap: 24px; }
+}
+
+@media (max-width: 640px) {
+    .hero-personal, .sectors-section, .faq-section { background-size: 72px 72px, 72px 72px, 100% 100%, 100% 100%; }
+    .hero-personal { padding: 75px 0; }
+    .hero-stats-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 0; }
+    .mini-stat { min-width: 0; margin: 0; padding: 0 14px 0 0; }
+    .mini-stat:nth-child(2)::after { display: none; }
+    .faq-section { padding: 76px 0; }
+    .faq-question { padding: 20px 0; font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+
+/* v14 shared warm paper fallback */
+:root{--warm-paper:#fffaf5;}
+
+
+/* v80 — restore the original hero line, with the commitment statement fitted between headline and description. */
+.hero-personal .hero-title { margin-bottom: 16px; }
+.hero-personal .hero-commitment {
+    max-width: 520px;
+    margin: 0 0 13px;
+    color: #201914;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.06rem, 1.55vw, 1.38rem);
+    font-weight: 750;
+    line-height: 1.22;
+    letter-spacing: -0.026em;
+}
+.hero-personal .hero-commitment span { color: var(--red); }
+.hero-personal .hero-lead {
+    max-width: 535px;
+    margin-bottom: 30px;
+    font-size: clamp(1rem, 1.32vw, 1.18rem);
+    line-height: 1.62;
+}
+@media (max-width: 700px) {
+    .hero-personal .hero-title { margin-bottom: 13px; }
+    .hero-personal .hero-commitment { font-size: 1.04rem; line-height: 1.28; }
+    .hero-personal .hero-lead { margin-bottom: 26px; font-size: 1rem; }
+}
+
+
+/* v81 — homepage commitment copy and flip profile card. */
+.hero-personal .hero-title { margin-bottom: 15px; }
+.hero-personal .hero-commitment,
+.hero-personal .hero-lead {
+    max-width: 535px;
+    font-family: inherit;
+    font-weight: 300;
+    font-size: clamp(1rem, 1.32vw, 1.18rem);
+    line-height: 1.62;
+    letter-spacing: 0;
+    color: #333;
+}
+.hero-personal .hero-commitment { margin: 0 0 15px; }
+.hero-personal .hero-commitment span { color: inherit; }
+.hero-personal .hero-lead { margin: 0 0 30px; }
+
+.hero-image {
+    position: relative;
+    z-index: 0;
+    perspective: 1400px;
+}
+.hero-profile-card {
+    position: relative;
+    display: grid;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    padding: 0;
+    border: 0;
+    border-radius: 30px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform .74s cubic-bezier(.2,.78,.2,1), filter .35s ease;
+    outline: none;
+}
+.hero-profile-card.is-flipped { transform: rotateY(180deg); }
+.hero-profile-card:focus-visible {
+    outline: 3px solid rgba(227,30,36,.72);
+    outline-offset: 8px;
+}
+.hero-profile-face {
+    position: relative;
+    grid-area: 1 / 1;
+    display: block;
+    overflow: hidden;
+    border-radius: 30px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+.hero-profile-front {
+    position: relative;
+    background: #e8e2db;
+    box-shadow: 30px 30px 0 var(--gray-bg);
+}
+.hero-profile-front img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 30px;
+    box-shadow: none !important;
+    will-change: auto;
+}
+.hero-profile-card:hover .hero-profile-front img { transform: none !important; }
+.hero-profile-hint {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    display: block;
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 999px;
+    background: rgba(19,16,14,.68);
+    color: rgba(255,255,255,.94);
+    font-family: 'Inter', sans-serif;
+    font-size: .61rem;
+    font-weight: 800;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: opacity .22s ease, transform .22s ease;
+}
+.hero-profile-card.is-flipped .hero-profile-hint { opacity: 0; transform: translateY(8px); }
+.hero-profile-back {
+    display: grid;
+    align-items: center;
+    padding: clamp(22px, 3.1vw, 38px);
+    transform: rotateY(180deg);
+    border: 1px solid rgba(227,30,36,.34);
+    background:
+        radial-gradient(circle at 84% 10%, rgba(227,30,36,.27), transparent 29%),
+        linear-gradient(145deg, #15100e 0%, #2a1d1a 53%, #17110f 100%);
+    box-shadow: 30px 30px 0 rgba(226,219,211,.86);
+    color: #fff;
+}
+.hero-profile-back::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .22;
+    background-image:
+        linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px);
+    background-size: 38px 38px;
+    mask-image: linear-gradient(135deg, #000 0%, rgba(0,0,0,.72) 55%, transparent 100%);
+    pointer-events: none;
+}
+.hero-profile-back-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(12px, 1.8vw, 18px);
+    text-align: left;
+}
+.hero-profile-back strong {
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.2rem, 2vw, 1.65rem);
+    font-weight: 800;
+    letter-spacing: -.045em;
+}
+.hero-profile-back-inner > span {
+    color: rgba(255,255,255,.84);
+    font-size: clamp(.86rem, 1.05vw, .98rem);
+    line-height: 1.56;
+}
+.hero-profile-back em {
+    margin-top: 4px;
+    color: #ff9a9d;
+    font-family: 'Inter', sans-serif;
+    font-size: .62rem;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+@media (max-width: 900px) {
+    .hero-profile-card { aspect-ratio: 16 / 13; }
+}
+@media (max-width: 700px) {
+    .hero-personal .hero-commitment,
+    .hero-personal .hero-lead { font-size: 1rem; line-height: 1.56; }
+    .hero-personal .hero-commitment { margin-bottom: 13px; }
+    .hero-profile-card { aspect-ratio: 4 / 5; }
+    .hero-profile-hint { right: 12px; bottom: 12px; left: 12px; font-size: .56rem; }
+    .hero-profile-back { padding: 24px 22px; }
+    .hero-profile-back-inner { gap: 12px; }
+    .hero-profile-back-inner > span { font-size: .85rem; line-height: 1.48; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero-profile-card { transition: none; }
+}
+
+
+/* v83 — keep the commitment and the lead as one continuous text block with a simple line break, not a separated paragraph. */
+.hero-personal .hero-intro-copy {
+    max-width: 535px;
+    margin: 0 0 30px;
+    color: #333;
+    font-family: inherit;
+    font-size: clamp(1rem, 1.32vw, 1.18rem);
+    font-weight: 300;
+    line-height: 1.62;
+    letter-spacing: 0;
+}
+.hero-personal .hero-intro-copy .hero-commitment,
+.hero-personal .hero-intro-copy .hero-description {
+    color: inherit;
+    font: inherit;
+}
+.hero-personal .hero-intro-copy .hero-commitment { display: inline; }
+.hero-personal .hero-intro-copy .hero-description { display: inline; }
+@media (max-width: 700px) {
+    .hero-personal .hero-intro-copy {
+        margin-bottom: 26px;
+        font-size: 1rem;
+        line-height: 1.56;
+    }
+}
