@@ -1,0 +1,116 @@
+
+/* v78 — transparent video-overlaid navigation and vehicle guide hero refinements. */
+
+/* Projects and the article library open directly on their video, without a coloured top strip. */
+.project-page .topline { display:none !important; }
+.project-page .main-header.mk-nav,
+.article-library-page .main-header.mk-nav {
+  position:fixed !important;
+  top:0 !important;
+  right:0 !important;
+  left:0 !important;
+  z-index:2200 !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top,
+.article-library-page .main-header.mk-nav.nav-transparent-top {
+  background:transparent !important;
+  border-bottom-color:transparent !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top .logo,
+.article-library-page .main-header.mk-nav.nav-transparent-top .logo {
+  color:#fff8f4 !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta),
+.article-library-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta) {
+  color:rgba(255,248,244,.94) !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta):hover,
+.project-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta).is-active,
+.article-library-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta):hover,
+.article-library-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta).is-active {
+  color:#ffb0b3 !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta)::after,
+.article-library-page .main-header.mk-nav.nav-transparent-top .nav-links a:not(.btn-cta)::after {
+  background:#ffb0b3 !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top .lang-switcher,
+.article-library-page .main-header.mk-nav.nav-transparent-top .lang-switcher {
+  background:rgba(255,255,255,.10) !important;
+  border-color:rgba(255,255,255,.20) !important;
+  box-shadow:0 6px 16px rgba(0,0,0,.16) !important;
+}
+.project-page .main-header.mk-nav.nav-transparent-top .lang-switcher a.is-current,
+.project-page .main-header.mk-nav.nav-transparent-top .lang-switcher a[aria-current="page"],
+.article-library-page .main-header.mk-nav.nav-transparent-top .lang-switcher a.is-current,
+.article-library-page .main-header.mk-nav.nav-transparent-top .lang-switcher a[aria-current="page"] {
+  border-color:#ffb0b3 !important;
+  background:rgba(227,30,36,.25) !important;
+}
+
+/* The article-library film remains visible behind the first screen, including under navigation. */
+.article-library-page .article-index-hero {
+  min-height:448px !important;
+  display:flex !important;
+  align-items:center !important;
+  padding:138px 0 64px !important;
+}
+.article-library-page .knowledge-hero-video {
+  object-position:center 34% !important;
+  filter:saturate(.90) contrast(1.03) brightness(.88) !important;
+}
+.article-library-page .article-index-hero::before {
+  background:linear-gradient(90deg,rgba(17,12,10,.76) 0%,rgba(17,12,10,.54) 40%,rgba(17,12,10,.28) 70%,rgba(17,12,10,.18) 100%) !important;
+}
+.article-library-page .article-index-hero::after { opacity:.15 !important; }
+
+/* The former reference photo becomes the hero background of the vehicle/body guide. */
+.article-hero.article-hero--vehicle {
+  position:relative !important;
+  isolation:isolate !important;
+  overflow:hidden !important;
+  min-height:470px !important;
+  display:flex !important;
+  align-items:center !important;
+  padding:150px 0 78px !important;
+  color:#fff !important;
+  background:#15110f !important;
+  background-image:none !important;
+  border-bottom:1px solid rgba(255,255,255,.14) !important;
+}
+.article-hero.article-hero--vehicle::before {
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:0 !important;
+  background:
+    linear-gradient(90deg,rgba(15,11,9,.88) 0%,rgba(15,11,9,.62) 43%,rgba(15,11,9,.24) 100%),
+    url("https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=1800&q=88") center 76% / cover no-repeat !important;
+}
+.article-hero.article-hero--vehicle::after {
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:1 !important;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px) !important;
+  background-size:54px 54px !important;
+  opacity:.26 !important;
+  pointer-events:none !important;
+}
+.article-hero.article-hero--vehicle .inner { position:relative !important; z-index:2 !important; }
+.article-hero.article-hero--vehicle h1 { color:#fff !important; }
+.article-hero.article-hero--vehicle h1 span { color:#ff777c !important; }
+.article-hero.article-hero--vehicle p { color:rgba(255,248,244,.83) !important; }
+.article-hero.article-hero--vehicle .eyebrow { color:#ffb0b3 !important; }
+
+@media (max-width:820px) {
+  .project-page .main-header.mk-nav .header-flex,
+  .article-library-page .main-header.mk-nav .header-flex { min-height:70px !important; }
+  .article-library-page .article-index-hero { min-height:390px !important; padding:112px 0 52px !important; }
+  .article-library-page .knowledge-hero-video { object-position:58% 30% !important; }
+  .article-hero.article-hero--vehicle { min-height:385px !important; padding:118px 0 62px !important; }
+  .article-hero.article-hero--vehicle::before { background-position:60% 66% !important; }
+}
