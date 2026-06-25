@@ -45,3 +45,21 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 }());
+
+/* Google Analytics 4 — shared across all site languages and pages. */
+(function () {
+  var measurementId = 'G-VXYQW5TR2J';
+  if (!/^https?:$/.test(window.location.protocol) || window.__mkGa4Ready) return;
+  window.__mkGa4Ready = true;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  window.gtag = window.gtag || gtag;
+  window.gtag('js', new Date());
+  window.gtag('config', measurementId);
+
+  var tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+  document.head.appendChild(tag);
+}());
