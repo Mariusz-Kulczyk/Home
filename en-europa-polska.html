@@ -308,6 +308,17 @@ body{background:#f3ede6!important;}
 
 <link rel="stylesheet" href="site-overrides-v77.css?v=77">
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
 </head><body><header class="main-header mk-nav" id="navbar">
   <div class="container header-flex">
     <a class="logo" href="home-en.html">M.KULCZYK</a>
@@ -360,9 +371,9 @@ body{background:#f3ede6!important;}
 <div class="sources-inline"><strong>Sources and update:</strong> Eurostat / Statistics Poland (GUS) — economic data; e‑TOLL — toll rules; annual reports of ORLEN, PKO BP, KGHM, LPP and Dino Polska — Polish companies; for foreign plants, only the scale of local activity is indicated when there is no comparable public result. Page updated: 21 June 2026.</div><div class="author-card author-card-v77"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Mariusza Kulczyka"><img src="https://blogger.googleusercontent.com/img/a/AVvXsEj8fLCvPiAsnKjE7kxKW5_vFXOaiSMVu9n7UU-_UuhvJ9zihFEXD_6s_3um3ZWC1HilzytBvzH6RGnYutbLRxb51rcnD5Iccr7xH0bfQB56v11BvyuPn2RQ6d91DA4OEKY5Md-4wdyFiAo2mNu6Q-zp4bDDYMiZkbAZiVMyM37ZqbPFGy_XfEVZt0c-7G1w" alt="Mariusz Kulczyk"></a><div><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer"><strong>Mariusz Kulczyk</strong></a><span>Logistics Engineer · LinkedIn</span></div></div><a class="article-back" href="articles-en.html">← Back to articles</a></section></main>
 <footer id="kontakt">
   <div class="container footer-grid">
-    <div class="f-brand"><a href="home.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:m.kulczyk@hotmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
+    <div class="f-brand"><a href="home.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
     <div class="f-links"><h5>Partner zone</h5><p><a href="loadplanner.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p><p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometer Live</a></p></div>
-    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>m.kulczyk@hotmail.com</strong></p><p>Telefon: <strong>+48 796 108 872</strong></p></div>
+    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Telefon: <strong>+48 796 108 872</strong></p></div>
     <div class="f-partner"><a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="Currently at MotoHouse"><span class="footer-motohouse-copy"><strong>Currently at:</strong></span><img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse"></a></div>
   </div>
   <div class="container footer-bottom"><span class="iso-text">Operational standards based on ISO and GDP</span><p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p></div>

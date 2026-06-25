@@ -110,6 +110,17 @@
 
 <link rel="stylesheet" href="site-overrides-v77.css?v=77">
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
 </head>
 <body>
 
@@ -375,7 +386,7 @@
             <p style="font-weight: 900; font-size: 1.3rem; margin-top: 15px;">Mariusz Kulczyk</p>
             <p style="font-size: 0.9rem; color: #fdfdfd; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Strategic Logistics Partner</p>
             
-            <p><i class="fa-solid fa-envelope"></i> mariusz200701@gmail.com</p>
+            <p><i class="fa-solid fa-envelope"></i> contact@mkulczyk.pl</p>
             <p><i class="fa-solid fa-phone"></i> +48 796 108 872</p>
         </div>
     </div>

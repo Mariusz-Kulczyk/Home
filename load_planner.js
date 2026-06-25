@@ -2056,7 +2056,7 @@ function buildAttachedEml(subject, plainBody, screenshotDataUrl, filename) {
   const htmlBody = `<div style="font-family:Arial,sans-serif;white-space:pre-wrap;line-height:1.45">${esc(plainBody).replace(/\n/g, '<br>')}</div>`;
   const chunks = [
     'MIME-Version: 1.0',
-    'To: m.kulczyk@hotmail.com',
+    'To: contact@mkulczyk.pl',
     `Subject: =?UTF-8?B?${utf8Base64(subject)}?=`,
     `Content-Type: multipart/mixed; boundary="${boundary}"`,
     '',
@@ -2189,7 +2189,7 @@ async function prepareInquiryEmail() {
   } else if (status) {
     status.textContent = L10N.mailReady;
   }
-  window.location.href = `mailto:m.kulczyk@hotmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = `mailto:contact@mkulczyk.pl?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 $('sendInquiry')?.addEventListener('click', prepareInquiryEmail);
 
