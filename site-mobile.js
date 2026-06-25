@@ -69,28 +69,31 @@
   var language = getLanguage();
   var copy = {
     pl: {
-      title: 'Używamy analitycznych plików cookies',
-      body: 'Za Twoją zgodą Google Analytics pomaga nam sprawdzać, jak strona jest używana.',
-      accept: 'Akceptuję',
-      reject: 'Odrzucam',
-      settings: 'Ustawienia cookies',
-      close: 'Zamknij ustawienia cookies'
+      title: 'Twoja prywatność',
+      intro: 'Zapamiętujemy Twoją decyzję dotyczącą plików cookies, aby nie pytać o nią przy każdym wejściu.',
+      detail: 'Za Twoją zgodą korzystamy z Google Analytics, aby sprawdzać, które treści są najczęściej odwiedzane i jak możemy poprawiać działanie serwisu. Dane analityczne wykorzystujemy wyłącznie do celów statystycznych — nie służą do personalizowania reklam.',
+      accept: 'Akceptuję analitykę',
+      reject: 'Tylko niezbędne',
+      settings: 'Ustawienia prywatności',
+      close: 'Zamknij ustawienia prywatności'
     },
     en: {
-      title: 'We use analytics cookies',
-      body: 'With your consent, Google Analytics helps us understand how the website is used.',
-      accept: 'Accept',
-      reject: 'Reject',
-      settings: 'Cookie settings',
-      close: 'Close cookie settings'
+      title: 'Your privacy',
+      intro: 'We remember your cookie choice so that you do not have to make the same decision every time you visit.',
+      detail: 'With your consent, we use Google Analytics to understand which content is visited most often and how we can improve the website. Analytics data is used for statistical purposes only and is not used to personalise advertising.',
+      accept: 'Accept analytics',
+      reject: 'Essential only',
+      settings: 'Privacy settings',
+      close: 'Close privacy settings'
     },
     de: {
-      title: 'Wir verwenden Analyse-Cookies',
-      body: 'Mit Ihrer Zustimmung hilft uns Google Analytics zu verstehen, wie die Website genutzt wird.',
-      accept: 'Akzeptieren',
-      reject: 'Ablehnen',
-      settings: 'Cookie-Einstellungen',
-      close: 'Cookie-Einstellungen schließen'
+      title: 'Ihre Privatsphäre',
+      intro: 'Wir speichern Ihre Cookie-Auswahl, damit Sie diese Entscheidung nicht bei jedem Besuch erneut treffen müssen.',
+      detail: 'Mit Ihrer Zustimmung nutzen wir Google Analytics, um zu verstehen, welche Inhalte am häufigsten besucht werden und wie wir die Website verbessern können. Analysedaten werden ausschließlich zu statistischen Zwecken verwendet und nicht zur Personalisierung von Werbung.',
+      accept: 'Analyse akzeptieren',
+      reject: 'Nur notwendige',
+      settings: 'Datenschutzeinstellungen',
+      close: 'Datenschutzeinstellungen schließen'
     }
   }[language];
 
@@ -138,7 +141,8 @@
       '.mk-cookie-consent{position:fixed;right:18px;bottom:18px;left:18px;z-index:2147483647;display:none;max-width:620px;margin:0 auto;padding:18px 18px 16px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:#1d1713;color:#fff;box-shadow:0 18px 55px rgba(0,0,0,.3);font:15px/1.45 Arial,sans-serif}' +
       '.mk-cookie-consent.is-visible{display:block}' +
       '.mk-cookie-consent__title{margin:0 34px 6px 0;font-size:17px;line-height:1.25;font-weight:700}' +
-      '.mk-cookie-consent__text{margin:0;color:rgba(255,255,255,.82)}' +
+      '.mk-cookie-consent__text{margin:0;color:rgba(255,255,255,.9)}' +
+      '.mk-cookie-consent__detail{margin:8px 0 0;color:rgba(255,255,255,.76)}' +
       '.mk-cookie-consent__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}' +
       '.mk-cookie-consent__button{appearance:none;border:1px solid transparent;border-radius:999px;padding:10px 15px;cursor:pointer;font:700 14px/1 Arial,sans-serif}' +
       '.mk-cookie-consent__button--accept{background:#d22222;color:#fff}' +
@@ -159,7 +163,8 @@
     banner.setAttribute('aria-label', copy.title);
     banner.innerHTML =
       '<h2 class="mk-cookie-consent__title">' + copy.title + '</h2>' +
-      '<p class="mk-cookie-consent__text">' + copy.body + '</p>' +
+      '<p class="mk-cookie-consent__text">' + copy.intro + '</p>' +
+      '<p class="mk-cookie-consent__detail">' + copy.detail + '</p>' +
       '<div class="mk-cookie-consent__actions">' +
         '<button type="button" class="mk-cookie-consent__button mk-cookie-consent__button--accept">' + copy.accept + '</button>' +
         '<button type="button" class="mk-cookie-consent__button mk-cookie-consent__button--reject">' + copy.reject + '</button>' +
