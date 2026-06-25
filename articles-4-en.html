@@ -11,6 +11,17 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
 
 <link rel="stylesheet" href="site-overrides-v77.css?v=77">
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
 </head><body><header class="main-header mk-nav" id="navbar">
   <div class="container header-flex">
     <a class="logo" href="home-en.html">M.KULCZYK</a>
@@ -18,9 +29,9 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
   </div>
 </header><section class="article-hero"><div class="container inner"><span class="eyebrow"><i class="fa-solid fa-network-wired"></i>4PL MODEL · 06.17.2026</span><h1>4PL in practice: when to hand transport coordination to a partner</h1><p>4PL does not mean giving away control. It is a way to structure transport decisions when relationships, deliveries and priorities grow.</p></div></section><main class="article-container"><div class="quick-grid"><div class="quick-card"><i class="fa-solid fa-network-wired"></i><strong>4PL MODEL</strong><span>06.17.2026</span></div><div class="quick-card"><i class="fa-regular fa-clock"></i><strong>6 min read</strong><span>Logistics without guesswork</span></div><div class="quick-card"><i class="fa-solid fa-route"></i><strong>M.KULCZYK</strong><span>Independent support for transport organisation and logistics projects.</span></div></div><section class="content-section"><h2>1. When it helps</h2><p>Usually when transport stops being a one-off order and becomes a constant part of sales, purchasing, warehousing and production.</p></section><section class="content-section"><h2>2. What a partner can take over</h2><p>Frequency planning, carrier selection, slot management, status control, deviation reporting and day-to-day operational coordination.</p></section><section class="content-section"><h2>3. What remains with the company</h2><p>Business goals, stock levels, customer priorities and strategic choices. A good 4PL model organises information flow without cutting off process ownership.</p></section><section class="content-section"><h2>4. Start without a revolution</h2><p>Begin with one area: a route, a delivery group or a recurring problem. With data in hand, responsibility can be expanded gradually.</p></section><div class="callout"><strong>M.KULCZYK</strong> — Independent support for transport organisation and logistics projects.</div><a class="article-back" href="articles-en.html"><i class="fa-solid fa-arrow-left"></i>ARTICLES</a></main><footer id="kontakt">
   <div class="container footer-grid">
-    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:m.kulczyk@hotmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
+    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
     <div class="f-links"><h5>Partner Zone</h5><p><a href="loadplanner-en.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p><p><a href="barometr-en.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p></div>
-    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>m.kulczyk@hotmail.com</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
+    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
     <div class="f-partner"><a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="Currently at MotoHouse"><span class="footer-motohouse-copy"><strong>Currently at:</strong></span><img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse"></a></div>
   </div>
   <div class="container footer-bottom"><span class="iso-text">Operational standards based on ISO and GDP norms</span><p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p></div>

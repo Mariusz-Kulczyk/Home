@@ -2274,6 +2274,17 @@ footer#kontakt .footer-motohouse-link.footer-motohouse-visual:hover {
 
 
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
 </head>
 <body>
 
@@ -2588,9 +2599,9 @@ footer#kontakt .footer-motohouse-link.footer-motohouse-visual:hover {
 
     <footer id="kontakt">
   <div class="container footer-grid">
-    <div class="f-brand"><a href="home.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:m.kulczyk@hotmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
+    <div class="f-brand"><a href="home.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
     <div class="f-links"><h5>Strefa Partnera</h5><p><a href="loadplanner.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p><p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p></div>
-    <div class="f-contact"><h5>Kontakt</h5><p>E-mail: <strong>m.kulczyk@hotmail.com</strong></p><p>Telefon: <strong>+48 796 108 872</strong></p></div>
+    <div class="f-contact"><h5>Kontakt</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Telefon: <strong>+48 796 108 872</strong></p></div>
     <div class="f-partner"><a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="Obecnie w MotoHouse"><span class="footer-motohouse-copy"><strong>Obecnie w:</strong></span><img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse"></a></div>
   </div>
   <div class="container footer-bottom"><span class="iso-text">Standardy operacyjne oparte na normach ISO i GDP</span><p class="copy">© 2026 Mariusz Kulczyk. Wszelkie prawa zastrzeżone.</p></div>

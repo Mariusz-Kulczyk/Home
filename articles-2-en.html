@@ -11,6 +11,17 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
 
 <link rel="stylesheet" href="site-overrides-v77.css?v=77">
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
 </head><body><header class="main-header mk-nav" id="navbar">
   <div class="container header-flex">
     <a class="logo" href="home-en.html">M.KULCZYK</a>
@@ -18,9 +29,9 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
   </div>
 </header><section class="article-hero"><div class="container inner"><span class="eyebrow"><i class="fa-solid fa-clipboard-list"></i>TRANSPORT BRIEF · 05.21.2026</span><h1>How to prepare a transport inquiry that speeds up quoting</h1><p>A complete brief helps select the right vehicle faster, reduces follow-up questions and limits execution errors.</p></div></section><main class="article-container"><div class="quick-grid"><div class="quick-card"><i class="fa-solid fa-clipboard-list"></i><strong>TRANSPORT BRIEF</strong><span>05.21.2026</span></div><div class="quick-card"><i class="fa-regular fa-clock"></i><strong>4 min read</strong><span>Logistics without guesswork</span></div><div class="quick-card"><i class="fa-solid fa-route"></i><strong>M.KULCZYK</strong><span>Independent support for transport organisation and logistics projects.</span></div></div><section class="content-section"><h2>1. Cargo data</h2><p>State the unit count, length, width, height and weight of every item. Add whether cargo can be stacked, rotated or side loaded.</p></section><section class="content-section"><h2>2. Places and time windows</h2><p>Provide exact addresses, time windows, on-site contact details and access restrictions. For urgent work, cargo readiness time also matters.</p></section><section class="content-section"><h2>3. Operations and requirements</h2><p>Clarify whether loading or unloading needs a dock, forklift, tail lift, ADR, temperature control or additional securing.</p></section><section class="content-section"><h2>4. One message, a complete picture</h2><p>The best brief enables an immediate decision: which vehicle, in what time and under which operating conditions can execute the move.</p></section><div class="callout"><strong>M.KULCZYK</strong> — Independent support for transport organisation and logistics projects.</div><a class="article-back" href="articles-en.html"><i class="fa-solid fa-arrow-left"></i>ARTICLES</a></main><footer id="kontakt">
   <div class="container footer-grid">
-    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:m.kulczyk@hotmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
+    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
     <div class="f-links"><h5>Partner Zone</h5><p><a href="loadplanner-en.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p><p><a href="barometr-en.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p></div>
-    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>m.kulczyk@hotmail.com</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
+    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
     <div class="f-partner"><a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="Currently at MotoHouse"><span class="footer-motohouse-copy"><strong>Currently at:</strong></span><img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse"></a></div>
   </div>
   <div class="container footer-bottom"><span class="iso-text">Operational standards based on ISO and GDP norms</span><p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p></div>

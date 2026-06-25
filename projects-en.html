@@ -61,6 +61,17 @@
 </style>
 
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
 </head><body class="project-page">
 <div class="topline"><div class="container"><span>URGENT REQUEST? VEHICLE READY IN 1–3 H ACROSS THE EU</span><a href="#kontakt">SEND INQUIRY</a></div></div>
 <header class="main-header mk-nav nav-transparent-top" id="navbar">
@@ -74,13 +85,13 @@
 <section class="intro"><div class="container"><div class="reveal"><span class="kicker">HOW WE WORK</span><h2>Less noise. More control.</h2></div><div class="reveal"><p>Consulting starts where a standard transport quote is no longer enough. I analyse constraints, choose an execution model and coordinate the critical points of the process.</p><div class="metric-row"><div class="metric"><small>Response time</small><strong>1–3 h</strong></div><div class="metric metric-wide"><small>Operational oversight</small><strong>Full process control</strong></div></div></div></div></section>
 <section class="services"><div class="container"><div class="section-head reveal"><span class="kicker">SCOPE OF SUPPORT</span><h2 class="section-title">From urgent moves to complex projects.</h2><p class="services-lead">The scope is matched to the scale of the task — from a single shipment to ongoing management of a selected operational area.</p></div><div class="service-grid"><article class="service reveal"><i class="fa-solid fa-route"></i><h3>Freight forwarding & transport control</h3><p>Execution plan, carrier choice, status tracking and document control.</p></article><article class="service reveal"><i class="fa-solid fa-diagram-project"></i><h3>Project organisation</h3><p>Coordination of non-standard moves, project stages and involved parties.</p></article><article class="service reveal"><i class="fa-solid fa-shield-halved"></i><h3>Specialist transport</h3><p>ADR, temperature-controlled transport, oversized loads, time-critical and sensitive cargo.</p></article><article class="service reveal"><i class="fa-solid fa-network-wired"></i><h3>4PL logistics management</h3><p>Using inventory levels, sales plans and operational needs, I plan transport frequency, delivery rhythm and the day-to-day coordination of an agreed part of the client’s logistics process.</p></article><article class="service reveal"><i class="fa-solid fa-layer-group"></i><h3>High-volume transport coordination</h3><p>Many shipments managed in parallel — with consistent control of vehicles, priorities, loading slots and operational communication.</p></article><article class="service reveal"><i class="fa-solid fa-chart-line"></i><h3>Process optimisation</h3><p>Analysis of recurring friction, cost, availability and KPI.</p></article></div></div></section>
 <section class="process"><div class="container process-grid"><div class="reveal"><span class="kicker">OPERATIONAL PEACE OF MIND</span><h2 class="section-title">How working with me looks.</h2></div><div class="steps"><article class="step reveal"><span>01</span><div><h3>Understand the need</h3><p>I collect the operating context, risks, deadline and non-negotiables.</p></div></article><article class="step reveal"><span>02</span><div><h3>Build the execution plan</h3><p>I set the vehicle, route, security level and communication rhythm.</p></div></article><article class="step reveal"><span>03</span><div><h3>Coordinate & report</h3><p>I manage delivery through to completion and provide clear updates and documents.</p></div></article></div></div></section>
-<section class="cta" id="kontakt"><div class="container"><div class="reveal"><span class="kicker">START WITH A CONVERSATION</span><h2>Have a project that needs more than a standard transport quote?</h2><p>Send the lane, deadline, cargo and key requirements. I will return with a practical execution model.</p></div><a class="cta-btn reveal" href="mailto:m.kulczyk@hotmail.com"><i class="fa-solid fa-paper-plane"></i>Send inquiry</a></div></section>
+<section class="cta" id="kontakt"><div class="container"><div class="reveal"><span class="kicker">START WITH A CONVERSATION</span><h2>Have a project that needs more than a standard transport quote?</h2><p>Send the lane, deadline, cargo and key requirements. I will return with a practical execution model.</p></div><a class="cta-btn reveal" href="mailto:contact@mkulczyk.pl"><i class="fa-solid fa-paper-plane"></i>Send inquiry</a></div></section>
 </main>
 <footer id="kontakt">
   <div class="container footer-grid">
-    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:m.kulczyk@hotmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
+    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
     <div class="f-links"><h5>Partner Zone</h5><p><a href="loadplanner-en.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p><p><a href="barometr-en.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p></div>
-    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>m.kulczyk@hotmail.com</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
+    <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
     <div class="f-partner"><a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="Currently at MotoHouse"><span class="footer-motohouse-copy"><strong>Currently at:</strong></span><img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse"></a></div>
   </div>
   <div class="container footer-bottom"><span class="iso-text">Operational standards based on ISO and GDP norms</span><p class="copy">© 2026 Mariusz Kulczyk. All rights reserved.</p></div>
