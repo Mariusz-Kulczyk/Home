@@ -22,10 +22,262 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
   location.replace(prefix + clean + '/' + location.search + location.hash);
 })();
 </script>
-</head><body><header class="main-header mk-nav" id="navbar">
+
+<style id="article-dark-navbar-v124">
+/* Dark navbar at article start; switches to the light compact version after scrolling. */
+.main-header.mk-nav{background:#17120f!important;border-bottom:1px solid rgba(255,255,255,.15)!important;color:#fff!important;transition:background .22s ease,color .22s ease,border-color .22s ease!important;}
+.main-header.mk-nav .logo,.main-header.mk-nav .nav-links>a,.main-header.mk-nav .nav-links a:not(.btn-cta){color:#fff!important;}
+.main-header.mk-nav .nav-links a.is-active{color:#fff!important;border-color:#e31e24!important;}
+.main-header.mk-nav .lang-mini a,.main-header.mk-nav .lang-switcher a{color:#fff!important;border-color:rgba(255,255,255,.42)!important;background:transparent!important;}
+.main-header.mk-nav .lang-mini a.is-current,.main-header.mk-nav .lang-switcher a.is-current{background:#fff!important;color:#17120f!important;border-color:#fff!important;}
+.main-header.mk-nav .btn-cta{background:#e31e24!important;color:#fff!important;border-color:#e31e24!important;}
+.main-header.mk-nav.nav-compact{background:#fffdfb!important;border-color:#e8e1db!important;color:#17120f!important;}
+.main-header.mk-nav.nav-compact .logo,.main-header.mk-nav.nav-compact .nav-links a:not(.btn-cta){color:#17120f!important;}
+.main-header.mk-nav.nav-compact .nav-links a.is-active{color:#17120f!important;border-color:#e31e24!important;}
+.main-header.mk-nav.nav-compact .lang-mini a,.main-header.mk-nav.nav-compact .lang-switcher a{color:#17120f!important;border-color:#d9cec5!important;background:#fff!important;}
+.main-header.mk-nav.nav-compact .lang-mini a.is-current,.main-header.mk-nav.nav-compact .lang-switcher a.is-current{background:#17120f!important;color:#fff!important;border-color:#17120f!important;}
+</style>
+
+<style id="article-home-navbar-import-v125">
+/* Nav copied from the home-page dark state: dark at the top, light after scrolling. */
+.main-header.article-home-nav {
+  position: sticky !important;
+  top: 0;
+  z-index: 1200;
+  padding: 0 !important;
+  min-height: 0 !important;
+  background: #34261f !important;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 10px 26px rgba(19,16,14,.16) !important;
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  transition: background .28s ease, border-color .28s ease, box-shadow .28s ease !important;
+}
+.main-header.article-home-nav .header-flex {
+  min-height: 80px !important;
+  transition: min-height .28s ease !important;
+}
+.main-header.article-home-nav.nav-compact .header-flex { min-height: 66px !important; }
+.main-header.article-home-nav .logo {
+  position: relative;
+  color: #fff !important;
+  font-family: Inter, Arial, sans-serif !important;
+  font-size: 1.22rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -.045em !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
+  transition: color .28s ease !important;
+}
+.main-header.article-home-nav .logo::after {
+  content: "STRATEGIC LOGISTICS" !important;
+  display: block !important;
+  margin-top: 4px !important;
+  color: rgba(255,255,255,.62) !important;
+  font-family: Inter, Arial, sans-serif !important;
+  font-size: .48rem !important;
+  font-weight: 900 !important;
+  letter-spacing: .17em !important;
+  line-height: 1 !important;
+  transition: color .28s ease !important;
+}
+.main-header.article-home-nav .nav-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+.main-header.article-home-nav .nav-links > li { display: inline-flex !important; align-items: center !important; }
+.main-header.article-home-nav .nav-links a:not(.btn-cta) {
+  position: relative !important;
+  padding: 11px 1px 10px !important;
+  color: #fff !important;
+  font-family: Inter, Arial, sans-serif !important;
+  font-size: .70rem !important;
+  font-weight: 900 !important;
+  letter-spacing: .075em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  transition: color .2s ease, opacity .2s ease !important;
+}
+.main-header.article-home-nav .nav-links a:not(.btn-cta)::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 3px !important;
+  height: 3px !important;
+  border-radius: 9px !important;
+  background: #ff7a80 !important;
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  transition: transform .2s ease !important;
+}
+.main-header.article-home-nav .nav-links a:not(.btn-cta):hover::after,
+.main-header.article-home-nav .nav-links a.is-active::after { transform: scaleX(1) !important; }
+.main-header.article-home-nav .nav-links a.is-active { color: #ff9ba0 !important; }
+.main-header.article-home-nav .nav-links a:not(.btn-cta):hover { color: #ffb1b4 !important; }
+.main-header.article-home-nav .btn-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 11px 15px !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 4px !important;
+  background: #e31e24 !important;
+  color: #fff !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,.16) !important;
+}
+.main-header.article-home-nav .lang-switcher {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  border-radius: 12px !important;
+  background: rgba(255,255,255,.10) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.08) !important;
+  transition: background .28s ease, border-color .28s ease !important;
+}
+.main-header.article-home-nav .lang-switcher a {
+  display: grid !important;
+  place-items: center !important;
+  width: 26px !important;
+  height: 24px !important;
+  min-width: 26px !important;
+  padding: 0 !important;
+  border: 1px solid transparent !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+}
+.main-header.article-home-nav .lang-switcher a::after { display: none !important; }
+.main-header.article-home-nav .lang-switcher img {
+  display: block !important;
+  width: 18px !important;
+  height: 13px !important;
+  object-fit: cover !important;
+  border-radius: 2px !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.22) !important;
+}
+.main-header.article-home-nav .lang-switcher a.is-current {
+  background: rgba(255,255,255,.20) !important;
+  border-color: rgba(255,255,255,.45) !important;
+}
+/* Home-page light mode after scrolling. */
+.main-header.article-home-nav.nav-state-light {
+  background: rgba(255,253,250,.97) !important;
+  border-bottom-color: rgba(52,38,31,.12) !important;
+  box-shadow: 0 9px 24px rgba(19,16,14,.09) !important;
+}
+.main-header.article-home-nav.nav-state-light .logo,
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta) { color: #201914 !important; }
+.main-header.article-home-nav.nav-state-light .logo::after { color: #746b65 !important; }
+.main-header.article-home-nav.nav-state-light .nav-links a.is-active,
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta):hover { color: #e31e24 !important; }
+.main-header.article-home-nav.nav-state-light .lang-switcher {
+  border-color: rgba(52,38,31,.16) !important;
+  background: rgba(52,38,31,.055) !important;
+  box-shadow: none !important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a.is-current {
+  border-color: rgba(52,38,31,.16) !important;
+  background: rgba(52,38,31,.10) !important;
+}
+@media (max-width: 780px) {
+  .main-header.article-home-nav .header-flex { min-height: 68px !important; }
+  .main-header.article-home-nav .logo { font-size: 1.06rem !important; }
+  .main-header.article-home-nav .nav-links { gap: 10px !important; }
+  .main-header.article-home-nav .nav-links a:not(.btn-cta) { font-size: .64rem !important; }
+}
+</style>
+
+
+<style id="article-navbar-home-exact">
+/* Navbar copied from the homepage dark state. It turns light only after the article hero has passed beneath it. */
+.main-header.article-home-nav{
+  position:sticky!important;top:0!important;z-index:1400!important;
+  min-height:0!important;padding:0!important;
+  transition:background .28s ease,border-color .28s ease,box-shadow .28s ease,min-height .22s ease!important;
+}
+.main-header.article-home-nav .header-flex{min-height:80px!important;transition:min-height .22s ease!important;}
+.main-header.article-home-nav .logo::after{content:none!important;display:none!important;}
+/* Same colour and contrast as the dark navbar on the homepage. */
+.main-header.article-home-nav.nav-state-dark,
+.main-header.article-home-nav.nav-state-dark.nav-on-dark{
+  background:linear-gradient(145deg,#13100e 0%,#1e1714 100%)!important;
+  border-bottom-color:rgba(255,255,255,.10)!important;
+  box-shadow:0 14px 30px rgba(19,16,14,.22)!important;
+}
+.main-header.article-home-nav.nav-state-dark .logo,
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta),
+.main-header.article-home-nav.nav-state-dark.nav-on-dark .logo,
+.main-header.article-home-nav.nav-state-dark.nav-on-dark .nav-links a:not(.btn-cta){
+  color:rgba(255,255,255,.92)!important;
+}
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta).is-active{color:#ff8b8f!important;}
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta):hover{color:#ffb1b4!important;}
+.main-header.article-home-nav.nav-state-dark .lang-switcher{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;padding:5px!important;
+  border:1px solid rgba(255,255,255,.22)!important;border-radius:12px!important;
+  background:rgba(255,255,255,.10)!important;box-shadow:inset 0 1px rgba(255,255,255,.08)!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher a{
+  display:grid!important;place-items:center!important;width:28px!important;height:22px!important;padding:0!important;
+  border:1px solid transparent!important;border-radius:7px!important;opacity:.76!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher a[aria-current="page"],
+.main-header.article-home-nav.nav-state-dark .lang-switcher a.is-current{
+  opacity:1!important;border-color:rgba(255,255,255,.56)!important;background:rgba(255,255,255,.16)!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher img{width:20px!important;height:auto!important;border-radius:2px!important;box-shadow:0 2px 6px rgba(0,0,0,.28)!important;}
+.main-header.article-home-nav .btn-cta{background:var(--red)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18)!important;}
+/* Light navbar after the hero/photo is passed. */
+.main-header.article-home-nav.nav-state-light,
+.main-header.article-home-nav.nav-state-light.nav-on-dark{
+  background:rgba(255,255,255,.94)!important;
+  border-bottom-color:rgba(19,16,14,.10)!important;
+  box-shadow:none!important;
+}
+.main-header.article-home-nav.nav-state-light .header-flex{min-height:66px!important;}
+.main-header.article-home-nav.nav-state-light .logo,
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta),
+.main-header.article-home-nav.nav-state-light.nav-on-dark .logo,
+.main-header.article-home-nav.nav-state-light.nav-on-dark .nav-links a:not(.btn-cta){color:#201914!important;}
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta).is-active{color:var(--red)!important;}
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta):hover{color:var(--red)!important;}
+.main-header.article-home-nav.nav-state-light .lang-switcher{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;padding:5px!important;
+  border:1px solid rgba(19,16,14,.12)!important;border-radius:12px!important;background:rgba(255,255,255,.68)!important;box-shadow:none!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a{
+  display:grid!important;place-items:center!important;width:28px!important;height:22px!important;padding:0!important;
+  border:1px solid transparent!important;border-radius:7px!important;opacity:.76!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a[aria-current="page"],
+.main-header.article-home-nav.nav-state-light .lang-switcher a.is-current{
+  opacity:1!important;border-color:rgba(227,30,36,.64)!important;background:rgba(227,30,36,.09)!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher img{width:20px!important;height:auto!important;border-radius:2px!important;box-shadow:0 2px 6px rgba(0,0,0,.18)!important;}
+@media(max-width:780px){
+  .main-header.article-home-nav .header-flex{min-height:70px!important;}
+  .main-header.article-home-nav.nav-state-light .header-flex{min-height:62px!important;}
+  .main-header.article-home-nav .nav-links a:not(.btn-cta){font-size:.61rem!important;letter-spacing:.055em!important;}
+}
+</style>
+
+</head><body><header class="main-header mk-nav article-home-nav nav-state-dark" id="navbar">
   <div class="container header-flex">
     <a class="logo" href="home-de.html">M.KULCZYK</a>
-    <nav aria-label="Hauptnavigation"><ul class="nav-links"><li class="lang-switcher" aria-label="Language selector"><a href="articles-4.html" aria-label="PL"><img src="https://flagcdn.com/w20/pl.png" alt="PL"></a><a href="articles-4-en.html" aria-label="EN"><img src="https://flagcdn.com/w20/gb.png" alt="EN"></a><a href="articles-4-de.html" aria-label="DE" class="is-current" aria-current="page"><img src="https://flagcdn.com/w20/de.png" alt="DE"></a></li><li data-nav-key="about"><a href="home-de.html#onas">ÜBER MICH</a></li><li data-nav-key="projects"><a href="projects-de.html">PROJEKTE</a></li><li data-nav-key="articles"><a href="articles-de.html" class="is-active">ARTIKEL</a></li><li data-nav-key="contact"><a href="home-de.html#kontakt" class="btn-cta">KONTAKT</a></li></ul></nav>
+    <nav aria-label="Hauptnavigation"><ul class="nav-links">
+      <li class="lang-switcher" aria-label="Language selector"><a href="articles-4.html" aria-label="PL"><img src="https://flagcdn.com/w20/pl.png" alt="PL"/></a><a href="articles-4-en.html" aria-label="EN"><img src="https://flagcdn.com/w20/gb.png" alt="EN"/></a><a href="articles-4-de.html" aria-label="DE" class="is-current" aria-current="page"><img src="https://flagcdn.com/w20/de.png" alt="DE"/></a></li>
+      <li data-nav-key="about"><a href="home-de.html#onas">ÜBER MICH</a></li>
+      <li data-nav-key="projects"><a href="projects-de.html">PROJEKTE</a></li>
+      <li data-nav-key="articles"><a class="is-active" href="articles-de.html">ARTIKEL</a></li>
+      <li data-nav-key="contact"><a class="btn-cta" href="home-de.html#kontakt">KONTAKT</a></li>
+    </ul></nav>
   </div>
 </header><section class="article-hero"><div class="container inner"><span class="eyebrow"><i class="fa-solid fa-network-wired"></i>4PL-MODELL · 17.06.2026</span><h1>4PL in der Praxis: wann ein Partner die Transportkoordination übernehmen sollte</h1><p>4PL bedeutet nicht, Kontrolle abzugeben. Es ist ein Weg, Transportentscheidungen zu strukturieren, wenn Relationen, Lieferungen und Prioritäten zunehmen.</p></div></section><main class="article-container"><div class="quick-grid"><div class="quick-card"><i class="fa-solid fa-network-wired"></i><strong>4PL-MODELL</strong><span>17.06.2026</span></div><div class="quick-card"><i class="fa-regular fa-clock"></i><strong>6 Min. Lesezeit</strong><span>Logistik ohne Rätselraten</span></div><div class="quick-card"><i class="fa-solid fa-route"></i><strong>M.KULCZYK</strong><span>Unabhängige Unterstützung bei Transportorganisation und Logistikprojekten.</span></div></div><section class="content-section"><h2>1. Wann es hilft</h2><p>Meist dann, wenn Transport nicht mehr nur ein Einzelauftrag ist, sondern ein fester Teil von Vertrieb, Einkauf, Lager und Produktion.</p></section><section class="content-section"><h2>2. Was ein Partner übernehmen kann</h2><p>Frequenzplanung, Auswahl von Frachtführern, Zeitfenstersteuerung, Statuskontrolle, Abweichungsberichte und laufende operative Koordination.</p></section><section class="content-section"><h2>3. Was im Unternehmen bleibt</h2><p>Geschäftsziele, Bestände, Kundenprioritäten und strategische Entscheidungen. Ein gutes 4PL-Modell ordnet Informationsflüsse, ohne die Prozessverantwortung abzuschneiden.</p></section><section class="content-section"><h2>4. Ohne Revolution starten</h2><p>Beginnen Sie mit einem Bereich: einer Relation, einer Liefergruppe oder einem wiederkehrenden Problem. Mit den gewonnenen Daten lässt sich Verantwortung schrittweise erweitern.</p></section><div class="callout"><strong>M.KULCZYK</strong> — Unabhängige Unterstützung bei Transportorganisation und Logistikprojekten.</div><a class="article-back" href="articles-de.html"><i class="fa-solid fa-arrow-left"></i>ARTIKEL</a></main><footer id="kontakt">
   <div class="container footer-grid">
@@ -87,29 +339,48 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
 </script>
 
 
-<script id="v77-nav-section-tone">
+
+
+<script src="site-mobile.js?v=107"></script>
+
+<script id="article-home-navbar-scroll-v125">
 (function () {
-  var header = document.querySelector('.main-header.mk-nav');
+  var header = document.querySelector('.main-header.article-home-nav');
   if (!header) return;
-  var darkSelector = '.consult-hero, .services, .cta, .article-index-hero, .hero-signal-strip, .fleet-dark, .tools-section, footer#kontakt';
-  var ticking = false;
-  function updateNavTone() {
-    var y = Math.min(window.innerHeight - 2, Math.round(header.getBoundingClientRect().bottom + 5));
-    var node = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
-    var isDark = !!(node && node.closest && node.closest(darkSelector));
-    header.classList.toggle('nav-state-dark', isDark);
-    header.classList.toggle('nav-state-light', !isDark);
-    header.classList.toggle('nav-compact', window.scrollY > 14);
-    ticking = false;
+  function updateArticleNav() {
+    var isScrolled = window.scrollY > 18;
+    header.classList.toggle('nav-state-dark', !isScrolled);
+    header.classList.toggle('nav-state-light', isScrolled);
+    header.classList.toggle('nav-compact', isScrolled);
   }
-  function requestUpdate() {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(updateNavTone); }
-  }
-  window.addEventListener('scroll', requestUpdate, { passive:true });
-  window.addEventListener('resize', requestUpdate);
-  requestUpdate();
+  updateArticleNav();
+  window.addEventListener('scroll', updateArticleNav, { passive: true });
 }());
 </script>
 
-<script src="site-mobile.js?v=107"></script>
+
+<script id="article-navbar-home-exact-script">
+(function(){
+  var header=document.querySelector('.main-header.article-home-nav');
+  if(!header) return;
+  var hero=document.querySelector('.article-hero, .adr-hero, .waste-hero');
+  function updateNavbar(){
+    if(!hero){
+      header.classList.add('nav-state-dark');
+      header.classList.remove('nav-state-light');
+      return;
+    }
+    var headerBottom=header.getBoundingClientRect().bottom;
+    var heroBottom=hero.getBoundingClientRect().bottom;
+    var passedHero=heroBottom<=headerBottom+2;
+    header.classList.toggle('nav-state-dark',!passedHero);
+    header.classList.toggle('nav-state-light',passedHero);
+  }
+  window.addEventListener('scroll',updateNavbar,{passive:true});
+  window.addEventListener('resize',updateNavbar);
+  window.addEventListener('pageshow',updateNavbar);
+  requestAnimationFrame(updateNavbar);
+}());
+</script>
+
 </body></html>

@@ -103,11 +103,93 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
   location.replace(prefix + clean + '/' + location.search + location.hash);
 })();
 </script>
-</head><body><header class="main-header mk-nav" id="navbar">
-<div class="container header-flex">
-<a class="logo" href="home-en.html">M.KULCZYK</a>
-<nav aria-label="Primary navigation"><ul class="nav-links"><li aria-label="Language selector" class="lang-switcher"><a aria-label="PL" href="articles-1.html"><img alt="PL" src="https://flagcdn.com/w20/pl.png"/></a><a aria-current="page" aria-label="EN" class="is-current" href="articles-1-en.html"><img alt="EN" src="https://flagcdn.com/w20/gb.png"/></a><a aria-label="DE" href="articles-1-de.html"><img alt="DE" src="https://flagcdn.com/w20/de.png"/></a></li><li data-nav-key="about"><a href="home-en.html#onas">ABOUT ME</a></li><li data-nav-key="projects"><a href="projects-en.html">PROJECTS</a></li><li data-nav-key="articles"><a class="is-active" href="articles-en.html">ARTICLES</a></li><li data-nav-key="contact"><a class="btn-cta" href="home-en.html#kontakt">CONTACT</a></li></ul></nav>
-</div>
+
+
+
+<style id="article-navbar-home-exact">
+/* Navbar copied from the homepage dark state. It turns light only after the article hero has passed beneath it. */
+.main-header.article-home-nav{
+  position:sticky!important;top:0!important;z-index:1400!important;
+  min-height:0!important;padding:0!important;
+  transition:background .28s ease,border-color .28s ease,box-shadow .28s ease,min-height .22s ease!important;
+}
+.main-header.article-home-nav .header-flex{min-height:80px!important;transition:min-height .22s ease!important;}
+.main-header.article-home-nav .logo::after{content:none!important;display:none!important;}
+/* Same colour and contrast as the dark navbar on the homepage. */
+.main-header.article-home-nav.nav-state-dark,
+.main-header.article-home-nav.nav-state-dark.nav-on-dark{
+  background:linear-gradient(145deg,#13100e 0%,#1e1714 100%)!important;
+  border-bottom-color:rgba(255,255,255,.10)!important;
+  box-shadow:0 14px 30px rgba(19,16,14,.22)!important;
+}
+.main-header.article-home-nav.nav-state-dark .logo,
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta),
+.main-header.article-home-nav.nav-state-dark.nav-on-dark .logo,
+.main-header.article-home-nav.nav-state-dark.nav-on-dark .nav-links a:not(.btn-cta){
+  color:rgba(255,255,255,.92)!important;
+}
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta).is-active{color:#ff8b8f!important;}
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta):hover{color:#ffb1b4!important;}
+.main-header.article-home-nav.nav-state-dark .lang-switcher{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;padding:5px!important;
+  border:1px solid rgba(255,255,255,.22)!important;border-radius:12px!important;
+  background:rgba(255,255,255,.10)!important;box-shadow:inset 0 1px rgba(255,255,255,.08)!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher a{
+  display:grid!important;place-items:center!important;width:28px!important;height:22px!important;padding:0!important;
+  border:1px solid transparent!important;border-radius:7px!important;opacity:.76!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher a[aria-current="page"],
+.main-header.article-home-nav.nav-state-dark .lang-switcher a.is-current{
+  opacity:1!important;border-color:rgba(255,255,255,.56)!important;background:rgba(255,255,255,.16)!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher img{width:20px!important;height:auto!important;border-radius:2px!important;box-shadow:0 2px 6px rgba(0,0,0,.28)!important;}
+.main-header.article-home-nav .btn-cta{background:var(--red)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18)!important;}
+/* Light navbar after the hero/photo is passed. */
+.main-header.article-home-nav.nav-state-light,
+.main-header.article-home-nav.nav-state-light.nav-on-dark{
+  background:rgba(255,255,255,.94)!important;
+  border-bottom-color:rgba(19,16,14,.10)!important;
+  box-shadow:none!important;
+}
+.main-header.article-home-nav.nav-state-light .header-flex{min-height:66px!important;}
+.main-header.article-home-nav.nav-state-light .logo,
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta),
+.main-header.article-home-nav.nav-state-light.nav-on-dark .logo,
+.main-header.article-home-nav.nav-state-light.nav-on-dark .nav-links a:not(.btn-cta){color:#201914!important;}
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta).is-active{color:var(--red)!important;}
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta):hover{color:var(--red)!important;}
+.main-header.article-home-nav.nav-state-light .lang-switcher{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;padding:5px!important;
+  border:1px solid rgba(19,16,14,.12)!important;border-radius:12px!important;background:rgba(255,255,255,.68)!important;box-shadow:none!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a{
+  display:grid!important;place-items:center!important;width:28px!important;height:22px!important;padding:0!important;
+  border:1px solid transparent!important;border-radius:7px!important;opacity:.76!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a[aria-current="page"],
+.main-header.article-home-nav.nav-state-light .lang-switcher a.is-current{
+  opacity:1!important;border-color:rgba(227,30,36,.64)!important;background:rgba(227,30,36,.09)!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher img{width:20px!important;height:auto!important;border-radius:2px!important;box-shadow:0 2px 6px rgba(0,0,0,.18)!important;}
+@media(max-width:780px){
+  .main-header.article-home-nav .header-flex{min-height:70px!important;}
+  .main-header.article-home-nav.nav-state-light .header-flex{min-height:62px!important;}
+  .main-header.article-home-nav .nav-links a:not(.btn-cta){font-size:.61rem!important;letter-spacing:.055em!important;}
+}
+</style>
+
+</head><body><header class="main-header mk-nav article-home-nav nav-state-dark" id="navbar">
+  <div class="container header-flex">
+    <a class="logo" href="home-en.html">M.KULCZYK</a>
+    <nav aria-label="Primary navigation"><ul class="nav-links">
+      <li class="lang-switcher" aria-label="Language selector"><a href="articles-1.html" aria-label="PL"><img src="https://flagcdn.com/w20/pl.png" alt="PL"/></a><a href="articles-1-en.html" aria-label="EN" class="is-current" aria-current="page"><img src="https://flagcdn.com/w20/gb.png" alt="EN"/></a><a href="articles-1-de.html" aria-label="DE"><img src="https://flagcdn.com/w20/de.png" alt="DE"/></a></li>
+      <li data-nav-key="about"><a href="home-en.html#onas">ABOUT ME</a></li>
+      <li data-nav-key="projects"><a href="projects-en.html">PROJECTS</a></li>
+      <li data-nav-key="articles"><a class="is-active" href="articles-en.html">ARTICLES</a></li>
+      <li data-nav-key="contact"><a class="btn-cta" href="home-en.html#kontakt">CONTACT</a></li>
+    </ul></nav>
+  </div>
 </header><section class="article-hero article-hero--vehicle"><div class="container inner"><span class="eyebrow"><i class="fa-solid fa-book-open"></i>FOUNDATIONS</span><h1>Selecting a vehicle and body <span>for the cargo</span></h1><p>A practical guide to vehicle bodies, weight classes, handling systems and cargo securing. A starting point for preparing a real transport request.</p></div></section><main class="article-container">
 <div class="kb-toc"><h2>In this article</h2><a href="#s1"><i class="fa-solid fa-arrow-right"></i>Introduction</a><a href="#s2"><i class="fa-solid fa-arrow-right"></i>GVW classification</a><a href="#s3"><i class="fa-solid fa-arrow-right"></i> Body types</a><a href="#s4"><i class="fa-solid fa-arrow-right"></i>Handling systems</a><a href="#s5"><i class="fa-solid fa-arrow-right"></i>Equipment and cargo securing</a></div><section class="kb-section" id="s1"><h2>Introduction</h2><p class="kb-lead">A vehicle is selected from the cargo data and the conditions of the operation. Relevant factors include dimensions and mass, number of units, centre of gravity, cargo sensitivity, required transit time, delivery windows, route, access restrictions, loading and unloading method, and the conditions at the receiving site. Only the full set of information allows the right vehicle configuration to be confirmed.</p></section><section class="kb-section" id="s2"><h2>GVW classification</h2><p class="kb-lead">Gross Vehicle Weight is the maximum mass of a vehicle or combination with its body, equipment, fuel, driver and cargo. It is not payload.</p>
 <p class="kb-dmc-caveat">GVW sets the maximum mass of a vehicle or combination in its actual configuration. The selection must account not only for cargo mass, but also for body and equipment weight, the number of axles, permitted axle loads, dimensions and centre-of-gravity distribution. Two vehicles with similar GVW can have different payloads and different operational capability.</p>
@@ -168,28 +250,33 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
     '</a>';
 }());
 </script>
-<script id="v77-nav-section-tone">
-(function () {
-  var header = document.querySelector('.main-header.mk-nav');
-  if (!header) return;
-  var darkSelector = '.consult-hero, .services, .cta, .article-index-hero, .hero-signal-strip, .fleet-dark, .tools-section, footer#kontakt';
-  var ticking = false;
-  function updateNavTone() {
-    var y = Math.min(window.innerHeight - 2, Math.round(header.getBoundingClientRect().bottom + 5));
-    var node = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
-    var isDark = !!(node && node.closest && node.closest(darkSelector));
-    header.classList.toggle('nav-state-dark', isDark);
-    header.classList.toggle('nav-state-light', !isDark);
-    header.classList.toggle('nav-compact', window.scrollY > 14);
-    ticking = false;
+
+<script src="site-mobile.js?v=107"></script>
+
+
+
+<script id="article-navbar-home-exact-script">
+(function(){
+  var header=document.querySelector('.main-header.article-home-nav');
+  if(!header) return;
+  var hero=document.querySelector('.article-hero, .adr-hero, .waste-hero');
+  function updateNavbar(){
+    if(!hero){
+      header.classList.add('nav-state-dark');
+      header.classList.remove('nav-state-light');
+      return;
+    }
+    var headerBottom=header.getBoundingClientRect().bottom;
+    var heroBottom=hero.getBoundingClientRect().bottom;
+    var passedHero=heroBottom<=headerBottom+2;
+    header.classList.toggle('nav-state-dark',!passedHero);
+    header.classList.toggle('nav-state-light',passedHero);
   }
-  function requestUpdate() {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(updateNavTone); }
-  }
-  window.addEventListener('scroll', requestUpdate, { passive:true });
-  window.addEventListener('resize', requestUpdate);
-  requestUpdate();
+  window.addEventListener('scroll',updateNavbar,{passive:true});
+  window.addEventListener('resize',updateNavbar);
+  window.addEventListener('pageshow',updateNavbar);
+  requestAnimationFrame(updateNavbar);
 }());
 </script>
-<script src="site-mobile.js?v=107"></script>
+
 </body></html>

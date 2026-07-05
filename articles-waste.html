@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="Transport ADR: podstawy umowy, dokumentacji, zwolnień, oznakowania i przykład UN 1263." name="description"/>
+<title>Transport odpadów — klasyfikacja, dokumentacja i przewóz | M.KULCZYK</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Inter:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="style.css?v=40" rel="stylesheet"/>
+<link href="nav-unified.css?v=77" rel="stylesheet"/>
+<link href="site-overrides-v77.css?v=77" rel="stylesheet"/>
+<link href="site-mobile.css?v=107" rel="stylesheet"/>
+<style>
+    :root{--ink:#13100e;--red:#e31e24;--paper:#fffaf5;--sand:#f6f0ea;--line:#e7dfd8;--muted:#665f59;--deep:#201a17}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--sand);color:var(--ink);font-family:Barlow,Arial,sans-serif}
+    .container{width:min(1180px,calc(100% - 40px));margin:0 auto}.logo{text-decoration:none;color:inherit;font:900 1.15rem/1 Inter,Arial,sans-serif;letter-spacing:.03em}
+    .main-header{position:sticky;top:0;z-index:40;background:rgba(255,253,251,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .header-flex{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}.nav-links a{font:800 .78rem/1 Inter,Arial,sans-serif;letter-spacing:.07em;text-decoration:none;color:var(--ink)}.nav-links a:hover,.nav-links a.is-active{color:var(--red)}.nav-links .btn-cta{display:inline-flex;padding:11px 15px;background:var(--ink);color:#fff;border-radius:4px}.nav-links .btn-cta:hover{background:var(--red);color:#fff}
+    .adr-hero{padding:92px 0 66px;background:var(--paper);border-bottom:1px solid var(--line);background-image:linear-gradient(rgba(51,43,36,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(51,43,36,.045) 1px,transparent 1px);background-size:54px 54px}.adr-hero .inner{max-width:930px;margin:0 auto;text-align:center}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--red);font:900 .72rem/1 Inter,Arial,sans-serif;letter-spacing:.15em}.adr-hero h1{margin:19px 0 16px;font:900 clamp(2.45rem,6vw,4.85rem)/1.02 Inter,Arial,sans-serif;letter-spacing:-.065em}.adr-hero h1 span{color:var(--red)}.adr-hero p{max-width:760px;margin:0 auto;color:var(--muted);font-size:1.12rem;line-height:1.7}
+    .article-shell{max-width:1080px;margin:0 auto;padding:54px 20px 90px}.toc{margin:0 0 32px;padding:25px 28px;background:#241d1a;color:#fff;border-radius:16px}.toc h2{margin:0 0 14px;color:#ffb7b9;font:900 .78rem/1 Inter,Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase}.toc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 25px}.toc a{color:#f7f1ec;text-decoration:none;font-weight:700;font-size:.98rem}.toc a:hover{color:#fff}.toc i{margin-right:8px;color:#ff6d72;font-size:.75rem}
+    .section{margin-top:23px;padding:35px;background:#fff;border:1px solid var(--line);border-radius:17px}.section h2{margin:0 0 12px;font:900 clamp(1.55rem,3vw,2.12rem)/1.1 Inter,Arial,sans-serif;letter-spacing:-.045em}.section h3{margin:31px 0 11px;font:900 1.13rem/1.2 Inter,Arial,sans-serif;letter-spacing:-.025em}.section p{margin:0 0 14px;color:#544d47;font-size:1.03rem;line-height:1.74}.section p:last-child{margin-bottom:0}.section ul,.section ol{margin:12px 0 0;padding-left:20px;color:#544d47;line-height:1.65}.section li{margin:7px 0}.lead{font-size:1.12rem!important;color:#3c3530!important}
+    .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:21px 0}.fact{padding:19px;background:#fff;border:1px solid var(--line);border-radius:13px}.fact b{display:block;color:var(--red);font:900 1.66rem/1 Inter,Arial,sans-serif;letter-spacing:-.05em}.fact span{display:block;margin-top:7px;color:#625952;font-size:.92rem;line-height:1.45}
+    .definition{margin:20px 0;padding:22px 24px;background:#fbf6f1;border:1px solid #e8ddd5;border-radius:14px;color:#514841;line-height:1.68}.definition b{color:var(--ink)}.definition strong{color:#281f1a}.quote-strip{margin:23px 0 2px;padding:20px 22px;border:1px solid #e7d9d5;border-radius:12px;background:#fffaf8}.quote-strip strong{color:var(--red);font:900 .75rem/1 Inter,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.quote-strip p{margin:11px 0 0!important;color:#332d29!important}
+    .class-gallery{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px;margin:22px 0 7px}.class-mark{min-width:0;text-align:center;padding:10px 4px;border:1px solid var(--line);border-radius:10px;background:#fff}.class-mark img{width:68px;height:68px;object-fit:contain;display:block;margin:0 auto 7px}.class-mark b{display:block;font:900 .78rem/1 Inter,Arial,sans-serif}.class-mark span{display:block;margin-top:4px;color:#665e58;font-size:.72rem;line-height:1.25}.image-credit{margin:9px 0 0!important;color:#7a7069!important;font-size:.82rem!important}
+    .classes{width:100%;margin-top:19px;border-collapse:collapse}.classes th,.classes td{padding:12px 13px;vertical-align:top;border-bottom:1px solid var(--line);text-align:left}.classes th{color:#6d6058;font:900 .72rem/1 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}.classes td:first-child{width:130px;font:900 .92rem/1.3 Inter,Arial,sans-serif;color:var(--ink)}
+    .rule-list{margin:20px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}.rule-list li{position:relative;margin:0;padding:14px 0 14px 31px;border-bottom:1px solid var(--line);color:#4f4741;line-height:1.6}.rule-list li:before{content:'•';position:absolute;left:8px;top:10px;color:var(--red);font-size:1.5rem}.rule-list b{color:var(--ink)}
+    .subhead{margin-top:28px!important;padding-top:24px;border-top:1px solid var(--line)}.formula{margin:19px 0;padding:19px 21px;border:1px solid #dcd0c8;border-radius:12px;background:#1f1916;color:#fff;font:700 .94rem/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;overflow:auto}.formula small{display:block;margin-top:7px;color:#d5c8c0;font:500 .84rem/1.5 Barlow,Arial,sans-serif}
+    .adr-table-wrap{overflow:auto;margin-top:20px;border:1px solid var(--line);border-radius:13px}.adr-table{width:100%;border-collapse:collapse;min-width:760px;background:#fff}.adr-table th{padding:13px 15px;background:#f4ede7;border-bottom:1px solid var(--line);text-align:left;color:#6a5b52;font:900 .72rem/1.1 Inter,Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase}.adr-table td{padding:14px 15px;vertical-align:top;border-bottom:1px solid #eee6df;color:#544d47;line-height:1.55}.adr-table tr:last-child td{border-bottom:0}.adr-table td:first-child{width:25%;color:var(--ink);font-weight:800}.adr-table td:nth-child(2){width:29%;font-weight:700;color:#382f2a}.adr-table code{padding:3px 6px;border-radius:5px;background:#f3ece7;color:#201a17;font:800 .87em/1 Inter,Arial,sans-serif}
+    .equipment{margin-top:18px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}.equipment-row{display:grid;grid-template-columns:265px 1fr;border-bottom:1px solid var(--line);background:#fff}.equipment-row:last-child{border-bottom:0}.equipment-row b{padding:16px;background:#f7f0ea;color:var(--ink);font:900 .88rem/1.35 Inter,Arial,sans-serif}.equipment-row span{padding:16px;color:#564e47;line-height:1.55}.adr-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:17px 0 0}.adr-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;background:#f8f2ed;border:1px solid #eadfd7;border-radius:999px;color:#4f433c;font:800 .78rem/1 Inter,Arial,sans-serif}.adr-chip b{color:var(--red)}.sources{margin-top:25px;padding-top:22px;border-top:1px solid var(--line);font-size:.92rem!important;color:#756b63!important}.sources strong{color:var(--ink)}.sources a{color:#5a4037}
+    .article-back{display:inline-flex;gap:9px;align-items:center;margin-top:34px;color:var(--ink);font:900 .84rem/1 Inter,Arial,sans-serif;letter-spacing:.04em;text-decoration:none}.article-back:hover{color:var(--red)}
+    footer#kontakt{margin-top:0;background:#13100e;color:#fff;border-top:8px solid var(--red);padding:52px 0 28px}footer#kontakt .footer-grid{display:grid;grid-template-columns:1.15fr .9fr 1fr 1fr;gap:36px}.footer-grid h5{margin:0 0 16px;color:var(--red);font:900 .74rem/1 Inter,Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase}.footer-grid p,.footer-grid a{margin:0 0 9px;color:#aaa;text-decoration:none}.footer-grid a:hover{color:#fff}.footer-grid strong{color:#fff}.socials{display:flex;gap:12px;margin-top:18px}.socials a{display:grid;place-items:center;width:34px;height:34px;border:1px solid #4b423d;border-radius:50%;color:#fff!important}.socials a:hover{background:var(--red);border-color:var(--red)}.partner-box{display:grid;place-items:center;min-height:92px;padding:16px;border:1px solid rgba(255,255,255,.18);border-radius:12px;text-align:center}.partner-box small{display:block;color:#ffb3b5;font:900 .62rem/1 Inter,Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase}.partner-box strong{display:block;margin-top:8px;font:900 1.08rem/1 Inter,Arial,sans-serif;letter-spacing:.02em}.footer-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:29px;padding-top:19px;border-top:1px solid #28221f;color:#898078;font-size:.78rem}.footer-bottom p{margin:0}
+    @media(max-width:950px){.class-gallery{grid-template-columns:repeat(5,minmax(0,1fr))}.facts{grid-template-columns:1fr 1fr}.header-flex{min-height:68px}.nav-links{gap:13px}.nav-links a{font-size:.7rem}footer#kontakt .footer-grid{grid-template-columns:1fr 1fr}.adr-hero{padding-top:75px}.section{padding:29px}}
+    @media(max-width:620px){.container{width:min(100% - 28px,1180px)}.nav-links li:not(:last-child){display:none}.article-shell{padding:34px 14px 70px}.section{padding:24px 19px;border-radius:13px}.facts,.toc-grid{grid-template-columns:1fr}.class-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.class-mark img{width:62px;height:62px}.equipment-row{grid-template-columns:1fr}.equipment-row b{padding:13px 15px}.equipment-row span{padding:13px 15px}.adr-hero h1{font-size:2.55rem}.adr-hero p{font-size:1rem}.toc{padding:23px 20px}footer#kontakt .footer-grid{grid-template-columns:1fr;gap:27px}.formula{font-size:.82rem}}
+  
+    .article-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:9px 18px;margin-top:21px;color:#625952;font-size:.91rem;font-weight:700}.article-meta span{display:inline-flex;align-items:center;gap:7px}.article-meta i{color:var(--red)}.article-meta b{color:var(--ink);font-weight:800}
+    .lang-mini{display:flex!important;align-items:center;gap:5px}.lang-mini a{display:inline-flex!important;align-items:center;justify-content:center;min-width:29px;height:27px;padding:0 7px!important;border:1px solid var(--line);border-radius:5px;font-size:.67rem!important}.lang-mini a.is-current{background:var(--ink);color:#fff}.lang-mini a:hover{border-color:var(--red);color:var(--red)}
+    @media(max-width:620px){.nav-links li.lang-mini{display:flex!important}.nav-links li.lang-mini a{font-size:.62rem!important;min-width:25px;height:25px;padding:0 5px!important}.nav-links{gap:7px}.nav-links .btn-cta{padding:9px 11px}}
+
+  </style>
+<script>
+(function(){
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('/').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + '/' + location.search + location.hash);
+})();
+</script>
+<style id="adr-home-footer-exact">
+/* Kopia stopki kontaktowej strony głównej — także dla artykułu ADR. */
+footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px solid #e31e24!important;padding:55px 0 30px!important;}
+footer#kontakt .footer-grid{display:grid!important;grid-template-columns:1.12fr .88fr 1fr 1.14fr!important;gap:40px!important;align-items:start!important;}
+footer#kontakt .logo{color:#fff!important;text-decoration:none!important;font:900 1.13rem/1 Inter,sans-serif!important;letter-spacing:.035em!important;}
+footer#kontakt .f-brand>p{display:none!important;} footer#kontakt h5{margin:0 0 17px!important;color:#e31e24!important;font:900 .76rem/1.2 Inter,sans-serif!important;letter-spacing:.12em!important;text-transform:uppercase!important;}
+footer#kontakt p,footer#kontakt a{color:#aaa!important;text-decoration:none!important;} footer#kontakt p{margin:0 0 9px!important;font-size:.9rem!important;} footer#kontakt a:hover{color:#fff!important;}
+footer#kontakt .socials{display:flex!important;gap:15px!important;margin-top:20px!important;} footer#kontakt .socials a{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;border:1px solid rgba(255,255,255,.19)!important;border-radius:50%!important;color:#fff!important;transition:.18s ease!important;}
+footer#kontakt .socials a:hover{background:#e31e24!important;border-color:#e31e24!important;transform:translateY(-2px)!important;}
+footer#kontakt .f-contact p{white-space:nowrap!important;} footer#kontakt .f-contact strong{color:#fff!important;font-weight:800!important;}
+footer#kontakt .f-partner{display:flex!important;align-items:stretch!important;min-width:0!important;}
+footer#kontakt .footer-motohouse-link{width:100%!important;min-height:104px!important;margin:0!important;padding:16px 18px!important;display:grid!important;grid-template-columns:1fr!important;grid-template-rows:auto 1fr!important;align-items:center!important;justify-items:center!important;gap:10px!important;border:1px solid rgba(255,255,255,.20)!important;border-left:3px solid #e31e24!important;border-radius:12px!important;background:rgba(255,255,255,.055)!important;overflow:hidden!important;transition:.2s ease!important;}
+footer#kontakt .footer-motohouse-link:hover{border-color:rgba(255,255,255,.42)!important;background:rgba(255,255,255,.09)!important;transform:translateY(-3px)!important;}
+footer#kontakt .footer-motohouse-copy{display:block!important;width:100%!important;text-align:center!important;}
+footer#kontakt .footer-motohouse-copy strong{display:block!important;color:#ffb3b5!important;font:900 .61rem/1.2 Inter,sans-serif!important;letter-spacing:.13em!important;text-transform:uppercase!important;}
+footer#kontakt .footer-motohouse-logo{display:block!important;width:132px!important;height:43px!important;object-fit:contain!important;padding:7px 9px!important;border-radius:7px!important;background:#fff!important;}
+footer#kontakt .footer-bottom{margin-top:30px!important;padding-top:20px!important;border-top:1px solid #221e1b!important;display:flex!important;justify-content:space-between!important;align-items:center!important;flex-wrap:wrap!important;gap:10px!important;color:#aaa!important;}
+footer#kontakt .iso-text{font-size:.72rem!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:1px!important;color:#aaa!important;} footer#kontakt .copy{font-size:.75rem!important;color:#777!important;margin:0!important;}
+/* Nav copied from the article list: keep the flags visible on mobile. */
+.adr-navbar-copy .lang-switcher{display:flex!important;align-items:center!important;gap:8px!important;}
+.adr-navbar-copy .lang-switcher a{display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:0!important;}
+.adr-navbar-copy .lang-switcher img{display:block!important;width:20px!important;height:14px!important;object-fit:cover!important;border-radius:1px!important;}
+@media(max-width:992px){footer#kontakt .footer-grid{grid-template-columns:1fr 1fr!important;gap:30px!important;}}
+@media(max-width:640px){.adr-navbar-copy .nav-links li.lang-switcher{display:flex!important;}footer#kontakt .footer-grid{grid-template-columns:1fr!important;gap:25px!important;}footer#kontakt .footer-motohouse-link{max-width:none!important;}footer#kontakt .footer-bottom{align-items:flex-start!important;}}
+</style>
+<style id="adr-white-frame-v119">
+/* Spójny układ z wyróżnionym artykułem: jeden jasny, centralny panel. */
+.article-shell{max-width:980px!important;margin:52px auto 92px!important;padding:58px 62px 68px!important;border:1px solid #ded7d0!important;border-radius:18px!important;background:#fff!important;box-shadow:0 18px 46px rgba(32,22,14,.055)!important;}
+.article-shell .toc{margin:0 0 42px!important;}
+.article-shell .section{margin-top:46px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;}
+.article-shell .section:first-of-type{margin-top:44px!important;}
+.article-shell .section + .section{padding-top:40px!important;border-top:1px solid var(--line)!important;}
+.article-shell .section h2{margin-bottom:13px!important;}
+.article-shell .article-author-card{margin-top:52px!important;padding-top:28px!important;border-top:1px solid var(--line)!important;}
+.article-shell .article-back{margin-top:34px!important;}
+@media(max-width:850px){.article-shell{margin:30px 16px 68px!important;padding:36px 24px 42px!important;border-radius:14px!important}.article-shell .section{margin-top:38px!important}.article-shell .section + .section{padding-top:32px!important}.article-shell .section:first-of-type{margin-top:38px!important}}
+</style>
+<style id="adr-white-sides-v120">html,body{background:#fff!important;}body{background:#fff!important;}main{background:#fff!important;}.article-shell{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important;}</style><style id="article-white-page-v120">
+html,body{background:#fff!important;} body{background:#fff!important;} main{background:#fff!important;}
+.article-shell{max-width:980px!important;margin:0 auto 92px!important;padding:58px 62px 68px!important;background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
+.article-shell .section{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;}
+.article-shell .section + .section{padding-top:40px!important;border-top:1px solid var(--line)!important;}
+.article-shell .section{margin-top:46px!important;}
+.article-shell .toc{margin-top:0!important;}
+.waste-hero{position:relative;display:flex;align-items:center;min-height:620px;padding:0!important;overflow:hidden;border-bottom:0!important;background:url('waste-transport-hero.png') 50% 62%/cover no-repeat!important;}
+.waste-hero .inner{max-width:1180px!important;margin:0 auto!important;padding:110px 0 96px;text-align:left!important;position:relative;z-index:1;}
+.waste-hero .inner{filter:none;}.waste-hero .eyebrow{color:#133547!important;text-shadow:0 1px 10px rgba(255,255,255,.45),0 0 1px rgba(255,255,255,.75);}.waste-hero .eyebrow i{color:#18884f!important;}.waste-hero h1{margin:19px 0 16px;color:#0f2f42!important;font:900 clamp(2.45rem,6vw,4.85rem)/1.02 Inter,Arial,sans-serif;letter-spacing:-.065em;text-shadow:0 2px 12px rgba(255,255,255,.48),0 0 1px rgba(255,255,255,.8);}.waste-hero p{max-width:760px;margin:0;color:#133547!important;font-size:1.12rem;line-height:1.7;text-shadow:0 1px 10px rgba(255,255,255,.42),0 0 1px rgba(255,255,255,.72);}
+@media(max-width:850px){.article-shell{padding:36px 24px 42px!important;margin-bottom:68px!important}.waste-hero{min-height:540px!important;background-position:56% 63%!important}.waste-hero .inner{padding:92px 0 76px!important}}
+@media(max-width:620px){.article-shell{padding:30px 18px 38px!important}.waste-hero{min-height:500px!important;background-position:62% 64%!important}.waste-hero .inner{padding:82px 0 64px!important}.waste-hero h1{font-size:2.55rem!important}.waste-hero p{font-size:1rem!important;max-width:90%!important}}
+</style>
+<style id="article-frame-v122">
+
+/* v122 — article frame aligned with the vehicle and supply-chain guides */
+html,body{background:#fff!important;}
+main{background:#fff!important;}
+.article-shell{max-width:1160px!important;margin:0 auto!important;padding:56px 20px 92px!important;background:#fff!important;}
+.article-shell .toc{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:18px!important;margin:0 0 34px!important;padding:23px 26px!important;border:1px solid var(--line)!important;border-left:5px solid var(--red)!important;border-radius:14px!important;background:#fff!important;color:var(--ink)!important;}
+.article-shell .toc h2{grid-column:1/-1!important;margin:0!important;color:var(--ink)!important;font:900 1.3rem/1.1 Inter,sans-serif!important;letter-spacing:-.035em!important;text-transform:none!important;}
+.article-shell .toc-grid{display:contents!important;}
+.article-shell .toc a{display:flex!important;align-items:center!important;gap:9px!important;color:var(--ink)!important;text-decoration:none!important;font-weight:800!important;font-size:.94rem!important;}
+.article-shell .toc a:hover{color:var(--red)!important;}
+.article-shell .toc i{margin:0!important;color:var(--red)!important;font-size:.75rem!important;}
+.article-shell .section{margin:30px 0!important;padding:35px!important;border:1px solid var(--line)!important;border-radius:16px!important;background:#fff!important;}
+@media(max-width:800px){.article-shell{padding:38px 16px 74px!important;}.article-shell .toc{grid-template-columns:1fr!important;padding:21px 20px!important;}.article-shell .section{padding:25px 21px!important;}}
+
+</style>
+<style id="continuous-article-layout">
+/* Jeden ciągły artykuł: wspólna biała rama, bez oddzielnych kart rozdziałów. */
+.article-shell{max-width:1080px;margin:54px auto 90px;padding:0 58px;background:#fff;border:1px solid var(--line);border-radius:0!important;}
+.article-shell .toc{margin:0!important;padding:32px 0 26px!important;background:#fff!important;color:var(--ink)!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;}
+.article-shell .toc h2{margin:0 0 16px!important;color:var(--ink)!important;font:800 1.05rem/1.25 Inter,Arial,sans-serif!important;letter-spacing:-.02em!important;text-transform:none!important;}
+.article-shell .toc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr);gap:10px 24px;}
+.article-shell .toc a{color:#4f4944!important;font-size:.91rem!important;font-weight:700!important;}
+.article-shell .toc i{color:#6d645e!important;}
+.article-shell .section{margin:0!important;padding:42px 0!important;background:transparent!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;}
+.article-shell .section h2{margin:0 0 15px!important;}
+.article-shell .section:last-of-type{border-bottom:0!important;}
+.article-shell .article-author-card{margin:0!important;padding:28px 0!important;border-top:0!important;}
+.article-shell .article-back{margin:0 0 42px!important;}
+@media(max-width:850px){.article-shell{margin:34px 16px 64px;padding:0 24px}.article-shell .toc-grid{grid-template-columns:1fr}.article-shell .section{padding:31px 0!important;}}
+</style>
+<style id="adr-waste-unified-frame-v124">
+/* Same single editorial frame as the supply-chain article. */
+body{background:#f7f2ec!important;}
+.article-shell{max-width:980px!important;margin:52px auto 92px!important;padding:58px 62px 68px!important;border:1px solid #ded7d0!important;border-radius:18px!important;background:#fff!important;box-shadow:0 18px 46px rgba(32,22,14,.055)!important;}
+.toc{margin:0 0 46px!important;padding:0 0 22px!important;border:0!important;border-bottom:1px solid #e8e1db!important;border-radius:0!important;background:transparent!important;color:#17120f!important;}
+.toc h2{margin:0 0 16px!important;color:#17120f!important;font:800 1.05rem/1.25 Inter,Arial,sans-serif!important;letter-spacing:-.02em!important;text-transform:none!important;}
+.toc-grid{gap:11px 26px!important;}
+.toc a{color:#4f4944!important;font-size:.91rem!important;font-weight:700!important;}
+.toc a i{color:#6d645e!important;}
+.toc a:hover{color:#17120f!important;}
+.section{margin:58px 0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;}
+.section:first-of-type{margin-top:44px!important;}
+.section h2{margin:0 0 14px!important;font:900 clamp(1.75rem,3.2vw,2.3rem)/1.08 Inter,Arial,sans-serif!important;color:#17120f!important;letter-spacing:-.045em!important;}
+.section h3{margin:34px 0 13px!important;color:#17120f!important;font:800 1.16rem/1.28 Inter,Arial,sans-serif!important;letter-spacing:-.022em!important;}
+.section p{color:#514a45!important;font-size:1.03rem!important;line-height:1.78!important;}
+.section .lead{max-width:880px!important;margin:0 0 28px!important;color:#514a45!important;font-size:1.03rem!important;line-height:1.78!important;}
+@media(max-width:850px){.article-shell{margin:30px 16px 68px!important;padding:36px 24px 42px!important;border-radius:14px!important;}.article-shell .section:first-of-type{margin-top:38px!important;}.toc-grid{grid-template-columns:1fr!important;}}
+</style>
+<style id="article-navbar-home-exact">
+/* Navbar copied from the homepage dark state. It turns light only after the article hero has passed beneath it. */
+.main-header.article-home-nav{
+  position:sticky!important;top:0!important;z-index:1400!important;
+  min-height:0!important;padding:0!important;
+  transition:background .28s ease,border-color .28s ease,box-shadow .28s ease,min-height .22s ease!important;
+}
+.main-header.article-home-nav .header-flex{min-height:80px!important;transition:min-height .22s ease!important;}
+.main-header.article-home-nav .logo::after{content:none!important;display:none!important;}
+/* Same colour and contrast as the dark navbar on the homepage. */
+.main-header.article-home-nav.nav-state-dark,
+.main-header.article-home-nav.nav-state-dark.nav-on-dark{
+  background:linear-gradient(145deg,#13100e 0%,#1e1714 100%)!important;
+  border-bottom-color:rgba(255,255,255,.10)!important;
+  box-shadow:0 14px 30px rgba(19,16,14,.22)!important;
+}
+.main-header.article-home-nav.nav-state-dark .logo,
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta),
+.main-header.article-home-nav.nav-state-dark.nav-on-dark .logo,
+.main-header.article-home-nav.nav-state-dark.nav-on-dark .nav-links a:not(.btn-cta){
+  color:rgba(255,255,255,.92)!important;
+}
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta).is-active{color:#ff8b8f!important;}
+.main-header.article-home-nav.nav-state-dark .nav-links a:not(.btn-cta):hover{color:#ffb1b4!important;}
+.main-header.article-home-nav.nav-state-dark .lang-switcher{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;padding:5px!important;
+  border:1px solid rgba(255,255,255,.22)!important;border-radius:12px!important;
+  background:rgba(255,255,255,.10)!important;box-shadow:inset 0 1px rgba(255,255,255,.08)!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher a{
+  display:grid!important;place-items:center!important;width:28px!important;height:22px!important;padding:0!important;
+  border:1px solid transparent!important;border-radius:7px!important;opacity:.76!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher a[aria-current="page"],
+.main-header.article-home-nav.nav-state-dark .lang-switcher a.is-current{
+  opacity:1!important;border-color:rgba(255,255,255,.56)!important;background:rgba(255,255,255,.16)!important;
+}
+.main-header.article-home-nav.nav-state-dark .lang-switcher img{width:20px!important;height:auto!important;border-radius:2px!important;box-shadow:0 2px 6px rgba(0,0,0,.28)!important;}
+.main-header.article-home-nav .btn-cta{background:var(--red)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18)!important;}
+/* Light navbar after the hero/photo is passed. */
+.main-header.article-home-nav.nav-state-light,
+.main-header.article-home-nav.nav-state-light.nav-on-dark{
+  background:rgba(255,255,255,.94)!important;
+  border-bottom-color:rgba(19,16,14,.10)!important;
+  box-shadow:none!important;
+}
+.main-header.article-home-nav.nav-state-light .header-flex{min-height:66px!important;}
+.main-header.article-home-nav.nav-state-light .logo,
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta),
+.main-header.article-home-nav.nav-state-light.nav-on-dark .logo,
+.main-header.article-home-nav.nav-state-light.nav-on-dark .nav-links a:not(.btn-cta){color:#201914!important;}
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta).is-active{color:var(--red)!important;}
+.main-header.article-home-nav.nav-state-light .nav-links a:not(.btn-cta):hover{color:var(--red)!important;}
+.main-header.article-home-nav.nav-state-light .lang-switcher{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;padding:5px!important;
+  border:1px solid rgba(19,16,14,.12)!important;border-radius:12px!important;background:rgba(255,255,255,.68)!important;box-shadow:none!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a{
+  display:grid!important;place-items:center!important;width:28px!important;height:22px!important;padding:0!important;
+  border:1px solid transparent!important;border-radius:7px!important;opacity:.76!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher a[aria-current="page"],
+.main-header.article-home-nav.nav-state-light .lang-switcher a.is-current{
+  opacity:1!important;border-color:rgba(227,30,36,.64)!important;background:rgba(227,30,36,.09)!important;
+}
+.main-header.article-home-nav.nav-state-light .lang-switcher img{width:20px!important;height:auto!important;border-radius:2px!important;box-shadow:0 2px 6px rgba(0,0,0,.18)!important;}
+@media(max-width:780px){
+  .main-header.article-home-nav .header-flex{min-height:70px!important;}
+  .main-header.article-home-nav.nav-state-light .header-flex{min-height:62px!important;}
+  .main-header.article-home-nav .nav-links a:not(.btn-cta){font-size:.61rem!important;letter-spacing:.055em!important;}
+}
+</style>
+<style id="hero-framing-v2">.waste-hero{background-color:transparent!important;background-size:cover!important;background-position:50% 62%!important;}@media(max-width:850px){.waste-hero{background-size:cover!important;background-position:56% 63%!important;}}@media(max-width:620px){.waste-hero{background-size:cover!important;background-position:62% 64%!important;}}</style></head>
+<body><header class="main-header mk-nav article-home-nav nav-state-dark" id="navbar">
+<div class="container header-flex">
+<a class="logo" href="home.html">M.KULCZYK</a>
+<nav aria-label="Główna nawigacja"><ul class="nav-links">
+<li aria-label="Language selector" class="lang-switcher"><a aria-current="page" aria-label="PL" class="is-current" href="articles-waste.html"><img alt="PL" src="https://flagcdn.com/w20/pl.png"/></a><a aria-label="EN" href="articles-waste-en.html"><img alt="EN" src="https://flagcdn.com/w20/gb.png"/></a><a aria-label="DE" href="articles-waste-de.html"><img alt="DE" src="https://flagcdn.com/w20/de.png"/></a></li>
+<li data-nav-key="about"><a href="home.html#onas">O MNIE</a></li>
+<li data-nav-key="projects"><a href="projects.html">PROJEKTY</a></li>
+<li data-nav-key="articles"><a class="is-active" href="articles.html">ARTYKUŁY</a></li>
+<li data-nav-key="contact"><a class="btn-cta" href="home.html#kontakt">KONTAKT</a></li>
+</ul></nav>
+</div>
+</header><main><section class="waste-hero"><div class="container inner"><div class="eyebrow"><i class="fa-solid fa-recycle"></i> TRANSPORT ODPADÓW</div><h1>Transport odpadów</h1><p>Klasyfikacja, dokumentacja, oznakowanie i przewóz transgraniczny.</p></div></section><div class="article-shell"><nav aria-label="Spis treści" class="toc"><h2>Spis treści</h2><div class="toc-grid"><a href="#s1"><i class="fa-solid fa-arrow-right"></i>1. Odpady jako kategoria prawna i logistyczna</a><a href="#s2"><i class="fa-solid fa-arrow-right"></i>2. Odpady niebezpieczne a ADR</a><a href="#s3"><i class="fa-solid fa-arrow-right"></i>3. Transport krajowy: BDO i dokumentacja przewozu</a><a href="#s4"><i class="fa-solid fa-arrow-right"></i>4. Przygotowanie i zabezpieczenie ładunku</a><a href="#s5"><i class="fa-solid fa-arrow-right"></i>5. Oznakowanie pojazdu: tablica „ODPADY”</a><a href="#s6"><i class="fa-solid fa-arrow-right"></i>6. Tablica A w transporcie międzynarodowym</a><a href="#s7"><i class="fa-solid fa-arrow-right"></i>7. SENT: wybrane przewozy krajowe</a><a href="#s8"><i class="fa-solid fa-arrow-right"></i>8. Transport międzynarodowy: DIWASS i Załącznik VII</a><a href="#s9"><i class="fa-solid fa-arrow-right"></i>9. SENT przy przywozie i tranzycie</a><a href="#s10"><i class="fa-solid fa-arrow-right"></i>10. Kontrole transportów odpadów</a><a href="#s11"><i class="fa-solid fa-arrow-right"></i>Zakończenie</a></div></nav><section class="section" id="s1"><h2>1. Odpady jako kategoria prawna i logistyczna</h2><p class="lead">Odpadem jest substancja lub przedmiot, których posiadacz się pozbywa, zamierza się pozbyć albo do których pozbycia się jest obowiązany.</p><p>To pojęcie obejmuje nie tylko odpady komunalne. Odpadem może być gruz budowlany, złom, osad poprodukcyjny, zużyty olej, pozostałość chemiczna, bateria, opakowanie po substancji niebezpiecznej albo materiał powstały w procesie produkcyjnym.</p><p>Podstawą przygotowania przewozu jest właściwy sześciocyfrowy kod odpadu. Wskazuje on źródło powstania i rodzaj odpadu, a w wielu przypadkach także jego status jako odpadu niebezpiecznego. Od klasyfikacji zależą dokumenty, odbiorca, sposób zabezpieczenia, obowiązki SENT oraz ewentualne zastosowanie ADR.</p></section><section class="section" id="s2"><h2>2. Odpady niebezpieczne a ADR</h2><p>Odpad oznaczony w katalogu gwiazdką jest odpadem niebezpiecznym. Nie oznacza to automatycznie, że jego przewóz podlega ADR. Status odpadu niebezpiecznego i klasyfikacja transportowa to dwa odrębne zagadnienia.</p><ol><li>Czy materiał jest odpadem niebezpiecznym w rozumieniu przepisów o odpadach?</li><li>Czy spełnia kryteria towaru niebezpiecznego w transporcie drogowym?</li></ol><p>Dopiero druga odpowiedź przesądza o obowiązkach ADR: numerze UN, opakowaniu, oznakowaniu, dokumencie przewozowym, wyposażeniu pojazdu albo kwalifikacjach kierowcy. Dla odpadu objętego ADR nie należy automatycznie łączyć oznakowania ADR z tablicą „ODPADY”; najpierw trzeba ustalić, jaki reżim dotyczy konkretnego przewozu.</p></section><section class="section" id="s3"><h2>3. Transport krajowy: BDO i dokumentacja przewozu</h2><p>W krajowym transporcie odpadów podstawowym narzędziem ewidencyjnym jest BDO. Jeżeli dla danego odpadu istnieje obowiązek ewidencji, przekazanie odpadu dokumentuje się najczęściej Kartą Przekazania Odpadów.</p><p>Kierujący powinien mieć podczas przewozu potwierdzenie wygenerowane z BDO — jako wydruk lub plik PDF na urządzeniu mobilnym. Po wykonaniu przewozu podmiot transportujący potwierdza transport w systemie.</p><p>Przed załadunkiem należy porównać dokumentację z rzeczywistym ładunkiem:</p><ul><li>kod odpadu,</li><li>dane przekazującego, transportującego i przejmującego,</li><li>masę odpadu,</li><li>miejsce rozpoczęcia i zakończenia przewozu,</li><li>zgodność rodzaju odpadu z dokumentem.</li></ul></section><section class="section" id="s4"><h2>4. Przygotowanie i zabezpieczenie ładunku</h2><p>Przewóz ma uniemożliwiać mieszanie odpadów, wysypywanie, pylenie, wyciek i nadmierne oddziaływanie warunków atmosferycznych. Pojemniki, worki i palety należy ułożyć albo umocować tak, aby nie przemieszczały się i nie przewracały.</p><p>Przed kolejnym przewozem trzeba sprawdzić, czy środek transportu nie zawiera pozostałości po poprzednim ładunku, które mogłyby zmienić właściwości nowego odpadu albo stworzyć zagrożenie dla środowiska lub zdrowia.</p><p>Dobór naczepy, kontenera, opakowania i zabezpieczeń wynika z właściwości odpadu. Złom, gruz, odpady sypkie, osady, odpady ciekłe, medyczne i pozostałości chemiczne wymagają różnych rozwiązań.</p></section><section class="section" id="s5"><h2>5. Oznakowanie pojazdu: tablica „ODPADY”</h2><p>W polskim ruchu krajowym pojazd albo zespół pojazdów przewożący odpady powinien być oznaczony z przodu białą tablicą z czarnym napisem „ODPADY”. Standardowy wymiar to 400 × 300 mm, a litery powinny mieć co najmniej 100 mm wysokości.</p><p>Gdy konstrukcja pojazdu nie pozwala na użycie standardowej tablicy, dopuszczalne jest oznakowanie co najmniej 300 × 120 mm z literami o wysokości minimum 80 mm. Tablica musi być czytelna, trwała i odporna na warunki atmosferyczne.</p><p>Obowiązek nie dotyczy m.in. przypadków bez obowiązku prowadzenia ewidencji oraz przewozu odpadów innych niż niebezpieczne w ilości do 100 kg. Rozporządzenie wymaga tablicy z przodu; nie ustanawia ogólnego obowiązku umieszczania jej jednocześnie z przodu i z tyłu.</p></section><section class="section" id="s6"><h2>6. Tablica A w transporcie międzynarodowym</h2><p>W transgranicznym przewozie odpadów polskie przepisy dopuszczają zamiast tablicy „ODPADY” białą tablicę z czarną wielką literą „A”. Powinna mieć 400 × 300 mm, a litera „A” co najmniej 200 mm wysokości. Umieszcza się ją z przodu pojazdu.</p><p>Oznakowanie bywa nazywane A-Schild, szczególnie przy przewozach do Niemiec lub przez Niemcy. Tablica A identyfikuje pojazd uczestniczący w transgranicznym przewozie odpadów, ale nie zastępuje dokumentów, procedury zgłoszenia, umowy ani rejestracji.</p></section><section class="section" id="s7"><h2>7. SENT: wybrane przewozy krajowe</h2><p>SENT nie obejmuje automatycznie każdego krajowego przewozu odpadów. Dla transportu rozpoczynającego się w Polsce zgłoszenie dotyczy wskazanych kodów odpadów, przede wszystkim związanych z farbami, lakierami, rozpuszczalnikami, zmywaczami, klejami i szczeliwami zawierającymi substancje niebezpieczne.</p><p>Dla tej grupy obowiązek powstaje, gdy masa brutto przesyłki wynosi co najmniej 1000 kg albo jej objętość co najmniej 1000 litrów. Przewóz złomu, makulatury, gruzu czy większości odpadów produkcyjnych nie podlega SENT wyłącznie dlatego, że jest przewozem odpadów.</p><p>BDO i SENT to dwa odrębne systemy. Jeden transport może wymagać dokumentacji BDO oraz zgłoszenia SENT.</p></section><section class="section" id="s8"><h2>8. Transport międzynarodowy: DIWASS i Załącznik VII</h2><p>Transgraniczne przemieszczanie odpadów podlega przepisom UE. Od 21 maja 2026 r. stosowane jest rozporządzenie UE 2024/1157, które zastąpiło rozporządzenie 1013/2006. Zmiany obejmują cyfryzację przez DIWASS.</p><p><strong>DIWASS</strong> (Digital Waste Shipment System) jest systemem Komisji Europejskiej do wymiany danych i dokumentów związanych z transgranicznym przemieszczaniem odpadów. Przewoźnik musi być wcześniej zarejestrowany w systemie, aby można było wskazać go w dokumentacji.</p><p>Przy przewozach wymagających uprzedniego pisemnego zgłoszenia i zgody, czyli notyfikacji, DIWASS jest obowiązkowy od 21 maja 2026 r. Dla części odpadów z zielonej listy przeznaczonych do odzysku — m.in. części złomu, papieru i stłuczki — do 31 grudnia 2026 r. Załącznik VII może nadal towarzyszyć transportowi na papierze, z nowym wzorem dokumentu i wymaganą umową. Od 1 stycznia 2027 r. przewozy te mają być realizowane przez DIWASS.</p></section><section class="section" id="s9"><h2>9. SENT przy przywozie i tranzycie</h2><p>Przy przywozie odpadów do Polski albo tranzycie przez Polskę obowiązki SENT są szersze niż w krajówce. Transport odpadów objętych przepisami o transgranicznym przemieszczaniu odpadów wymaga zgłoszenia do SENT, z uwzględnieniem ustawowych wyjątków.</p><p>Po stronie przewoźnika istotne są aktualizacja danych, przekazywanie geolokalizacji oraz posiadanie numeru referencyjnego podczas przewozu.</p></section><section class="section" id="s10"><h2>10. Kontrole transportów odpadów</h2><p>Kontrola może nastąpić na granicy zewnętrznej UE, w trakcie kontroli drogowej, na parkingu, w terminalu albo przy miejscu załadunku lub rozładunku. Sprawdzane są zwykle oznakowanie pojazdu, dokumenty BDO, zgodność kodu odpadu z dokumentacją oraz zgodność rzeczywistego ładunku z deklaracją.</p><p>Transport trzeba przygotować tak, aby dane w dokumentach, oznakowanie, sposób zabezpieczenia i faktyczny ładunek tworzyły jeden spójny zestaw.</p></section><section class="section" id="s11"><h2>Zakończenie</h2><p>Transport odpadów wymaga każdorazowej analizy kodu odpadu, właściwości materiału, sposobu pakowania i trasy. W przewozie krajowym podstawowe znaczenie mają BDO, KPO, zabezpieczenie ładunku i oznakowanie pojazdu; w określonych przypadkach także SENT.</p><p>W przewozie międzynarodowym dochodzą właściwa procedura przemieszczenia, dokumenty, obowiązki SENT i DIWASS. Przy planowaniu trzeba oddzielić status odpadu, wymagania ADR i obowiązki transgraniczne — nie są to automatycznie te same zasady.</p></section><div class="article-author-card"><a aria-label="LinkedIn Mariusza Kulczyka" href="https://www.linkedin.com/in/mariusz-kulczyk/" rel="noopener noreferrer" target="_blank"><span class="author-icon"><i class="fa-brands fa-linkedin-in"></i></span></a><div><a href="https://www.linkedin.com/in/mariusz-kulczyk/" rel="noopener noreferrer" target="_blank"><strong>Mariusz Kulczyk</strong></a><small>Inżynier logistyki · Przygotowano: 5 lipca 2026 · LinkedIn</small></div></div><a class="article-back" href="articles.html"><i class="fa-solid fa-arrow-left"></i>WRÓĆ DO ARTYKUŁÓW</a></div></main><footer id="kontakt">
+<div class="container footer-grid">
+<div class="f-brand"><a class="logo" href="home.html">M.KULCZYK</a><div class="socials"><a aria-label="LinkedIn" href="https://www.linkedin.com/in/mariusz-kulczyk/" rel="noopener noreferrer" target="_blank"><i class="fa-brands fa-linkedin"></i></a><a aria-label="WhatsApp" href="https://wa.me/48796108872" rel="noopener noreferrer" target="_blank"><i class="fa-brands fa-whatsapp"></i></a><a aria-label="Email" href="mailto:contact@mkulczyk.pl"><i class="fa-solid fa-envelope"></i></a></div></div>
+<div class="f-links"><h5>Strefa Partnera</h5><p><a href="loadplanner.html"><i class="fa-solid fa-cube"></i> Planer Załadunku 3D</a></p><p><a href="barometr.html"><i class="fa-solid fa-earth-europe"></i> Barometr Live</a></p></div>
+<div class="f-contact"><h5>Kontakt</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Telefon: <strong>+48 796 108 872</strong></p></div>
+<div class="f-partner"><a aria-label="Obecnie w MotoHouse" class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" rel="noopener noreferrer" target="_blank"><span class="footer-motohouse-copy"><strong>Obecnie w:</strong></span><img alt="MotoHouse" class="footer-motohouse-logo" src="motohouse-logo-2.svg"/></a></div>
+</div>
+<div class="container footer-bottom"><span class="iso-text">Standardy operacyjne oparte na normach ISO i GDP</span><p class="copy">© 2026 Mariusz Kulczyk. Wszelkie prawa zastrzeżone.</p></div>
+</footer><script>(function(){var header=document.querySelector('.main-header');if(!header)return;window.addEventListener('scroll',function(){header.classList.toggle('nav-compact',window.scrollY>12)},{passive:true});}());</script><script src="site-mobile.js?v=107"></script>
+<script id="article-navbar-home-exact-script">
+(function(){
+  var header=document.querySelector('.main-header.article-home-nav');
+  if(!header) return;
+  var hero=document.querySelector('.article-hero, .adr-hero, .waste-hero');
+  function updateNavbar(){
+    if(!hero){
+      header.classList.add('nav-state-dark');
+      header.classList.remove('nav-state-light');
+      return;
+    }
+    var headerBottom=header.getBoundingClientRect().bottom;
+    var heroBottom=hero.getBoundingClientRect().bottom;
+    var passedHero=heroBottom<=headerBottom+2;
+    header.classList.toggle('nav-state-dark',!passedHero);
+    header.classList.toggle('nav-state-light',passedHero);
+  }
+  window.addEventListener('scroll',updateNavbar,{passive:true});
+  window.addEventListener('resize',updateNavbar);
+  window.addEventListener('pageshow',updateNavbar);
+  requestAnimationFrame(updateNavbar);
+}());
+</script>
+</body></html>
