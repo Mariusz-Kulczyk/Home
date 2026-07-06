@@ -92,17 +92,6 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
 .kb-reference-item .kb-spec strong{color:var(--ink)!important;font:800 .84rem/1.45 Inter,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
 </style>
 <link href="site-mobile.css?v=107" rel="stylesheet"/>
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('/').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + '/' + location.search + location.hash);
-})();
-</script>
 <style id="supply-chain-article-style">
 .article-hero--supplychain{position:relative;isolation:isolate;overflow:hidden;background:#1a2027!important;background-image:none!important;border-bottom:0;}
 .article-hero--supplychain::before{content:'';position:absolute;inset:0;z-index:-2;background:url('supply-chain-hero.png') center center/cover no-repeat;}
@@ -217,7 +206,7 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
   .main-header.article-home-nav .nav-links a:not(.btn-cta){font-size:.61rem!important;letter-spacing:.055em!important;}
 }
 </style>
-<style id="hero-framing-v2">.supply-hero{background-color:transparent!important;background-size:cover!important;background-position:center 55%!important;}@media(max-width:850px){.supply-hero{background-size:cover!important;background-position:center 58%!important;}}</style><link href="/articles-supply-chain-de/" rel="canonical"/></head><body><header class="main-header mk-nav article-home-nav nav-state-dark" id="navbar">
+<style id="hero-framing-v2">.supply-hero{background-color:transparent!important;background-size:cover!important;background-position:center 55%!important;}@media(max-width:850px){.supply-hero{background-size:cover!important;background-position:center 58%!important;}}</style><link href="articles-supply-chain-de.html" rel="canonical"/></head><body><header class="main-header mk-nav article-home-nav nav-state-dark" id="navbar">
 <div class="container header-flex">
 <a class="logo" href="home-de.html">M.KULCZYK</a>
 <nav aria-label="Hauptnavigation"><ul class="nav-links">
@@ -269,7 +258,7 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
   if(!footer) return;
   var holder = footer.querySelector('.f-partner');
   if(!holder) return;
-  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var page = (window.location.pathname.split('index.html').pop() || '').toLowerCase();
   var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
   var copyMap = {
     pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },
