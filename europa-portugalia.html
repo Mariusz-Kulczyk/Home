@@ -260,12 +260,12 @@ body{background:#f3ede6!important;}
 <script>
 (function () {
   if (location.protocol === 'file:') return;
-  var file = location.pathname.split('/').pop();
+  var file = location.pathname.split('index.html').pop();
   if (!file || !/\.html$/i.test(file)) return;
   if (/^(index|404)\.html$/i.test(file)) return;
   var clean = file.replace(/\.html$/i, '');
   var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + '/' + location.search + location.hash);
+  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
 })();
 </script>
 <style id="country-core-snapshot-v1">.core-snapshot{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin:0 0 24px}.core-snapshot>div{padding:17px 18px;border:1px solid #e2d6ce;border-radius:14px;background:#fffaf7}.core-snapshot b{display:block;color:#e31e24;font:900 .67rem/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}.core-snapshot p{margin:9px 0 0!important;color:#514741!important;line-height:1.62!important}.core-sector-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.core-sector-row span{padding:7px 9px;border:1px solid #eadfd8;border-radius:999px;background:#fff;color:#392f2a;font:800 .74rem/1.2 Inter,sans-serif}@media(max-width:760px){.core-snapshot{grid-template-columns:1fr}}</style><style id="pt-country-normal-paragraphs-v2">
@@ -505,7 +505,7 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
   if(!footer) return;
   var holder = footer.querySelector('.f-partner');
   if(!holder) return;
-  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var page = (window.location.pathname.split('index.html').pop() || '').toLowerCase();
   var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
   var copyMap = {
     pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },

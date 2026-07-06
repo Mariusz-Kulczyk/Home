@@ -3,13 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url=home.html">
   <title>M.KULCZYK</title>
-  <script>
-    (function () {
-      var target = location.protocol === 'file:' ? 'home.html' : 'home/';
-      location.replace(target);
-    })();
-  </script>
+  <script>location.replace('home.html' + location.search + location.hash);</script>
 </head>
 <body>
   <p>Przejdź do <a href="home.html">strony głównej</a>.</p>

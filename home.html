@@ -2277,12 +2277,12 @@ footer#kontakt .footer-motohouse-link.footer-motohouse-visual:hover {
 <script>
 (function () {
   if (location.protocol === 'file:') return;
-  var file = location.pathname.split('/').pop();
+  var file = location.pathname.split('index.html').pop();
   if (!file || !/\.html$/i.test(file)) return;
   if (/^(index|404)\.html$/i.test(file)) return;
   var clean = file.replace(/\.html$/i, '');
   var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + '/' + location.search + location.hash);
+  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
 })();
 </script>
 </head>
@@ -3012,7 +3012,7 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
   if(!footer) return;
   var holder = footer.querySelector('.f-partner');
   if(!holder) return;
-  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var page = (window.location.pathname.split('index.html').pop() || '').toLowerCase();
   var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
   var copyMap = {
     pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },
