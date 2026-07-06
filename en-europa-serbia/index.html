@@ -46,17 +46,6 @@ footer#kontakt .iso-text{font-size:.72rem!important;font-weight:700!important;te
 <link href="nav-unified.css?v=77" rel="stylesheet"/>
 <link href="site-overrides-v77.css?v=77" rel="stylesheet"/>
 <link href="site-mobile.css?v=107" rel="stylesheet"/>
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('/').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + '/' + location.search + location.hash);
-})();
-</script>
 <style id="v78-country-guide-article-surface">
 /* v78 — shared country-guide article surface: framed white sheet and dark navigation over the hero */
 body{background:#f4eee9!important;}
@@ -79,7 +68,7 @@ main.country-template-v36 .country-guide{background:#fff;}
 </style>
 <meta content="Transport guide: Serbia — economy, trade, top sectors, currency and transport practice." name="description"/><style id="country-full-content-v1">
 .country-guide .guide-toc{margin:0 0 34px!important}.country-guide .guide-section{margin:0 0 44px!important}.country-guide .guide-section>h2{margin:0 0 20px!important;color:#e31e24!important;font:900 clamp(2rem,4vw,3.15rem)/1.02 Inter,sans-serif!important;letter-spacing:-.06em!important}.country-guide .guide-block{min-height:0!important}.country-guide .guide-block h3{margin:0 0 12px!important;color:#171210!important;font:900 1.12rem/1.18 Inter,sans-serif!important}.country-guide .guide-block p{line-height:1.7!important}.economy-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 20px}.economy-kpi{padding:16px;border:1px solid #e5d9d1;border-radius:14px;background:#fffaf7}.economy-kpi b{display:block;color:#e31e24;font:900 .66rem/1.2 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}.economy-kpi span{display:block;margin-top:8px;color:#3b322d;font:800 .96rem/1.35 Inter,sans-serif}.sector-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:16px}.sector-card{padding:17px 15px;border:1px solid #e5d9d1;border-radius:14px;background:#fffaf7}.sector-card .no{display:block;color:#e31e24;font:900 .65rem/1 Inter,sans-serif;letter-spacing:.11em}.sector-card strong{display:block;margin-top:9px;color:#171210;font:900 .92rem/1.32 Inter,sans-serif}.change-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 0;padding:0;list-style:none}.change-list li{padding:15px 16px;border-radius:13px;background:#171210;color:#fff;line-height:1.55;font-weight:700}.change-list i{display:block;margin-bottom:9px;color:#ff9b9e}.pest-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pest-card{padding:17px;border:1px solid #e5d9d1;border-radius:14px;background:#fffdfb}.pest-card b{display:block;margin-bottom:7px;color:#e31e24;font:900 .7rem/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}.pest-card p{margin:0!important}.route-panel{padding:19px 20px;border-left:4px solid #e31e24;border-radius:0 14px 14px 0;background:#fff7f4;color:#4f443d;line-height:1.67}.source-strip{margin-top:26px;padding:18px 20px;border-top:1px solid #e7dad2;color:#746861;font-size:.87rem;line-height:1.65}.source-strip strong{color:#171210}.practical-list{margin:13px 0 0;padding-left:21px;color:#5f554e;line-height:1.7}.practical-list li{margin:7px 0}@media(max-width:940px){.economy-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.sector-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.change-list{grid-template-columns:1fr}.pest-cards{grid-template-columns:1fr}}@media(max-width:620px){.economy-kpis,.sector-grid{grid-template-columns:1fr}.guide-toc ol{columns:1!important}.country-guide .guide-section{margin-bottom:34px!important}}
-</style><link href="/en-europa-serbia/" rel="canonical"/></head><body><header class="main-header mk-nav country-article-nav nav-state-dark" id="navbar">
+</style><link href="en-europa-serbia.html" rel="canonical"/></head><body><header class="main-header mk-nav country-article-nav nav-state-dark" id="navbar">
 <div class="container header-flex">
 <a class="logo" href="home-en.html">M.KULCZYK</a>
 <nav aria-label="Primary navigation"><ul class="nav-links"><li aria-label="Language selector" class="lang-switcher"><a aria-label="PL" href="europa-serbia.html"><img alt="PL" src="https://flagcdn.com/w20/pl.png"/></a><a aria-current="page" aria-label="EN" class="is-current" href="en-europa-serbia.html"><img alt="EN" src="https://flagcdn.com/w20/gb.png"/></a><a aria-label="DE" href="de-europa-serbia.html"><img alt="DE" src="https://flagcdn.com/w20/de.png"/></a></li><li data-nav-key="about"><a href="home-en.html#onas">ABOUT ME</a></li><li data-nav-key="projects"><a href="projects-en.html">PROJECTS</a></li><li data-nav-key="articles"><a class="is-active" href="articles-en.html">ARTICLES</a></li><li data-nav-key="contact"><a class="btn-cta" href="home-en.html#kontakt">CONTACT</a></li></ul></nav>
@@ -138,7 +127,7 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
   if(!footer) return;
   var holder = footer.querySelector('.f-partner');
   if(!holder) return;
-  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var page = (window.location.pathname.split('index.html').pop() || '').toLowerCase();
   var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
   var copyMap = {
     pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },

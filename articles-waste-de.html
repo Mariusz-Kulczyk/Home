@@ -41,17 +41,6 @@
     @media(max-width:620px){.nav-links li.lang-mini{display:flex!important}.nav-links li.lang-mini a{font-size:.62rem!important;min-width:25px;height:25px;padding:0 5px!important}.nav-links{gap:7px}.nav-links .btn-cta{padding:9px 11px}}
 
   </style>
-<script>
-(function(){
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
 <style id="adr-home-footer-exact">
 /* Kopia stopki kontaktowej strony głównej — także dla artykułu ADR. */
 footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px solid #e31e24!important;padding:55px 0 30px!important;}

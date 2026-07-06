@@ -11,17 +11,6 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
 
 <link rel="stylesheet" href="site-overrides-v77.css?v=77">
 <link rel="stylesheet" href="site-mobile.css?v=107">
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
 
 <style id="article-dark-navbar-v124">
 /* Dark navbar at article start; switches to the light compact version after scrolling. */
