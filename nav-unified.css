@@ -394,26 +394,3 @@
   .main-header.mk-nav.home-nav-testimonials .nav-links a:not(.btn-cta) { font-size: .68rem !important; }
   .main-header.mk-nav.home-nav-testimonials .btn-cta { padding: 0 12px !important; font-size: .68rem !important; }
 }
-
-/* Footer language hotfix — works on every page that loads nav-unified.css. */
-html[lang="pl"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong,
-html[lang="en"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong,
-html[lang="de"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong {
-  font-size: 0 !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-}
-
-html[lang="pl"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong::after,
-html[lang="en"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong::after,
-html[lang="de"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong::after {
-  display: block;
-  color: #ffb3b5 !important;
-  font: 900 .61rem/1.2 Inter, sans-serif !important;
-  letter-spacing: .13em !important;
-  text-transform: uppercase !important;
-}
-
-html[lang="pl"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong::after { content: "Obecnie w:"; }
-html[lang="en"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong::after { content: "Currently at:"; }
-html[lang="de"] body footer#kontakt .f-partner .footer-motohouse-link.footer-motohouse-visual .footer-motohouse-copy strong::after { content: "Derzeit bei:"; }
