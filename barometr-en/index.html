@@ -42,20 +42,20 @@ footer{margin-top:56px;background:#13100e;color:#fff;border-top:4px solid var(--
 @media(max-width:540px){.barometer-overview-frame{height:520px}.map-viewport{height:560px}}
 </style>
 <link rel="stylesheet" href="site-mobile.css?v=107">
-  <link rel="canonical" href="/barometr-en/">
+  <link rel="canonical" href="barometr-en.html">
 </head>
 <body id="top" class="tool-page-barometer">
 <aside class="tool-rail" aria-label="Tools">
-  <a class="tool-rail-brand" href="home-en/" aria-label="M.KULCZYK"><span class="tool-rail-brand-mark">MK</span>M.KULCZYK</a>
-  <a class="tool-back" href="home-en/#tools"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Back to tools</span></a>
+  <a class="tool-rail-brand" href="home-en.html" aria-label="M.KULCZYK"><span class="tool-rail-brand-mark">MK</span>M.KULCZYK</a>
+  <a class="tool-back" href="home-en.html#tools"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Back to tools</span></a>
   <p class="tool-rail-label">Tools</p>
   <nav class="tool-rail-menu" aria-label="Tools">
     <a class="tool-rail-item is-current" href="#top"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span><small>Market monitor</small>Supply barometer</span></a>
-    <a class="tool-rail-item" href="loadplanner-en/"><i class="fa-solid fa-cube" aria-hidden="true"></i><span><small>3D planning</small>Load Planner 3D</span></a>
+    <a class="tool-rail-item" href="loadplanner-en.html"><i class="fa-solid fa-cube" aria-hidden="true"></i><span><small>3D planning</small>Load Planner 3D</span></a>
   </nav>
   <div class="tool-rail-spacer"></div>
   <div class="tool-rail-live"><strong>Live data</strong><p>Europe-wide market signals in one view.</p></div>
-  <div class="tool-rail-lang" aria-label="Language selector"><a href="barometr/" class="">PL</a><a href="barometr-en/" class="is-current" aria-current="page">EN</a><a href="barometr-de/" class="">DE</a></div>
+  <div class="tool-rail-lang" aria-label="Language selector"><a href="barometr.html" class="">PL</a><a href="barometr-en.html" class="is-current" aria-current="page">EN</a><a href="barometr-de.html" class="">DE</a></div>
 </aside>
 <main class="barometer-main tool-barometer-main"><div class="container">
   <div class="heading"><div><p class="eyebrow"><span class="live-dot"></span>European availability monitoring <span class="beta-label">BETA VERSION</span></p><h1>Carrier availability <span>barometer</span></h1></div><div class="source"><i class="fa-solid fa-signal"></i><span>Google Sheets data</span></div></div>
@@ -66,8 +66,8 @@ footer{margin-top:56px;background:#13100e;color:#fff;border-top:4px solid var(--
 </div></main>
 <footer id="kontakt">
   <div class="container footer-grid">
-    <div class="f-brand"><a href="home-en/" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
-    <div class="f-links"><h5>Partner Zone</h5><p><a href="loadplanner-en/"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p><p><a href="barometr-en/"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p></div>
+    <div class="f-brand"><a href="home-en.html" class="logo">M.KULCZYK</a><div class="socials"><a href="https://www.linkedin.com/in/mariusz-kulczyk/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://wa.me/48796108872" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="mailto:contact@mkulczyk.pl" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></div></div>
+    <div class="f-links"><h5>Partner Zone</h5><p><a href="loadplanner-en.html"><i class="fa-solid fa-cube"></i> 3D Load Planner</a></p><p><a href="barometr-en.html"><i class="fa-solid fa-earth-europe"></i> Live Barometer</a></p></div>
     <div class="f-contact"><h5>Contact</h5><p>E-mail: <strong>contact@mkulczyk.pl</strong></p><p>Phone: <strong>+48 796 108 872</strong></p></div>
     <div class="f-partner"><a class="footer-motohouse-link footer-motohouse-visual" href="https://motohouse-tsl.com" target="_blank" rel="noopener noreferrer" aria-label="Currently at MotoHouse"><span class="footer-motohouse-copy"><strong>Currently at:</strong></span><img class="footer-motohouse-logo" src="motohouse-logo-2.svg" alt="MotoHouse"></a></div>
   </div>
@@ -210,7 +210,7 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
   if(!footer) return;
   var holder = footer.querySelector('.f-partner');
   if(!holder) return;
-  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var page = (window.location.pathname.split('index.html').pop() || '').toLowerCase();
   var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
   var copyMap = {
     pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },

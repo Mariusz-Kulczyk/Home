@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="site-overrides-v77.css?v=77">
   <link rel="stylesheet" href="tool-rail-v96.css?v=96">
 <link rel="stylesheet" href="site-mobile.css?v=107">
-  <link rel="canonical" href="/loadplanner-en/">
+  <link rel="canonical" href="loadplanner-en.html">
 </head>
 <body>
 <div class="loadpilot-shell">
@@ -24,10 +24,10 @@
     <div class="brand">
       <div class="logo">LP</div>
       <div><h1>LoadPlanner 3D</h1><p>Cargo-space planning</p></div>
-      <div class="planner-brand-actions"><a class="back-link" href="home-en/#narzedzia" aria-label="Back to homepage"><i class="fa-solid fa-arrow-left"></i></a></div>
+      <div class="planner-brand-actions"><a class="back-link" href="home-en.html#narzedzia" aria-label="Back to homepage"><i class="fa-solid fa-arrow-left"></i></a></div>
     </div>
 
-    <div class="planner-lang-switch" aria-label="Language selector"><span>Język / Language</span><a href="loadplanner/" class="">PL</a><a href="loadplanner-en/" class="is-current" aria-current="page">EN</a><a href="loadplanner-de/" class="">DE</a></div>
+    <div class="planner-lang-switch" aria-label="Language selector"><span>Język / Language</span><a href="loadplanner.html" class="">PL</a><a href="loadplanner-en.html" class="is-current" aria-current="page">EN</a><a href="loadplanner-de.html" class="">DE</a></div>
 
     <div class="planner-mode-tabs planner-mode-tabs--icon-only" role="tablist" aria-label="Planner modes">
       <button class="planner-mode-tab is-active" type="button" role="tab" aria-selected="true" data-planner-mode="manual" aria-label="Manual setup" title="Manual setup"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i><span class="sr-only">Manual setup</span></button>
@@ -102,7 +102,7 @@ footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!i
   if(!footer) return;
   var holder = footer.querySelector('.f-partner');
   if(!holder) return;
-  var page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var page = (window.location.pathname.split('index.html').pop() || '').toLowerCase();
   var lang = page.indexOf('de') === 0 ? 'de' : (page.indexOf('en') === 0 ? 'en' : 'pl');
   var copyMap = {
     pl: { working: 'Obecnie w:', aria: 'Obecnie w MotoHouse' },
