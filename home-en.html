@@ -2144,6 +2144,17 @@ footer#kontakt .footer-motohouse-link.footer-motohouse-visual:hover {
 
 
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('index.html').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
+})();
+</script>
 </head>
 <body>
 
@@ -2323,6 +2334,7 @@ footer#kontakt .footer-motohouse-link.footer-motohouse-visual:hover {
                         <a class="tool-action" href="loadplanner-en.html">Open planner <i class="fa-solid fa-arrow-right"></i></a>
                     </article>
                     <div class="tool-links">
+                        <a class="tool-link tool-link-pfe" href="padmain-freight-exchange.html?lang=en"><i class="fa-solid fa-truck-fast"></i><span><strong>Padmain Freight Exchange</strong><span>A panel for quick groupage transport inquiries.</span></span><i class="fa-solid fa-arrow-right tool-arrow"></i></a>
                         <a class="tool-link" href="barometr-en.html"><i class="fa-solid fa-earth-europe"></i><span><strong>Live Transport Barometer</strong><span>Market signals and current transport context.</span></span><i class="fa-solid fa-arrow-right tool-arrow"></i></a>
                         <a class="tool-link tool-link-knowledge" href="articles-en.html"><i class="fa-solid fa-book-open"></i><span><strong>Articles</strong><span>Practical transport guidance, procedures and resources.</span></span><i class="fa-solid fa-arrow-right tool-arrow"></i></a>
                     </div>
@@ -2833,6 +2845,13 @@ footer#kontakt .iso-text{font-size:.72rem!important;font-weight:700!important;te
 /* v67/v68 — unified footer partner area with only the MotoHouse card on every page. */
 footer#kontakt .f-partner{display:flex!important;align-items:stretch!important;min-width:0!important;}
 footer#kontakt .footer-motohouse-link{border-left:0!important;min-height:104px!important;padding:16px 18px!important;justify-items:center!important;align-content:center!important;width:100%!important;}
+
+/* v131 — Padmain Freight Exchange card added as first right-side tool */
+.tools-section .tool-links{grid-template-rows:repeat(3,minmax(0,1fr))!important;}
+.tools-section .tool-link{min-height:0!important;}
+.tool-link-pfe i:first-child{background:rgba(227,30,36,.22)!important;color:#ff8b8f!important;}
+.tool-link-pfe:hover i:first-child{background:rgba(227,30,36,.34)!important;color:#fff!important;}
+
 </style>
 
 <script id="v67-footer-certificates-script">
