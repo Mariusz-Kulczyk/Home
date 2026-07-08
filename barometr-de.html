@@ -41,6 +41,17 @@ footer{margin-top:56px;background:#13100e;color:#fff;border-top:4px solid var(--
 @media(max-width:540px){.barometer-overview-frame{height:520px}.map-viewport{height:560px}}
 </style>
 <link rel="stylesheet" href="site-mobile.css?v=107">
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('index.html').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
+})();
+</script>
 </head>
 <body id="top" class="tool-page-barometer">
 <aside class="tool-rail" aria-label="Tools">
@@ -49,6 +60,7 @@ footer{margin-top:56px;background:#13100e;color:#fff;border-top:4px solid var(--
   <p class="tool-rail-label">Tools</p>
   <nav class="tool-rail-menu" aria-label="Tools">
     <a class="tool-rail-item is-current" href="#top"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span><small>Marktmonitor</small>Angebotsbarometer</span></a>
+    <a class="tool-rail-item" href="padmain-freight-exchange.html?lang=de"><i class="fa-solid fa-truck-fast" aria-hidden="true"></i><span><small>Anfrage-Panel</small>Padmain Freight Exchange</span></a>
     <a class="tool-rail-item" href="loadplanner-de.html"><i class="fa-solid fa-cube" aria-hidden="true"></i><span><small>3D-Planung</small>Load Planner 3D</span></a>
   </nav>
   <div class="tool-rail-spacer"></div>
