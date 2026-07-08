@@ -92,6 +92,17 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
 .kb-reference-item .kb-spec strong{color:var(--ink)!important;font:800 .84rem/1.45 Inter,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
 </style>
 <link href="site-mobile.css?v=107" rel="stylesheet"/>
+<script>
+(function () {
+  if (location.protocol === 'file:') return;
+  var file = location.pathname.split('index.html').pop();
+  if (!file || !/\.html$/i.test(file)) return;
+  if (/^(index|404)\.html$/i.test(file)) return;
+  var clean = file.replace(/\.html$/i, '');
+  var prefix = location.pathname.slice(0, -file.length);
+  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
+})();
+</script>
 <style id="supply-chain-article-style">
 .article-hero--supplychain{position:relative;isolation:isolate;overflow:hidden;background:#1a2027!important;background-image:none!important;border-bottom:0;}
 .article-hero--supplychain::before{content:'';position:absolute;inset:0;z-index:-2;background:url('supply-chain-hero.png') center center/cover no-repeat;}
