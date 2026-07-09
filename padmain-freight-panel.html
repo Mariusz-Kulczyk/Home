@@ -1946,8 +1946,8 @@ function companyCodeFromText(v){
   return (base.slice(0,6)||'KL');
 }
 function clientIdFromEmail(email){
-  const key=normalizeLogin(email||'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
-  return `client_${key||Date.now()}`;
+  const mail=normalizeLogin(email||'');
+  return mail;
 }
 function minimalClientProfile(email,extra={}){
   const mail=normalizeLogin(email||extra.email||extra.login||'');
@@ -1976,8 +1976,8 @@ function normalizeClientDirectory(markDeleted=false){
   const oldIdToEmail=new Map();
   (state.clients||[]).forEach(c=>{
     const mail=normalizeLogin(c.email||c.login||'');
-    if(c.id&&mail)oldIdToEmail.set(c.id,mail);
-    if(!mail||isAdminEmail(mail))return;
+    if(c.id&&mail&&mail.includes('@'))oldIdToEmail.set(c.id,mail);
+    if(!mail||!mail.includes('@')||isAdminEmail(mail)){if(markDeleted&&c.id)cloudDeleted.clients.add(c.id);changed=true;return;}
     const clean=minimalClientProfile(mail,{...c,sourceIds:[...(c.sourceIds||[]),c.id].filter(Boolean)});
     delete clean.accessCode;
     if(c.id&&c.id!==clean.id&&markDeleted)cloudDeleted.clients.add(c.id);
@@ -2010,44 +2010,31 @@ function mergeClientProfile(profile){
   return false;
 }
 function mergeClientProfilesFromRequests(){
-  let added=false;
+  let changed=false;
   (state.requests||[]).forEach(r=>{
-    const mail=String(r.clientEmail||'').trim();
-    if(mail&&!isAdminEmail(mail))added=mergeClientProfile(minimalClientProfile(mail,{id:r.clientId||clientIdFromEmail(mail),firebaseEmailOnly:true}))||added;
+    const mail=normalizeLogin(r.clientEmail||'');
+    const c=mail?getClientByEmail(mail):null;
+    if(c&&r.clientId!==c.id){r.clientId=c.id;changed=true;}
   });
-  return added;
+  return changed;
 }
-function mergeLegacyClientProfilesFromLocal(){
-  let added=false;
-  try{
-    const keys=['mkLtlModelV44FirebaseBackup','mkLtlModelV23','mkLtlModelV17','mkLtlModelV16','mkLtlModelV15'];
-    keys.forEach(k=>{
-      const raw=localStorage.getItem(k);if(!raw)return;
-      const old=JSON.parse(raw)||{};
-      (Array.isArray(old.clients)?old.clients:[]).forEach(c=>{if(c&&c.email&&!isAdminEmail(c.email))added=mergeClientProfile({...c,login:c.email||c.login||'',firebaseEmailOnly:false})||added;});
-      (Array.isArray(old.requests)?old.requests:[]).forEach(r=>{const c=(old.clients||[]).find(x=>x.id===r.clientId)||{};const mail=r.clientEmail||c.email;if(mail&&!isAdminEmail(mail))added=mergeClientProfile(minimalClientProfile(mail,{id:r.clientId||clientIdFromEmail(mail),company:c.company||mail,companyCode:c.companyCode||'',contact:c.contact||c.name||'',phone:c.phone||'',vatEu:c.vatEu||'',language:c.language||'pl',firebaseEmailOnly:false}))||added;});
-    });
-  }catch(e){console.warn('Legacy client import skipped',e)}
-  return added;
-}
-function getClientByEmail(email){const n=normalizeLogin(email||'');return n?state.clients.find(c=>normalizeLogin(c.email)===n):null}
+function mergeLegacyClientProfilesFromLocal(){return false;}
+function getClientByEmail(email){const n=normalizeLogin(email||'');return n&&n.includes('@')?state.clients.find(c=>normalizeLogin(c.email)===n):null}
 function getClientForRequest(r){return getClient(r?.clientId)||getClientByEmail(r?.clientEmail)||null}
 function currentAuthEmail(){return normalizeLogin((fbAuth?.currentUser?.email)||(authUser?.email)||(state.current?.email)||'')}
 function currentClientId(){const mail=currentAuthEmail();return clientIdFromEmail(mail)}
 function ensureCurrentClientIdentity(){
   const mail=currentAuthEmail();if(!mail||isAdminEmail(mail))return null;
-  let c=getClientByEmail(mail)||state.current||minimalClientProfile(mail,{createdFromAuth:true,firebaseEmailOnly:true});
-  c={...minimalClientProfile(mail,c),id:clientIdFromEmail(mail),email:mail,login:mail,role:'client'};
-  delete c.accessCode;
-  const idx=state.clients.findIndex(x=>normalizeLogin(x.email)===mail||x.id===c.id);
-  if(idx>=0)state.clients[idx]=mergeClientData(state.clients[idx],c);else state.clients.push(c);
-  state.current=state.clients.find(x=>normalizeLogin(x.email)===mail)||c;
-  return state.current;
+  const c=getClientByEmail(mail);
+  if(!c){state.current={id:mail,role:'client',email:mail,login:mail,company:'Brak profilu',missingProfile:true};return null;}
+  c.id=mail;c.email=mail;c.login=mail;c.role='client';delete c.accessCode;delete c.missingProfile;
+  state.current=c;
+  return c;
 }
 function prepareOwnedRequestForSave(r){
   const mail=currentAuthEmail();const c=ensureCurrentClientIdentity()||{};
-  if(mail&&!isAdminEmail(mail)){r.clientEmail=mail;r.clientId=clientIdFromEmail(mail);}
-  return plain({...r,clientEmail:r.clientEmail||c.email||mail||'',clientId:r.clientId||c.id||clientIdFromEmail(mail),ownerEmail:mail||r.clientEmail||'',ownerUid:fbAuth?.currentUser?.uid||''});
+  if(mail&&!isAdminEmail(mail)){r.clientEmail=mail;r.clientId=mail;}
+  return plain({...r,clientEmail:r.clientEmail||c.email||mail||'',clientId:r.clientId||c.id||mail,ownerEmail:mail||r.clientEmail||'',ownerUid:fbAuth?.currentUser?.uid||''});
 }
 function prepareOwnedNotificationForSave(n){
   const mail=currentAuthEmail();return plain({...n,clientEmail:n.clientEmail||mail,targetEmail:n.targetEmail||ADMIN_EMAIL});
@@ -2057,31 +2044,28 @@ async function ensureAuthProfileOnLogin(user){
   const email=normalizeLogin(user.email||'');
   if(!email||isAdminEmail(email))return false;
   try{
-    const id=clientIdFromEmail(email);
-    const profile=minimalClientProfile(email,{
-      company:email,
-      contact:email,
-      createdFromAuth:true,
-      firebaseEmailOnly:true,
-      ownerUid:user.uid||'',
-      lastLoginAt:new Date().toISOString()
-    });
-    delete profile.accessCode;
-    await setDoc(doc(fbDb,'clients',id),cleanClientForSave({...profile,ownerUid:user.uid||'',lastLoginAt:profile.lastLoginAt}),{merge:true});
-    mergeClientProfile({...profile,ownerUid:user.uid||''});
+    const ref=doc(fbDb,'clients',email);
+    const snap=await getDoc(ref);
+    if(!snap.exists()){
+      state.current={id:email,role:'client',email,login:email,company:'Brak profilu',missingProfile:true};
+      return false;
+    }
+    const lastLoginAt=new Date().toISOString();
+    await setDoc(ref,{lastLoginAt,ownerUid:user.uid||'',email,login:email,role:'client'},{merge:true});
+    mergeClientProfile({id:email,...snap.data(),email,login:email,lastLoginAt,ownerUid:user.uid||'',firebaseEmailOnly:false});
     return true;
   }catch(e){
-    console.warn('Auth profile create error',e);
+    console.warn('Auth profile login update error',e);
     return false;
   }
 }
 async function saveOwnClientProfile(client){
-  if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!client)return false;
+  if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!client||client.missingProfile)return false;
   const email=normalizeLogin(fbAuth.currentUser.email||'');
   if(!email||isAdminEmail(email)||normalizeLogin(client.email)!==email)return false;
   try{
-    const clean=cleanClientForSave({...client,email,login:email,ownerUid:fbAuth.currentUser.uid||''});
-    await setDoc(doc(fbDb,'clients',clientIdFromEmail(email)),clean,{merge:true});
+    const clean=cleanClientForSave({...client,id:email,email,login:email,ownerUid:fbAuth.currentUser.uid||'',lastLoginAt:new Date().toISOString()});
+    await setDoc(doc(fbDb,'clients',email),clean,{merge:true});
     return true;
   }catch(e){console.warn('Own client profile save error',e);return false;}
 }
@@ -2095,13 +2079,9 @@ function setCurrentFromAuthEmail(email){
     state.view='loads';
     return true;
   }
-  let client=state.clients.find(c=>normalizeLogin(c.email)===normalized||normalizeLogin(c.login)===normalized);
-  if(!client){
-    client=minimalClientProfile(normalized,{company:normalized,contact:normalized,createdFromAuth:true,firebaseEmailOnly:true});
-    state.clients=[...state.clients.filter(c=>normalizeLogin(c.email)!==normalized),client];
-  }
-  client.role='client';delete client.accessCode;client.id=clientIdFromEmail(normalized);client.email=normalized;client.login=normalized;
-  state.current=client;
+  const client=state.clients.find(c=>normalizeLogin(c.email)===normalized||normalizeLogin(c.login)===normalized);
+  if(client){client.role='client';delete client.accessCode;delete client.missingProfile;client.id=normalized;client.email=normalized;client.login=normalized;state.current=client;}
+  else state.current={id:normalized,role:'client',email:normalized,login:normalized,company:'Brak profilu',missingProfile:true};
   state.view='loads';
   return true;
 }
@@ -2110,7 +2090,7 @@ function syncLoggedInSession(){
   if(email&&!state.current)return setCurrentFromAuthEmail(email);
   return Boolean(state.current);
 }
-function withClientEmail(r){const c=getClientForRequest(r)||{};const mail=normalizeLogin(r.clientEmail||c.email||currentAuthEmail()||'');return {...plain(r),clientEmail:mail,clientId:clientIdFromEmail(mail),ownerEmail:r.ownerEmail||mail}}
+function withClientEmail(r){const c=getClientForRequest(r)||{};const mail=normalizeLogin(r.clientEmail||c.email||currentAuthEmail()||'');return {...plain(r),clientEmail:mail,clientId:mail,ownerEmail:r.ownerEmail||mail}}
 async function docsToArray(q){const snap=await getDocs(q);return snap.docs.map(d=>({id:d.id,...d.data()}));}
 async function loadCloudData(){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb)return false;
@@ -2139,18 +2119,24 @@ async function loadCloudData(){
       if(mergedFromRequests||mergedFromLegacy||mergedDirectory)store();
     }else{
       const authEmail=normalizeLogin(fbAuth.currentUser.email||'');
-      await ensureAuthProfileOnLogin(fbAuth.currentUser);
-      const clientDoc=await getDoc(doc(fbDb,'clients',clientIdFromEmail(authEmail)));
-      const clients=clientDoc.exists()?[{id:clientDoc.id,...clientDoc.data()}]:await docsToArray(query(collection(fbDb,'clients'),where('email','==',authEmail)));
-      const client=clients[0]||minimalClientProfile(authEmail,{createdFromAuth:true,firebaseEmailOnly:true});
-      const own={...minimalClientProfile(client.email||authEmail,client),id:clientIdFromEmail(authEmail),role:'client',email:authEmail,login:authEmail};delete own.accessCode;
-      state.clients=[own];
-      state.current=state.clients[0];
-      ensureCurrentClientIdentity();
-      state.requests=await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',fbAuth.currentUser.email||'')));
-      state.notifications=[];
-      state.view='loads';
-      await saveOwnClientProfile(state.current);
+      const clientDoc=await getDoc(doc(fbDb,'clients',authEmail));
+      if(!clientDoc.exists()){
+        state.clients=[];
+        state.current={id:authEmail,role:'client',email:authEmail,login:authEmail,company:'Brak profilu',missingProfile:true};
+        state.requests=[];
+        state.notifications=[];
+        state.view='loads';
+      }else{
+        const lastLoginAt=new Date().toISOString();
+        const client={id:authEmail,...clientDoc.data(),email:authEmail,login:authEmail,role:'client',lastLoginAt};
+        delete client.accessCode;delete client.missingProfile;
+        state.clients=[client];
+        state.current=client;
+        state.requests=await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',authEmail)));
+        state.notifications=[];
+        state.view='loads';
+        await saveOwnClientProfile(state.current);
+      }
     }
     state.requests.forEach(normalizeRequest);
     saveLocal();
@@ -2169,7 +2155,7 @@ async function cloudSaveNow(){
       normalizeClientDirectory(true);
       batch.set(doc(fbDb,'admin','profile'),cleanAdminForSave(state.admin),{merge:true});
       batch.set(doc(fbDb,'settings','global'),plain({notifyEmail:state.notifyEmail,currency:state.currency,notifyBrowser:state.notifyBrowser}),{merge:true});
-      state.clients.forEach(c=>{const clean=cleanClientForSave(c);if(clean.email)batch.set(doc(fbDb,'clients',clean.id),clean,{merge:true});});
+      state.clients.forEach(c=>{const clean=cleanClientForSave(c);if(clean.email)batch.set(doc(fbDb,'clients',clean.email),clean,{merge:true});});
       state.requests.forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
       state.notifications.forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
       cloudDeleted.requests.forEach(id=>batch.delete(doc(fbDb,'requests',id)));
@@ -2177,7 +2163,7 @@ async function cloudSaveNow(){
       cloudDeleted.clients.forEach(id=>batch.delete(doc(fbDb,'clients',id)));
     }else{
       const currentClient=ensureCurrentClientIdentity();
-      if(currentClient)batch.set(doc(fbDb,'clients',clientIdFromEmail(email)),cleanClientForSave({...currentClient,ownerUid:fbAuth.currentUser.uid||''}),{merge:true});
+      if(currentClient)batch.set(doc(fbDb,'clients',email),cleanClientForSave({...currentClient,id:email,ownerUid:fbAuth.currentUser.uid||''}),{merge:true});
       state.requests.filter(r=>normalizeLogin(r.clientEmail||getClientForRequest(r)?.email||email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),prepareOwnedRequestForSave(r),{merge:true}));
       state.notifications.filter(n=>normalizeLogin(n.clientEmail||email)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL)).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),prepareOwnedNotificationForSave(n),{merge:true}));
     }
@@ -2468,7 +2454,9 @@ function statusTag(r,admin=false){
 }
 function clientFaqHtml(){return '';}
 function renderClient(){
-  const c=state.current;const mine=state.requests.filter(r=>r.clientId===c.id);
+  const c=state.current;
+  if(c?.missingProfile){return layout(`<div class="head"><div><h1>Brak profilu klienta</h1><p>Ten e-mail loguje się w Firebase, ale nie ma profilu w panelu.</p></div></div><section class="card"><div class="empty"><b>${esc(c.email||'')}</b><br>Administrator musi dodać profil klienta z dokładnie tym e-mailem.</div></section>`)}
+  const mine=state.requests.filter(r=>normalizeLogin(r.clientEmail||'')===normalizeLogin(c.email||'')||r.clientId===c.id);
   const showRecurring=state.view==='recurring';
   const source=sortedRequests(mine.filter(r=>showRecurring?Boolean(r.recurring):!r.recurring),'client');
   const rows=source.map(r=>clientRow(r,showRecurring)).join('');
@@ -2551,7 +2539,7 @@ function adminRow(r){
 }
 function sortedClients(){
   const ui=tableUi.accounts,collator=new Intl.Collator('pl',{numeric:true,sensitivity:'base'});
-  const val=c=>({company:c.company||'',code:c.companyCode||'',vat:c.vatEu||'',contact:c.contact||c.name||'',email:c.email||'',language:c.language||''}[ui.key]||'');
+  const val=c=>({company:c.company||'',code:c.companyCode||'',vat:c.vatEu||'',contact:c.contact||c.name||'',email:c.email||'',language:c.language||'',lastLogin:c.lastLoginAt||''}[ui.key]||'');
   return [...state.clients].sort((a,b)=>collator.compare(String(val(a)),String(val(b)))*(ui.dir==='asc'?1:-1));
 }
 function accountSortHead(label,key){const ui=tableUi.accounts;return `<button type="button" data-account-sort-key="${key}">${esc(label)} ${ui.key===key?(ui.dir==='asc'?'↑':'↓'):''}</button>`}
@@ -2566,13 +2554,13 @@ function renderClients(){
   mergeClientProfilesFromRequests();
   normalizeClientDirectory(false);
   const q=String(tableUi.accounts.query||'').trim().toLocaleLowerCase('pl-PL');
-  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>{const info=clientRequestInfo(c);const src=c.createdFromAuth?'Firebase Auth':(c.firebaseEmailOnly?'z zapytania / logowania':'profil ręczny');return `<tr><td><b>${esc(c.company||c.email||'—')}</b><br><span class="info">Kod firmy: ${esc(c.companyCode||'—')} · ID profilu: ${esc(c.id||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td><b>${esc(c.email||'—')}</b><br><span class="info">Łącznik logowania: e-mail Firebase · Źródło: ${esc(src)}</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span><br><span class="info">Zapytania: ${info.total} / aktywne: ${info.active}${info.lastCode?` · ostatnie: ${esc(info.lastCode)}`:''}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`}).join('');
-  return layout(`<div class="head"><div><h1>Klienci / profile</h1><p>Jeden klient = jeden e-mail Firebase. Panel nie zapisuje haseł ani kodów dostępu — hasło istnieje tylko w Firebase Authentication.</p></div><div class="account-actions"><button class="btn" data-repair-clients>Napraw / scal po e-mailu</button><button class="btn red" data-add-client>+ Dodaj profil z e-maila</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie profili</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Nie zgaduj po ID dokumentu Firestore. Edytuj profil po e-mailu, np. nord@mkulczyk.pl. Stare duplikaty po UID zostaną oznaczone do usunięcia przy zapisie admina.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod / ID','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail / źródło','email')}</th><th>${accountSortHead('Język / zapytania','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="6"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
+  const rows=sortedClients().filter(c=>normalizeLogin(c.email).includes('@')).filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>{const info=clientRequestInfo(c);const src=c.firebaseEmailOnly?'profil minimalny':'profil ręczny';const loginDate=c.lastLoginAt?formatRegisteredAt(c.lastLoginAt):'—';return `<tr><td><b>${esc(c.company||c.email||'—')}</b><br><span class="info">Kod firmy: ${esc(c.companyCode||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td><b>${esc(c.email||'—')}</b><br><span class="info">Profil po e-mailu · ${esc(src)}</span></td><td><b>${esc(loginDate)}</b></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span><br><span class="info">Zapytania: ${info.total} / aktywne: ${info.active}${info.lastCode?` · ostatnie: ${esc(info.lastCode)}`:''}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`}).join('');
+  return layout(`<div class="head"><div><h1>Klienci / profile</h1><p>Profil klienta łączy się z logowaniem tylko po e-mailu. Bez kodów, bez importu kont, bez ID do szukania.</p></div><div class="account-actions"><button class="btn" data-repair-clients>Napraw / scal po e-mailu</button><button class="btn red" data-add-client>+ Dodaj profil z e-maila</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie profili</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Klient musi mieć profil z dokładnie tym samym e-mailem co konto w Firebase Authentication.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail','email')}</th><th>${accountSortHead('Ostatnie logowanie','lastLogin')}</th><th>${accountSortHead('Język / zapytania','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="7"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
 }
 function openClientAddModal(){
   if(state.current?.role!=='admin'){loginModal();return}
   document.querySelector('.modal')?.remove();
-  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="clientCreateModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Dodaj profil klienta</h2><p>Wpisz ten sam e-mail, który jest w Firebase Authentication. To tworzy tylko profil firmy — bez hasła i bez kodu dostępu.</p><div class="edit-form"><label class="full">E-mail Firebase<input id="newClientEmail" type="email" placeholder="np. klient@firma.pl"></label><label class="full">Nazwa w rejestrze <input id="newClientCompany" placeholder="opcjonalnie"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-create-client-profile>Dodaj profil</button></div></section></div>`);
+  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="clientCreateModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Dodaj profil klienta</h2><p>Wpisz ten sam e-mail, który jest w Firebase Authentication. To tworzy profil pod tym e-mailem. Hasło zostaje tylko w Firebase Authentication.</p><div class="edit-form"><label class="full">E-mail Firebase<input id="newClientEmail" type="email" placeholder="np. klient@firma.pl"></label><label class="full">Nazwa w rejestrze <input id="newClientCompany" placeholder="opcjonalnie"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-create-client-profile>Dodaj profil</button></div></section></div>`);
   setTimeout(()=>$('#newClientEmail')?.focus(),0);
 }
 async function createClientProfileFromEmail(){
@@ -2627,9 +2615,8 @@ async function confirmDeleteClient(id){
 }
 async function repairClientProfilesByEmail(){
   if(state.current?.role!=='admin'){loginModal();return}
-  mergeClientProfilesFromRequests();
   const changed=normalizeClientDirectory(true);
-  state.requests.forEach(r=>{const c=getClientForRequest(r);if(c&&c.email){r.clientId=c.id;r.clientEmail=normalizeLogin(c.email);}});
+  state.requests.forEach(r=>{const mail=normalizeLogin(r.clientEmail||'');const c=mail?getClientByEmail(mail):null;if(c){r.clientId=c.id;r.clientEmail=mail;}});
   render();
   await storeCloudNow(changed?'Profile klientów scalone po e-mailu.':'Profile klientów sprawdzone po e-mailu.');
 }
@@ -2663,8 +2650,8 @@ function renderSettings(){
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
-function addRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=ensureCurrentClientIdentity()||state.current;const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:false,loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
-function addRecurringRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=ensureCurrentClientIdentity()||state.current;const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:true,shipmentPlanStart:'',shipmentPlanEnd:'',scheduleMode:'weekdays',scheduleQty:'',scheduleNote:'',weekdaySchedule:{},loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
+function addRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=ensureCurrentClientIdentity();if(!c){toast('Brak profilu klienta dla tego e-maila.');render();return}const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:false,loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
+function addRecurringRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=ensureCurrentClientIdentity();if(!c){toast('Brak profilu klienta dla tego e-maila.');render();return}const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:true,shipmentPlanStart:'',shipmentPlanEnd:'',scheduleMode:'weekdays',scheduleQty:'',scheduleNote:'',weekdaySchedule:{},loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
 function draftFromRow(id){const row=document.querySelector(`[data-edit-row="${id}"]`);const r=state.requests.find(x=>x.id===id);if(!row||!r)return;r.ldm=row.querySelector('[name="ldm"]')?.value||'';r.notes=row.querySelector('[name="notes"]')?.value||'';r.clientNote=row.querySelector('[name="clientNote"]')?.value||'';r.weight=row.querySelector('[name="weight"]')?.value||'';r.access=row.querySelector('[name="access"]')?.value||'';r.budget=row.querySelector('[name="budget"]')?.value.trim()||'';r.currency=row.querySelector('[name="currency"]')?.value||state.currency;store()}
 function pointStartKey(p){const d=dateForStart(p);return d?`${d}T${p.timeStart||'00:00'}`:''}
 function pointEndKey(p){const d=dateForEnd(p);return d?`${d}T${p.timeEnd||'23:59'}`:''}
