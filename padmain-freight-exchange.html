@@ -1315,6 +1315,7 @@ body{
 .wizard-range-block.no-title{margin-top:10px;}
 .wizard-range-block.no-title>span{display:none!important;}
 .help-tip{display:inline-grid;place-items:center;width:17px;height:17px;margin-left:5px;border-radius:50%;background:#eef2ff;color:#4f46e5;border:1px solid #c7d2fe;font-size:11px;font-weight:900;cursor:help;vertical-align:middle;}
+.wizard-grid label .wizard-label-title,.wizard-label .wizard-label-title{display:inline-flex!important;align-items:center!important;gap:5px!important;min-height:17px!important;color:#5e7080!important;font-size:9px!important;font-weight:900!important;letter-spacing:.045em!important;text-transform:uppercase!important}.wizard-grid label .wizard-label-title .help-tip,.wizard-label .wizard-label-title .help-tip{margin-left:0!important;flex:0 0 auto!important}
 .wizard-field-error{border-color:#dc2626!important;box-shadow:0 0 0 2px rgba(220,38,38,.10)!important;}
 .client-faq{margin-top:16px;padding:18px;border-left:5px solid #b3131b!important;}
 .client-faq h2{margin:0 0 4px;font-size:18px;letter-spacing:-.03em;color:#111827;}
@@ -1577,6 +1578,72 @@ function localSnapshot(){return {notifyEmail:state.notifyEmail,currency:state.cu
 function clearOldLocalBackups(){try{['mkLtlModelV44FirebaseBackup','mkLtlModelV23','mkLtlModelV17','mkLtlModelV16','mkLtlModelV15'].forEach(k=>localStorage.removeItem(k));}catch(e){}}
 function saveLocal(){try{localStorage.setItem('mkPfeUiPrefs',JSON.stringify(localSnapshot()));clearOldLocalBackups();}catch(e){}}
 function plain(obj){return JSON.parse(JSON.stringify(obj||{}));}
+function companyCodeFromText(v){
+  const base=String(v||'KL').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/gi,'').toUpperCase();
+  return (base.slice(0,6)||'KL');
+}
+function clientIdFromEmail(email){
+  const key=normalizeLogin(email||'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+  return `client_${key||Date.now()}`;
+}
+function minimalClientProfile(email,extra={}){
+  const mail=String(email||extra.email||'').trim();
+  const company=String(extra.company||mail||'Klient').trim();
+  const code=String(extra.companyCode||companyCodeFromText(company||mail)).trim().toUpperCase();
+  return {id:extra.id||clientIdFromEmail(mail),role:'client',company,companyCode:code,vatEu:extra.vatEu||'',language:extra.language||state.lang||'pl',name:extra.name||extra.contact||'',contact:extra.contact||extra.name||'',email:mail,phone:extra.phone||'',login:mail,accessCode:'',firebaseEmailOnly:Boolean(extra.firebaseEmailOnly??true),createdFromAuth:Boolean(extra.createdFromAuth||false),createdAt:extra.createdAt||new Date().toISOString()};
+}
+function mergeClientProfile(profile){
+  if(!profile||!profile.email||isAdminEmail(profile.email))return false;
+  const clean=minimalClientProfile(profile.email,profile);
+  const email=normalizeLogin(clean.email);
+  let idx=state.clients.findIndex(c=>normalizeLogin(c.email)===email||c.id===clean.id);
+  if(idx<0){state.clients.push(clean);return true;}
+  const existing=state.clients[idx];
+  const merged={...existing,role:'client',email:existing.email||clean.email,login:existing.email||existing.login||clean.email,accessCode:''};
+  ['company','companyCode','vatEu','language','name','contact','phone'].forEach(k=>{
+    const current=String(merged[k]||'').trim();
+    const looksEmpty=!current||current==='Nowy klient'||current==='Klient'||current===merged.email;
+    if(looksEmpty&&clean[k])merged[k]=clean[k];
+  });
+  merged.firebaseEmailOnly=Boolean(merged.firebaseEmailOnly||clean.firebaseEmailOnly);
+  state.clients[idx]=merged;
+  return false;
+}
+function mergeClientProfilesFromRequests(){
+  let added=false;
+  (state.requests||[]).forEach(r=>{
+    const mail=String(r.clientEmail||'').trim();
+    if(mail&&!isAdminEmail(mail))added=mergeClientProfile(minimalClientProfile(mail,{id:r.clientId||clientIdFromEmail(mail),firebaseEmailOnly:true}))||added;
+  });
+  return added;
+}
+function mergeLegacyClientProfilesFromLocal(){
+  let added=false;
+  try{
+    const keys=['mkLtlModelV44FirebaseBackup','mkLtlModelV23','mkLtlModelV17','mkLtlModelV16','mkLtlModelV15'];
+    keys.forEach(k=>{
+      const raw=localStorage.getItem(k);if(!raw)return;
+      const old=JSON.parse(raw)||{};
+      (Array.isArray(old.clients)?old.clients:[]).forEach(c=>{if(c&&c.email&&!isAdminEmail(c.email))added=mergeClientProfile({...c,accessCode:'',login:c.email||c.login||'',firebaseEmailOnly:false})||added;});
+      (Array.isArray(old.requests)?old.requests:[]).forEach(r=>{const c=(old.clients||[]).find(x=>x.id===r.clientId)||{};const mail=r.clientEmail||c.email;if(mail&&!isAdminEmail(mail))added=mergeClientProfile(minimalClientProfile(mail,{id:r.clientId||clientIdFromEmail(mail),company:c.company||mail,companyCode:c.companyCode||'',contact:c.contact||c.name||'',phone:c.phone||'',vatEu:c.vatEu||'',language:c.language||'pl',firebaseEmailOnly:false}))||added;});
+    });
+  }catch(e){console.warn('Legacy client import skipped',e)}
+  return added;
+}
+function getClientByEmail(email){const n=normalizeLogin(email||'');return n?state.clients.find(c=>normalizeLogin(c.email)===n):null}
+function getClientForRequest(r){return getClient(r?.clientId)||getClientByEmail(r?.clientEmail)||null}
+async function saveOwnClientProfile(client){
+  if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!client)return false;
+  const email=normalizeLogin(fbAuth.currentUser.email||'');
+  if(!email||isAdminEmail(email)||normalizeLogin(client.email)!==email)return false;
+  try{
+    const batch=writeBatch(fbDb);
+    const clean=plain({...client,role:'client',login:client.email||client.login||'',accessCode:''});
+    batch.set(doc(fbDb,'clients',client.id||clientIdFromEmail(email)),clean,{merge:true});
+    await batch.commit();
+    return true;
+  }catch(e){console.warn('Own client profile save error',e);return false;}
+}
 function loginAlias(v){return String(v||'').trim()}
 function isAdminEmail(email){return normalizeLogin(email)===normalizeLogin(ADMIN_EMAIL)}
 function setCurrentFromAuthEmail(email){
@@ -1602,7 +1669,7 @@ function syncLoggedInSession(){
   if(email&&!state.current)return setCurrentFromAuthEmail(email);
   return Boolean(state.current);
 }
-function withClientEmail(r){const c=getClient(r.clientId)||{};return {...plain(r),clientEmail:r.clientEmail||c.email||''}}
+function withClientEmail(r){const c=getClientForRequest(r)||{};return {...plain(r),clientEmail:r.clientEmail||c.email||''}}
 async function docsToArray(q){const snap=await getDocs(q);return snap.docs.map(d=>({id:d.id,...d.data()}));}
 async function loadCloudData(){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb)return false;
@@ -1622,17 +1689,21 @@ async function loadCloudData(){
       state.clients=Array.isArray(clients)?clients.map(c=>({...c,role:'client',accessCode:''})):[];
       state.requests=Array.isArray(requests)?requests:[];
       state.notifications=Array.isArray(notifications)?notifications:[];
+      const mergedFromRequests=mergeClientProfilesFromRequests();
+      const mergedFromLegacy=mergeLegacyClientProfilesFromLocal();
       ensureDefaultClients();
       state.current=state.admin;
       state.view='loads';
+      if(mergedFromRequests||mergedFromLegacy)store();
     }else{
       const clients=await docsToArray(query(collection(fbDb,'clients'),where('email','==',fbAuth.currentUser.email||'')));
-      const client=clients[0]||{id:'client_'+fbAuth.currentUser.uid,role:'client',company:fbAuth.currentUser.email||'Klient',companyCode:'KL',vatEu:'',language:'pl',name:fbAuth.currentUser.email||'Klient',contact:fbAuth.currentUser.email||'',email:fbAuth.currentUser.email||'',phone:'',login:fbAuth.currentUser.email||'',accessCode:''};
-      state.clients=[{...client,role:'client'}];
+      const client=clients[0]||minimalClientProfile(fbAuth.currentUser.email||'',{id:'client_'+fbAuth.currentUser.uid,createdFromAuth:true,firebaseEmailOnly:true});
+      state.clients=[{...minimalClientProfile(client.email||fbAuth.currentUser.email||'',client),role:'client',accessCode:''}];
       state.current=state.clients[0];
       state.requests=await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',fbAuth.currentUser.email||'')));
       state.notifications=[];
       state.view='loads';
+      await saveOwnClientProfile(state.current);
     }
     state.requests.forEach(normalizeRequest);
     saveLocal();
@@ -1657,7 +1728,7 @@ async function cloudSaveNow(){
       cloudDeleted.notifications.forEach(id=>batch.delete(doc(fbDb,'notifications',id)));
       cloudDeleted.clients.forEach(id=>batch.delete(doc(fbDb,'clients',id)));
     }else{
-      state.requests.filter(r=>normalizeLogin(r.clientEmail||getClient(r.clientId)?.email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
+      state.requests.filter(r=>normalizeLogin(r.clientEmail||getClientForRequest(r)?.email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
       state.notifications.filter(n=>normalizeLogin(n.clientEmail)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL)).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
     }
     await batch.commit();
@@ -1677,6 +1748,7 @@ async function storeCloudNow(successText='Zapisano na serwerze.'){
 function store(){saveLocal();if(fbAuth?.currentUser&&fbDb){if(cloudSaveTimer)clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(cloudSaveNow,250);}}
 async function load(){
   try{const raw=localStorage.getItem('mkPfeUiPrefs');const x=JSON.parse(raw);if(x){state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.lang=x.lang||state.lang;state.notifyBrowser=Boolean(x.notifyBrowser);}}catch(e){}
+  mergeLegacyClientProfilesFromLocal();
   clearOldLocalBackups();
   try{const urlLang=new URLSearchParams(location.search).get('lang');if(['pl','en','de'].includes(urlLang))state.lang=urlLang;}catch(e){}
   ensureDefaultClients();state.notifyEmail=state.notifyEmail||defaults.notifyEmail;
@@ -1969,7 +2041,7 @@ function openOfferMailLangModal(id){
 }
 function adminRow(r){
   normalizeRequest(r);
-  const c=getClient(r.clientId)||{};
+  const c=getClientForRequest(r)||{};
   const hasBudget=Boolean(String(r.budget||'').trim());
   let decision='';
   if(r.status==='archived'){
@@ -1991,7 +2063,8 @@ function adminRow(r){
   }
   if(!decision) decision=`<span class="counter-note">—</span>`;
   const adminDelete=r.status!=='archived'?`<button class="btn danger small" data-delete="${esc(r.id)}">Usuń</button>`:'';
-  const client=`<div class="client-card"><b>${esc(c.company||'—')}</b><span>${esc(c.contact||'')}</span><span>${esc(c.phone||'')}</span></div>`;
+  const clientEmail=r.clientEmail||c.email||'';
+  const client=`<div class="client-card"><b>${esc(c.company||clientEmail||'—')}</b><span>${esc(c.contact||c.name||'')}</span><span>${esc(c.phone||clientEmail||'')}</span></div>`;
   const price=r.budget?`<b>${esc(r.budget)} ${esc(r.currency||state.currency)}</b>`:'<span class="muted-dash">—</span>';
   const clientArchived=r.status==='archived'&&r.archivedBy==='client'&&!r.archiveNoticeConfirmed;
   const archiveConfirmed=r.status==='archived'&&r.archiveNoticeConfirmed;
@@ -2009,15 +2082,28 @@ function sortedClients(){
 }
 function accountSortHead(label,key){const ui=tableUi.accounts;return `<button type="button" data-account-sort-key="${key}">${esc(label)} ${ui.key===key?(ui.dir==='asc'?'↑':'↓'):''}</button>`}
 function renderClients(){
+  mergeClientProfilesFromRequests();
   const q=String(tableUi.accounts.query||'').trim().toLocaleLowerCase('pl-PL');
-  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>`<tr><td><b>${esc(c.company||'—')}</b><br><span class="info">${esc(c.companyCode||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td>${esc(c.email||'—')}<br><span class="info">login Firebase = e-mail</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`).join('');
-  return layout(`<div class="head"><div><h1>Klienci i konta</h1><p>Profile klientów zapisują się w Firestore. Hasła i konta logowania są tylko w Firebase Authentication.</p></div><div class="account-actions"><button class="btn red" data-add-client>+ Dodaj profil klienta</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie kont</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Dane klientów nie są już zapisywane w localStorage przeglądarki.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail Firebase','email')}</th><th>${accountSortHead('Język','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="6"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
+  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>`<tr><td><b>${esc(c.company||c.email||'—')}</b><br><span class="info">${esc(c.companyCode||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td>${esc(c.email||'—')}<br><span class="info">${c.firebaseEmailOnly?'profil z logowania Firebase':'login Firebase = e-mail'}</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`).join('');
+  return layout(`<div class="head"><div><h1>Klienci i konta</h1><p>Profile klientów zapisują się w Firestore. Konto logowania i hasło są w Firebase Authentication.</p></div><div class="account-actions"><button class="btn red" data-add-client>+ Dodaj profil z e-maila</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie kont</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Strona nie może pobrać pełnej listy Authentication. Profil pojawi się po pierwszym logowaniu klienta albo po ręcznym dodaniu e-maila.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail Firebase','email')}</th><th>${accountSortHead('Język','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="6"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
 }
 function openClientAddModal(){
   if(state.current?.role!=='admin'){loginModal();return}
-  const id='client'+Date.now();
-  const c={id,role:'client',company:'Nowy klient',companyCode:'KL',vatEu:'',language:'pl',name:'',contact:'',email:'',phone:'',login:'',accessCode:''};
-  state.clients.push(c);store();openClientEditModal(id);
+  document.querySelector('.modal')?.remove();
+  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="clientCreateModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Dodaj profil klienta</h2><p>Wpisz e-mail z Firebase Authentication. Resztę danych firmy możesz uzupełnić po zapisaniu.</p><div class="edit-form"><label class="full">E-mail Firebase<input id="newClientEmail" type="email" placeholder="np. klient@firma.pl"></label><label class="full">Nazwa w rejestrze <input id="newClientCompany" placeholder="opcjonalnie"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-create-client-profile>Dodaj profil</button></div></section></div>`);
+  setTimeout(()=>$('#newClientEmail')?.focus(),0);
+}
+async function createClientProfileFromEmail(){
+  if(state.current?.role!=='admin'){loginModal();return}
+  const email=String($('#newClientEmail')?.value||'').trim();
+  if(!email||!email.includes('@')){toast('Wpisz poprawny e-mail klienta z Firebase Authentication.');return}
+  if(isAdminEmail(email)){toast('Konto admina contact@mkulczyk.pl nie jest dodawane do rejestru klientów.');return}
+  const existing=getClientByEmail(email);
+  if(existing){document.querySelector('#clientCreateModal')?.remove();openClientEditModal(existing.id);toast('Ten profil już istnieje — otworzyłem edycję.');return}
+  const company=String($('#newClientCompany')?.value||'').trim()||email;
+  const c=minimalClientProfile(email,{company,companyCode:companyCodeFromText(company),firebaseEmailOnly:true});
+  state.clients.push(c);
+  document.querySelector('#clientCreateModal')?.remove();render();await storeCloudNow('Profil klienta zapisany na serwerze.');
 }
 function openClientEditModal(id){
   if(state.current?.role!=='admin'){loginModal();return}
@@ -2028,7 +2114,10 @@ function openClientEditModal(id){
 async function saveClientAccount(id){
   if(state.current?.role!=='admin'){loginModal();return}
   const c=state.clients.find(x=>x.id===id);if(!c)return;
-  c.company=$('#clientCompany')?.value.trim()||c.company;c.companyCode=($('#clientCode')?.value.trim()||c.companyCode).toUpperCase();c.vatEu=$('#clientVat')?.value.trim()||'';c.language=$('#clientLanguage')?.value||'pl';c.contact=$('#clientContact')?.value.trim()||'';c.name=c.contact;c.phone=$('#clientPhone')?.value.trim()||'';c.email=$('#clientEmail')?.value.trim()||'';c.login=c.email;c.accessCode='';
+  const email=$('#clientEmail')?.value.trim()||'';
+  if(!email||!email.includes('@')){toast('Wpisz poprawny e-mail Firebase klienta.');return}
+  c.company=$('#clientCompany')?.value.trim()||email;c.companyCode=($('#clientCode')?.value.trim()||c.companyCode||companyCodeFromText(c.company)).toUpperCase();c.vatEu=$('#clientVat')?.value.trim()||'';c.language=$('#clientLanguage')?.value||'pl';c.contact=$('#clientContact')?.value.trim()||'';c.name=c.contact;c.phone=$('#clientPhone')?.value.trim()||'';c.email=email;c.login=c.email;c.accessCode='';c.firebaseEmailOnly=false;
+  state.requests.filter(r=>r.clientId===id).forEach(r=>{r.clientEmail=c.email});
   document.querySelector('#clientEditModal')?.remove();render();await storeCloudNow('Profil klienta zapisany na serwerze.');
 }
 function openDeleteClientModal(id){
@@ -2130,7 +2219,7 @@ function validatePointAgainstRoute(r,kind,p){
 
 
 function addNotification(kind,r,details='',priority='high'){
-  const c=getClient(r?.clientId)||{};
+  const c=getClientForRequest(r)||{};
   const target='contact@mkulczyk.pl';
   const item={
     id:'n'+Date.now()+Math.random().toString(16).slice(2),
@@ -2350,7 +2439,7 @@ function openRequestWizard(id){
   const loads=(r.loads&&r.loads.length)?r.loads:[{}];const stops=r.stops||[];const unloads=(r.unloads&&r.unloads.length)?r.unloads:[{}];
   document.querySelector('.modal')?.remove();
   const currs=['PLN','EUR','GBP'];
-  const html=`<div class="modal request-modal" id="requestWizard" data-id="${esc(id)}" data-step="1">${countryOptionsMarkup()}<section class="modal-card wizard-card"><button class="modal-close" aria-label="Zamknij" data-wizard-cancel="${esc(id)}">×</button><div class="wizard-title"><div><span class="wizard-kicker">NOWE ZAPYTANIE</span><h2>${esc(r.code)}</h2><p>Wprowadź trasę krok po kroku. </p></div><div class="wizard-progress"><span data-progress="1"><small>Trasa</small></span><i></i><span data-progress="2"><small>Ładunek</small></span><i></i><span data-progress="3"><small>Budżet</small></span></div></div><div class="wizard-step active" data-step="1"><div class="wizard-intro"><h3>Trasa i okna czasowe</h3><p>Podaj kraj, kod pocztowy, daty i godziny. Nowe zapytanie może dotyczyć wyłącznie dzisiejszych lub przyszłych terminów.</p></div><div class="wizard-route-error" id="wizardRouteError" role="alert" aria-live="polite"></div><div class="wizard-route-stack">${wizardRouteMarkup(loads,stops,unloads)}</div></div><div class="wizard-step" data-step="2"><div class="wizard-intro"><h3>Ładunek i wymagania</h3></div><div class="wizard-grid three"><label>LDM [m] <span class="help-tip" title="${esc(hintCopy('ldm'))}">?</span><input id="wizLdm" inputmode="decimal" placeholder="np. 2,4" value="${esc(ldmDisplay(r.ldm))}"></label><label>Waga (t) *<input id="wizWeight" inputmode="decimal" placeholder="np. 1,2" value="${esc(r.weight||'')}"></label>${wizardAccessMarkup(r.access)}</div><label class="wizard-label">Lista ładunkowa / opis <textarea id="wizNotes" rows="4" maxlength="500" placeholder="Np. 4 palety EUR, towar neutralny">${esc(r.notes||'')}</textarea></label><h4 class="wizard-section-label">Wymagania dodatkowe <span>opcjonalnie</span></h4><div class="wizard-check-grid">${wizardCheckboxes(r)}</div><div id="wizTempRange" class="wizard-grid two ${((r.requirements||[]).includes('temperature'))?'':'hidden'}"><label>Temperatura od<input id="wizTempMin" type="number" step="0.1" value="${esc(r.tempMin||'')}"></label><label>Temperatura do<input id="wizTempMax" type="number" step="0.1" value="${esc(r.tempMax||'')}"></label></div></div><div class="wizard-step" data-step="3"><div class="wizard-intro"><h3>Budżet i informacja dla spedytora</h3><p>${esc(hintCopy('budget'))}</p></div><div class="wizard-grid two"><label>Budżet <span class="help-tip" title="${esc(hintCopy('budget'))}">?</span><input id="wizBudget" inputmode="decimal" placeholder="np. 1800" value="${esc(r.budget||'')}"></label><label>Waluta<select id="wizCurrency">${currs.map(x=>`<option ${(r.currency||state.currency)===x?'selected':''}>${x}</option>`).join('')}</select></label></div><label class="wizard-label">Notatka dla spedytora <span>opcjonalnie</span><textarea id="wizClientNote" rows="5" maxlength="500" placeholder="Informacje dodatkowe dotyczące zapytania.">${esc(r.clientNote||'')}</textarea></label><div class="wizard-ready"><b>Gotowe do wysłania</b><span>Po zapisie zapytanie otrzyma status „Oczekujące” i pojawi się w panelu spedytora.</span></div></div><div class="wizard-footer"><button class="btn" data-wizard-cancel="${esc(id)}">Anuluj</button><div><button class="btn" data-wizard-prev>Wstecz</button><button class="btn red" data-wizard-next>Dalej</button><button class="btn red hidden" data-wizard-save="${esc(id)}">Zapisz zapytanie</button></div></div></section></div>`;
+  const html=`<div class="modal request-modal" id="requestWizard" data-id="${esc(id)}" data-step="1">${countryOptionsMarkup()}<section class="modal-card wizard-card"><button class="modal-close" aria-label="Zamknij" data-wizard-cancel="${esc(id)}">×</button><div class="wizard-title"><div><span class="wizard-kicker">NOWE ZAPYTANIE</span><h2>${esc(r.code)}</h2><p>Wprowadź trasę krok po kroku. </p></div><div class="wizard-progress"><span data-progress="1"><small>Trasa</small></span><i></i><span data-progress="2"><small>Ładunek</small></span><i></i><span data-progress="3"><small>Budżet</small></span></div></div><div class="wizard-step active" data-step="1"><div class="wizard-intro"><h3>Trasa i okna czasowe</h3><p>Podaj kraj, kod pocztowy, daty i godziny. Nowe zapytanie może dotyczyć wyłącznie dzisiejszych lub przyszłych terminów.</p></div><div class="wizard-route-error" id="wizardRouteError" role="alert" aria-live="polite"></div><div class="wizard-route-stack">${wizardRouteMarkup(loads,stops,unloads)}</div></div><div class="wizard-step" data-step="2"><div class="wizard-intro"><h3>Ładunek i wymagania</h3></div><div class="wizard-grid three"><label><span class="wizard-label-title">LDM [m] <span class="help-tip" title="${esc(hintCopy('ldm'))}">?</span></span><input id="wizLdm" inputmode="decimal" placeholder="np. 2,4" value="${esc(ldmDisplay(r.ldm))}"></label><label>Waga (t) *<input id="wizWeight" inputmode="decimal" placeholder="np. 1,2" value="${esc(r.weight||'')}"></label>${wizardAccessMarkup(r.access)}</div><label class="wizard-label">Lista ładunkowa / opis <textarea id="wizNotes" rows="4" maxlength="500" placeholder="Np. 4 palety EUR, towar neutralny">${esc(r.notes||'')}</textarea></label><h4 class="wizard-section-label">Wymagania dodatkowe <span>opcjonalnie</span></h4><div class="wizard-check-grid">${wizardCheckboxes(r)}</div><div id="wizTempRange" class="wizard-grid two ${((r.requirements||[]).includes('temperature'))?'':'hidden'}"><label>Temperatura od<input id="wizTempMin" type="number" step="0.1" value="${esc(r.tempMin||'')}"></label><label>Temperatura do<input id="wizTempMax" type="number" step="0.1" value="${esc(r.tempMax||'')}"></label></div></div><div class="wizard-step" data-step="3"><div class="wizard-intro"><h3>Budżet i informacja dla spedytora</h3><p>${esc(hintCopy('budget'))}</p></div><div class="wizard-grid two"><label><span class="wizard-label-title">Budżet <span class="help-tip" title="${esc(hintCopy('budget'))}">?</span></span><input id="wizBudget" inputmode="decimal" placeholder="np. 1800" value="${esc(r.budget||'')}"></label><label>Waluta<select id="wizCurrency">${currs.map(x=>`<option ${(r.currency||state.currency)===x?'selected':''}>${x}</option>`).join('')}</select></label></div><label class="wizard-label">Notatka dla spedytora <span>opcjonalnie</span><textarea id="wizClientNote" rows="5" maxlength="500" placeholder="Informacje dodatkowe dotyczące zapytania.">${esc(r.clientNote||'')}</textarea></label><div class="wizard-ready"><b>Gotowe do wysłania</b><span>Po zapisie zapytanie otrzyma status „Oczekujące” i pojawi się w panelu spedytora.</span></div></div><div class="wizard-footer"><button class="btn" data-wizard-cancel="${esc(id)}">Anuluj</button><div><button class="btn" data-wizard-prev>Wstecz</button><button class="btn red" data-wizard-next>Dalej</button><button class="btn red hidden" data-wizard-save="${esc(id)}">Zapisz zapytanie</button></div></div></section></div>`;
   document.body.insertAdjacentHTML('beforeend',html);setWizardStep(1);
 }
 function closeRequestWizard(id){const r=state.requests.find(x=>x.id===id);if(r?.isNewDraft&&!r.submitted)state.requests=state.requests.filter(x=>x.id!==id);store();$('#requestWizard')?.remove();render();}
@@ -2530,7 +2619,7 @@ function filterCountryMenu(input){
 function closeCountryMenus(){document.querySelectorAll('.country-field.open').forEach(x=>x.classList.remove('open'))}
 document.addEventListener('click',e=>{const opt=e.target.closest('[data-country-code]');if(opt){const field=opt.closest('.country-field');const input=field?.querySelector('[data-country-input]');if(input){input.value=opt.dataset.countryCode;input.classList.remove('wizard-field-error');field.classList.remove('open');}return}if(!e.target.closest('.country-field'))closeCountryMenus();});
 document.addEventListener('click',e=>{const a=e.target.closest('[data-account-sort-key]');if(a){const key=a.dataset.accountSortKey;const ui=tableUi.accounts;if(ui.key===key)ui.dir=ui.dir==='asc'?'desc':'asc';else{ui.key=key;ui.dir='asc'}render();return}const t=e.target.closest('[data-sort-key]');if(!t)return;const role=t.dataset.sortRole,key=t.dataset.sortKey;if(!role||!key)return;const ui=tableUi[role];if(ui.key===key)ui.dir=ui.dir==='asc'?'desc':'asc';else{ui.key=key;ui.dir=key==='createdAt'?'desc':'asc'}render();applyTableSearch(role,ui.query);});
-document.addEventListener('click',e=>{const t=e.target.closest('button,[data-quick]');if(!t)return;if(t.dataset.quick){login(t.dataset.quick);return}if(t.hasAttribute('data-open-login')){loginModal();return}if(t.hasAttribute('data-add-client')){openClientAddModal();return}if(t.dataset.action==='logout'){logout();return}if(t.dataset.action==='add-request'){addRequest();return}if(t.hasAttribute('data-how-works')){openHowWorksModal();return}if(t.dataset.nav){state.view=t.dataset.nav;render();return}if(t.hasAttribute('data-profile')){state.view='profile';render();return}if(t.dataset.lang){state.lang=t.dataset.lang;try{const url=new URL(location.href);url.searchParams.set('lang',state.lang);history.replaceState(null,'',url.toString())}catch(e){}store();render();return}if(t.dataset.save){updateRequest(t.dataset.save);return}if(t.dataset.delete){deleteRequest(t.dataset.delete);return}if(t.dataset.confirmDelete){confirmDeleteRequest(t.dataset.confirmDelete);return}if(t.dataset.confirmArchiveNotice){confirmArchiveNotice(t.dataset.confirmArchiveNotice);return}if(t.hasAttribute('data-add-user-info')){openAddUserInfo();return}if(t.hasAttribute('data-edit-profile')){openProfileEditModal();return}if(t.hasAttribute('data-save-profile')){saveProfile();return}if(t.dataset.editClient){openClientEditModal(t.dataset.editClient);return}if(t.dataset.deleteClient){openDeleteClientModal(t.dataset.deleteClient);return}if(t.dataset.confirmDeleteClient){confirmDeleteClient(t.dataset.confirmDeleteClient);return}if(t.dataset.saveClient){saveClientAccount(t.dataset.saveClient);return}if(t.hasAttribute('data-mark-notifications-read')){markNotificationsRead();return}if(t.hasAttribute('data-clear-notifications')){clearNotifications();return}if(t.hasAttribute('data-enable-browser-notify')){requestBrowserNotifications();return}if(t.dataset.edit){editRequest(t.dataset.edit);return}if(t.dataset.routeId){openRouteModal(t.dataset.routeId,t.dataset.routeKind);return}if(t.dataset.addRoutePoint){addRoutePoint(t.dataset.addRoutePoint,t.dataset.routeKind);return}if(t.dataset.removeRoutePoint){removeRoutePoint(t.dataset.removeRoutePoint,t.dataset.routeKind,t.dataset.routeIndex);return}if(t.dataset.requirements){requirementsModal(t.dataset.requirements);return}if(t.dataset.saveRequirements){saveRequirements(t.dataset.saveRequirements);return}if(t.dataset.acceptBudget){acceptBudget(t.dataset.acceptBudget);return}if(t.dataset.declineBudget){declineBudgetProposal(t.dataset.declineBudget);return}if(t.dataset.counterBudget){openCounterBudgetModal(t.dataset.counterBudget);return}if(t.dataset.submitCounter){submitCounterBudget(t.dataset.submitCounter);return}if(t.dataset.submitBudgetProposal){submitBudgetProposal(t.dataset.submitBudgetProposal);return}if(t.dataset.openStatus){openStatusModal(t.dataset.openStatus);return}if(t.dataset.saveStatus){setAdminStatus(t.dataset.saveStatus,$('#adminStatusChoice')?.value||'waiting');return}if(t.dataset.offerSent){setOfferSent(t.dataset.offerSent);return}if(t.dataset.startRealisation){startRealisation(t.dataset.startRealisation);return}if(t.dataset.openOfferMailLangs){openOfferMailLangModal(t.dataset.openOfferMailLangs);return}if(t.dataset.sendOfferMail){sendOfferMail(t.dataset.sendOfferMail,t.dataset.mailLang||state.lang||'pl');return}if(t.dataset.approveCounter){approveCounter(t.dataset.approveCounter);return}if(t.dataset.declineCounter){declineCounter(t.dataset.declineCounter);return}if(t.hasAttribute('data-test-mail')){testMail();return}if(t.dataset.copy){const r=state.requests.find(x=>x.id===t.dataset.copy);if(r){navigator.clipboard?.writeText(`${r.code}\n${routeSummary(r.loads)}\n${routeSummary(r.unloads)}\nLDM: ${ldmDisplay(r.ldm)} | Waga: ${r.weight||''} t`);toast('Szkic oferty skopiowany.')}return}if(t.dataset.mail){const r=state.requests.find(x=>x.id===t.dataset.mail),c=r&&getClient(r.clientId);if(r&&c)window.location.href=`mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent('Zapytanie '+r.code)}&body=${encodeURIComponent('Dzień dobry,\n\nstatus zapytania '+r.code+': '+statusLabel(r.status)+'.')}`;return}if(t.hasAttribute('data-close-modal')){document.querySelector('.modal')?.remove();return}});
+document.addEventListener('click',e=>{const t=e.target.closest('button,[data-quick]');if(!t)return;if(t.dataset.quick){login(t.dataset.quick);return}if(t.hasAttribute('data-open-login')){loginModal();return}if(t.hasAttribute('data-add-client')){openClientAddModal();return}if(t.hasAttribute('data-create-client-profile')){createClientProfileFromEmail();return}if(t.dataset.action==='logout'){logout();return}if(t.dataset.action==='add-request'){addRequest();return}if(t.hasAttribute('data-how-works')){openHowWorksModal();return}if(t.dataset.nav){state.view=t.dataset.nav;render();return}if(t.hasAttribute('data-profile')){state.view='profile';render();return}if(t.dataset.lang){state.lang=t.dataset.lang;try{const url=new URL(location.href);url.searchParams.set('lang',state.lang);history.replaceState(null,'',url.toString())}catch(e){}store();render();return}if(t.dataset.save){updateRequest(t.dataset.save);return}if(t.dataset.delete){deleteRequest(t.dataset.delete);return}if(t.dataset.confirmDelete){confirmDeleteRequest(t.dataset.confirmDelete);return}if(t.dataset.confirmArchiveNotice){confirmArchiveNotice(t.dataset.confirmArchiveNotice);return}if(t.hasAttribute('data-add-user-info')){openAddUserInfo();return}if(t.hasAttribute('data-edit-profile')){openProfileEditModal();return}if(t.hasAttribute('data-save-profile')){saveProfile();return}if(t.dataset.editClient){openClientEditModal(t.dataset.editClient);return}if(t.dataset.deleteClient){openDeleteClientModal(t.dataset.deleteClient);return}if(t.dataset.confirmDeleteClient){confirmDeleteClient(t.dataset.confirmDeleteClient);return}if(t.dataset.saveClient){saveClientAccount(t.dataset.saveClient);return}if(t.hasAttribute('data-mark-notifications-read')){markNotificationsRead();return}if(t.hasAttribute('data-clear-notifications')){clearNotifications();return}if(t.hasAttribute('data-enable-browser-notify')){requestBrowserNotifications();return}if(t.dataset.edit){editRequest(t.dataset.edit);return}if(t.dataset.routeId){openRouteModal(t.dataset.routeId,t.dataset.routeKind);return}if(t.dataset.addRoutePoint){addRoutePoint(t.dataset.addRoutePoint,t.dataset.routeKind);return}if(t.dataset.removeRoutePoint){removeRoutePoint(t.dataset.removeRoutePoint,t.dataset.routeKind,t.dataset.routeIndex);return}if(t.dataset.requirements){requirementsModal(t.dataset.requirements);return}if(t.dataset.saveRequirements){saveRequirements(t.dataset.saveRequirements);return}if(t.dataset.acceptBudget){acceptBudget(t.dataset.acceptBudget);return}if(t.dataset.declineBudget){declineBudgetProposal(t.dataset.declineBudget);return}if(t.dataset.counterBudget){openCounterBudgetModal(t.dataset.counterBudget);return}if(t.dataset.submitCounter){submitCounterBudget(t.dataset.submitCounter);return}if(t.dataset.submitBudgetProposal){submitBudgetProposal(t.dataset.submitBudgetProposal);return}if(t.dataset.openStatus){openStatusModal(t.dataset.openStatus);return}if(t.dataset.saveStatus){setAdminStatus(t.dataset.saveStatus,$('#adminStatusChoice')?.value||'waiting');return}if(t.dataset.offerSent){setOfferSent(t.dataset.offerSent);return}if(t.dataset.startRealisation){startRealisation(t.dataset.startRealisation);return}if(t.dataset.openOfferMailLangs){openOfferMailLangModal(t.dataset.openOfferMailLangs);return}if(t.dataset.sendOfferMail){sendOfferMail(t.dataset.sendOfferMail,t.dataset.mailLang||state.lang||'pl');return}if(t.dataset.approveCounter){approveCounter(t.dataset.approveCounter);return}if(t.dataset.declineCounter){declineCounter(t.dataset.declineCounter);return}if(t.hasAttribute('data-test-mail')){testMail();return}if(t.dataset.copy){const r=state.requests.find(x=>x.id===t.dataset.copy);if(r){navigator.clipboard?.writeText(`${r.code}\n${routeSummary(r.loads)}\n${routeSummary(r.unloads)}\nLDM: ${ldmDisplay(r.ldm)} | Waga: ${r.weight||''} t`);toast('Szkic oferty skopiowany.')}return}if(t.dataset.mail){const r=state.requests.find(x=>x.id===t.dataset.mail),c=r&&getClient(r.clientId);if(r&&c)window.location.href=`mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent('Zapytanie '+r.code)}&body=${encodeURIComponent('Dzień dobry,\n\nstatus zapytania '+r.code+': '+statusLabel(r.status)+'.')}`;return}if(t.hasAttribute('data-close-modal')){document.querySelector('.modal')?.remove();return}});
 document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;if(t.dataset.wizardAddPoint){addWizardPoint(t.dataset.wizardAddPoint);return}if(t.hasAttribute('data-wizard-show-stops')){const section=$('#wizardStopsSection');if(section){section.classList.remove('is-collapsed');section.classList.add('is-open');if(!$('#wizardStopsPoints')?.children.length)addWizardPoint('stops')}return}if(t.dataset.wizardRemovePoint){removeWizardPoint(t);return}if(t.hasAttribute('data-wizard-next')){setWizardStep(Number($('#requestWizard')?.dataset.step||1)+1);return}if(t.hasAttribute('data-wizard-prev')){setWizardStep(Math.max(1,Number($('#requestWizard')?.dataset.step||1)-1));return}if(t.dataset.wizardSave){saveRequestWizard(t.dataset.wizardSave);return}if(t.dataset.wizardCancel){closeRequestWizard(t.dataset.wizardCancel);return}});
 document.addEventListener('change',e=>{if(e.target.matches('[data-wizard-temp]'))$('#wizTempRange')?.classList.toggle('hidden',!e.target.checked)});
 function updateFieldColour(el){if(!el.matches('[name="ldm"],[name="weight"],[name="access"]'))return;const empty=String(el.value||'').trim()==='';el.classList.toggle('missing-strong',empty)}
