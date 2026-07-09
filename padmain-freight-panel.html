@@ -1662,6 +1662,16 @@ body{
 .table-card table.v143-list .point-group-head,.table-card table.v144-list .point-group-head{background:#2d3b46!important;color:#fff!important;border-color:#43525d!important}
 .table-card table.v143-list .point-subhead th,.table-card table.v144-list .point-subhead th{background:#344551!important;color:#eaf0f5!important;border-color:#43525d!important}
 
+
+/* v147: stable country flags in route code cells */
+.table-card table.v144-list .point-code-wrap{gap:5px!important;justify-content:center!important;}
+.table-card table.v144-list .country-flag{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 20px!important;width:20px!important;min-width:20px!important;height:14px!important;overflow:hidden!important;border-radius:2px!important;box-shadow:0 0 0 1px rgba(24,37,48,.12)!important;background:#eef2f5!important;line-height:1!important;}
+.table-card table.v144-list .country-flag-img{display:block!important;width:20px!important;height:14px!important;object-fit:cover!important;}
+.table-card table.v144-list .country-flag-fallback{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:20px!important;height:14px!important;font-size:12px!important;line-height:1!important;}
+.table-card table.v144-list .point-code{letter-spacing:.01em!important;}
+.table-card table.v143-list .country-flag{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:20px!important;min-width:20px!important;height:14px!important;overflow:hidden!important;border-radius:2px!important;box-shadow:0 0 0 1px rgba(24,37,48,.12)!important;background:#eef2f5!important;}
+.table-card table.v143-list .country-flag-img{display:block!important;width:20px!important;height:14px!important;object-fit:cover!important;}
+
 </style>
 </head>
 <body>
@@ -1742,6 +1752,44 @@ function countryFlag(code){
   if(!/^[A-Z]{2}$/.test(c))return '';
   return [...c].map(ch=>String.fromCodePoint(127397+ch.charCodeAt(0))).join('');
 }
+function flagCdnCode(code){
+  const c=normalizeCountryCode(code);
+  return /^[A-Z]{2}$/.test(c)?c.toLowerCase():'';
+}
+function countryFlagHtml(code){
+  const c=normalizeCountryCode(code);
+  const cdn=flagCdnCode(c);
+  if(!cdn)return '';
+  const emoji=countryFlag(c);
+  return `<span class="country-flag" title="${esc(c)}" aria-label="${esc(c)}"><img class="country-flag-img" src="https://flagcdn.com/w20/${esc(cdn)}.png" alt="${esc(c)}" loading="lazy" onerror="this.replaceWith(document.createTextNode('${esc(emoji||c)}'))"></span>`;
+}
+function postalWithoutCountry(v){
+  const raw=String(v||'').trim().toUpperCase();
+  const match=raw.match(/\b((?:\d{2}-\d{3})|(?:\d{4}\s?[A-Z]{2})|(?:\d{5})|(?:\d{3}\s?\d{2})|(?:\d{4})|(?:[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}))\b/);
+  return match?match[1].replace(/\s+/g,''):'';
+}
+function pointCountryCode(p={},raw=''){
+  return normalizeCountryCode(p.country)||countryCodeFromPostal(p.postalCity)||countryCodeFromPostal(p.postal)||countryCodeFromPostal(p.address)||countryCodeFromPostal(raw)||'';
+}
+function compactPostalWithCountry(country,raw){
+  const c=normalizeCountryCode(country);
+  const v=String(raw||'').trim().toUpperCase();
+  if(!v)return '';
+  const parsed=postalOnly(v);
+  if(parsed)return parsed;
+  const only=postalWithoutCountry(v);
+  if(c&&only)return `${c}${only}`;
+  const compact=v.replace(/\s+/g,'').replace(/^[,;:-]+/,'');
+  if(c&&compact&&compact!==c)return compact.startsWith(c)?compact:`${c}${compact}`;
+  return compact;
+}
+function pointDisplayCode(p={}){
+  const raw=String(p.postalCity||p.postal||p.address||'').trim();
+  const country=pointCountryCode(p,raw);
+  const code=compactPostalWithCountry(country,raw)||compactPostalWithCountry(country,p.postal)||compactPostalWithCountry(country,p.address);
+  if(code)return code.replace(/\s+/g,'');
+  return country||'';
+}
 function countryOptionsMarkup(){return ''}
 function countryMenuMarkup(){return `<div class="country-menu" data-country-menu>${countryOptions.map(([code,name])=>`<button type="button" class="country-option" data-country-code="${code}"><b>${code}</b><span>${name}</span></button>`).join('')}</div>`}
 
@@ -1763,15 +1811,15 @@ function countryMenuMarkup(){return `<div class="country-menu" data-country-menu
   }
   function registeredCell(r){const text=formatRegisteredAt(r.createdAt);return `<td class="registered-cell"><b title="${esc(text)}">${esc(text)}</b></td>`}
   function pointTableText(p){
-    if(!p)return {code:'—',country:'',flag:'',date:'',time:'',short:'—',full:''};
-    const raw=String(p.postalCity||p.address||'').trim();
-    const country=normalizeCountryCode(p.country)||countryCodeFromPostal(raw);
-    const code=formatPostal(raw);
-    const displayCode=code.replace(/\s+/g,'')||raw.replace(/\s+/g,'');
+    if(!p)return {code:'—',country:'',flag:'',flagHtml:'',date:'',time:'',short:'—',full:''};
+    const raw=String(p.postalCity||p.postal||p.address||'').trim();
+    const country=pointCountryCode(p,raw);
+    const displayCode=pointDisplayCode(p)||raw.replace(/\s+/g,'')||'—';
     const date=pointDates(p),time=pointTimes(p);
     const flag=countryFlag(country);
-    const short=[displayCode,date,time].filter(Boolean).join(' · ')||'—';
-    return {code:displayCode,country,flag,date,time,short,full:fullPointSummary(p)||short};
+    const flagHtml=countryFlagHtml(country);
+    const short=[country?`${country} ${displayCode.replace(new RegExp('^'+country),country)}`:displayCode,date,time].filter(Boolean).join(' · ')||'—';
+    return {code:displayCode,country,flag,flagHtml,date,time,short,full:fullPointSummary(p)||short};
   }
   function pointPlusBadge(count){return count>1?`<span class="point-extra">+${count-1}</span>`:''}
   function pointTitle(arr,label){return (arr&&arr.length?arr.map((p,i)=>`${label} ${i+1}: ${fullPointSummary(p)||pointTableText(p).short}`).filter(Boolean).join('\n'):'')||label}
@@ -1782,7 +1830,7 @@ function countryMenuMarkup(){return `<div class="country-menu" data-country-menu
       return `<td class="point-date-cell" title="${esc(title)}"><span class="muted-dash">—</span></td><td class="point-time-cell" title="${esc(title)}"><span class="muted-dash">—</span></td><td class="point-code-cell" title="${esc(title)}"><span class="muted-dash">—</span></td>`;
     }
     const date=data.date||'—',time=data.time||'—',displayCode=data.code||'—';
-    return `<td class="point-date-cell" title="${esc(title)}"><span class="one-line">${esc(date)}</span></td><td class="point-time-cell" title="${esc(title)}"><span class="one-line">${esc(time)}</span></td><td class="point-code-cell" title="${esc(title)}"><span class="point-code-wrap"><span class="country-flag" aria-hidden="true">${esc(data.flag)}</span><span class="point-code">${esc(displayCode)}</span>${pointPlusBadge(arr.length)}</span></td>`;
+    return `<td class="point-date-cell" title="${esc(title)}"><span class="one-line">${esc(date)}</span></td><td class="point-time-cell" title="${esc(title)}"><span class="one-line">${esc(time)}</span></td><td class="point-code-cell" title="${esc(title)}"><span class="point-code-wrap">${data.flagHtml||''}<span class="point-code">${esc(displayCode)}</span>${pointPlusBadge(arr.length)}</span></td>`;
   }
   function oneLineCell(value,cls='one-line'){const v=String(value||'—').trim()||'—';return `<td title="${esc(v)}"><div class="${cls}">${esc(v)}</div></td>`}
   function ldmCell(r){return oneLineCell(r.ldm?normalizedLdm(r.ldm):'—','one-line')}
@@ -2040,7 +2088,11 @@ function normalizeRequest(r){
   r.loads=Array.isArray(r.loads)?r.loads:[];
   r.stops=Array.isArray(r.stops)?r.stops:[];
   r.unloads=Array.isArray(r.unloads)?r.unloads:[];
-  [r.loads,r.stops,r.unloads].forEach(arr=>arr.forEach(p=>{p.postalCity=postalOnly(p.postalCity||p.address);p.address=String(p.address||'').trim();}));
+  [r.loads,r.stops,r.unloads].forEach(arr=>arr.forEach(p=>{
+    const code=pointDisplayCode(p);
+    if(code)p.postalCity=code;
+    p.address=String(p.address||'').trim();
+  }));
   r.requirements=Array.isArray(r.requirements)?r.requirements:[];
   r.tempMin=r.tempMin||'';r.tempMax=r.tempMax||'';r.notes=r.notes||'';r.clientNote=r.clientNote||'';
   r.currency=r.currency||state.currency||'PLN';r.createdAt=r.createdAt||new Date().toISOString();r.submitted=Boolean(r.submitted);
