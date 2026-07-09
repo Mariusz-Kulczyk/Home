@@ -41,17 +41,6 @@ footer{margin-top:56px;background:#13100e;color:#fff;border-top:4px solid var(--
 @media(max-width:540px){.barometer-overview-frame{height:520px}.map-viewport{height:560px}}
 </style>
 <link rel="stylesheet" href="site-mobile.css?v=107">
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
 </head>
 <body id="top" class="tool-page-barometer">
 <aside class="tool-rail" aria-label="Narzędzia">

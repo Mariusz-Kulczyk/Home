@@ -92,20 +92,6 @@ footer#kontakt{background:#13100e!important;color:#fff!important;border-top:8px 
 .kb-reference-item .kb-spec strong{color:var(--ink)!important;font:800 .84rem/1.45 Inter,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
 </style>
 <link rel="stylesheet" href="site-mobile.css?v=107">
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
-
-
-
 <style id="article-navbar-home-exact">
 /* Navbar copied from the homepage dark state. It turns light only after the article hero has passed beneath it. */
 .main-header.article-home-nav{

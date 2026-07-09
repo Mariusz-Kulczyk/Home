@@ -61,17 +61,6 @@
 </style>
 
 <link rel="stylesheet" href="site-mobile.css?v=107">
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
 </head><body class="project-page">
 <div class="topline"><div class="container"><span>DRINGENDE ANFRAGE? FAHRZEUG IN 1–3 H IN DER EU VERFÜGBAR</span><a href="#kontakt">ANFRAGE SENDEN</a></div></div>
 <header class="main-header mk-nav nav-transparent-top" id="navbar">
