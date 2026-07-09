@@ -1450,6 +1450,190 @@ body{
 .table-card table.compact-list.v139-list{min-width:1380px!important;width:max-content!important}.v139-list .col-reg{width:92px}.v139-list .col-code{width:84px}.v139-list .col-client{width:150px}.v139-list .col-point{width:140px}.v139-list .col-small{width:72px}.v139-list .col-access{width:92px}.v139-list .col-req{width:156px}.v139-list .col-note{width:176px}.v139-list .col-money{width:94px}.v139-list .col-status{width:132px}.v139-list .col-actions{width:150px}.v139-list td{height:46px!important;max-height:58px!important;vertical-align:middle!important;white-space:normal!important;line-height:1.2!important}.v139-list .one-line,.v139-list .point-cell,.v139-list .note-two,.v139-list .requirements-one{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;word-break:break-word;overflow-wrap:anywhere}.v139-list .one-line,.v139-list .point-cell,.v139-list .requirements-one{-webkit-line-clamp:1;line-clamp:1}.v139-list .note-two{-webkit-line-clamp:2;line-clamp:2;max-height:2.45em}.v139-list .point-cell b{font-size:10px}.v139-list .point-cell small{display:block;color:#647385;font-size:8px;font-weight:900}.v139-list .point-extra{color:#a21f25;font-weight:900}.v139-list .muted-small{color:#778696;font-size:8px;font-weight:900}
 @media(max-width:900px){.shipment-plan-box .date-row,.schedule-mode-grid,.weekday-grid{grid-template-columns:1fr}.nav .nav-action{padding:10px 11px}.table-card table.compact-list.v139-list{min-width:1180px!important}}
 
+
+
+/* V141 — tabela giełdowa: jeden zwarty wiersz, flagi i pełne dane w podglądzie po najechaniu */
+.table-card table.v139-list{
+  width:100%!important;
+  min-width:1280px!important;
+  table-layout:fixed!important;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+}
+.table-card table.v139-list.admin-list{min-width:1380px!important}
+.table-card table.v139-list th{
+  height:34px!important;
+  padding:7px 8px!important;
+  font-size:9px!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  vertical-align:middle!important;
+}
+.table-card table.v139-list td{
+  height:43px!important;
+  padding:5px 8px!important;
+  vertical-align:middle!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:10px!important;
+  line-height:1.12!important;
+}
+.table-card table.v139-list tbody tr.request-row td{
+  box-shadow:inset 0 -1px 0 rgba(190,204,215,.38)!important;
+}
+.table-card table.v139-list .registered-cell,
+.table-card table.v139-list .code,
+.table-card table.v139-list .money-cell,
+.table-card table.v139-list .status-cell{
+  text-align:center!important;
+}
+.table-card table.v139-list .registered-cell b,
+.table-card table.v139-list .code{
+  display:block!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.table-card table.v139-list .point-cell{
+  display:flex!important;
+  align-items:center!important;
+  gap:4px!important;
+  min-width:0!important;
+  width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-weight:900!important;
+}
+.table-card table.v139-list .point-cell.empty{justify-content:center;color:#84909c}
+.table-card table.v139-list .country-flag{
+  flex:0 0 auto;
+  font-size:14px;
+  line-height:1;
+  filter:saturate(1.05);
+}
+.table-card table.v139-list .point-country{
+  flex:0 0 auto;
+  color:#23313f;
+  font-size:9px;
+  letter-spacing:.02em;
+}
+.table-card table.v139-list .point-code{
+  flex:0 1 auto;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  color:#182530;
+}
+.table-card table.v139-list .point-date,
+.table-card table.v139-list .point-time{
+  flex:0 0 auto;
+  color:#617383;
+  font-size:9px;
+  font-weight:800;
+}
+.table-card table.v139-list .point-extra{
+  flex:0 0 auto;
+  padding:1px 5px;
+  border-radius:999px;
+  background:#eef2f5;
+  color:#5d6d7b;
+  font-size:8px;
+  font-weight:900;
+}
+.table-card table.v139-list .one-line,
+.table-card table.v139-list .requirements-one{
+  display:block!important;
+  width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.table-card table.v139-list .note-two{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+  line-height:1.16!important;
+  max-height:2.32em!important;
+  font-weight:800!important;
+  color:#445666!important;
+}
+.table-card table.v139-list .client-card{
+  display:block!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.table-card table.v139-list .client-card b,
+.table-card table.v139-list .client-card span{
+  display:inline!important;
+  max-width:none!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+.table-card table.v139-list .client-card span::before{content:' · ';color:#9aa6b1}
+.table-card table.v139-list .status-tag{
+  min-width:0!important;
+  width:100%!important;
+  padding:5px 6px!important;
+  font-size:8.5px!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.table-card table.v139-list .actions,
+.table-card table.v139-list .admin-actions{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:4px!important;
+  overflow:hidden!important;
+}
+.table-card table.v139-list .btn.small,
+.table-card table.v139-list .email-action-tile{
+  min-height:24px!important;
+  height:24px!important;
+  padding:0 6px!important;
+  border-radius:5px!important;
+  font-size:8px!important;
+  white-space:nowrap!important;
+}
+.table-card table.v139-list .email-action-tile{width:auto!important;min-width:54px!important}
+.table-card table.v139-list .counter-note{
+  display:block!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:8px!important;
+}
+.table-card table.v139-list col.col-reg{width:7.2%!important}
+.table-card table.v139-list col.col-code{width:4.3%!important}
+.table-card table.v139-list col.col-point{width:10.8%!important}
+.table-card table.v139-list col.col-small{width:4.7%!important}
+.table-card table.v139-list col.col-access{width:5.2%!important}
+.table-card table.v139-list col.col-req{width:8.4%!important}
+.table-card table.v139-list col.col-note{width:10.5%!important}
+.table-card table.v139-list col.col-money{width:6.2%!important}
+.table-card table.v139-list col.col-status{width:8%!important}
+.table-card table.v139-list col.col-actions{width:9.2%!important}
+.table-card table.v139-list.admin-list col.col-client{width:9.2%!important}
+.table-card table.v139-list.admin-list col.col-point{width:9.4%!important}
+.table-card table.v139-list.admin-list col.col-note{width:9%!important}
+.table-card table.v139-list.admin-list col.col-actions{width:10.2%!important}
+.budget-proposal-row td,.admin-counter-row td,.archive-warning-row td{height:auto!important;white-space:normal!important;overflow:visible!important}
+@media(max-width:1180px){
+  .table-card table.v139-list{min-width:1260px!important}
+  .table-card table.v139-list.admin-list{min-width:1360px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1520,6 +1704,16 @@ function normalizeCountryCode(v){
   const byName=countryOptions.find(([,name])=>name.toLocaleLowerCase('pl-PL')===cleaned);if(byName)return byName[0];
   return '';
 }
+function countryCodeFromPostal(v){
+  const raw=String(v||'').trim().toUpperCase();
+  const m=raw.match(/^([A-Z]{2})/);
+  return m?normalizeCountryCode(m[1]):'';
+}
+function countryFlag(code){
+  const c=normalizeCountryCode(code);
+  if(!/^[A-Z]{2}$/.test(c))return '';
+  return [...c].map(ch=>String.fromCodePoint(127397+ch.charCodeAt(0))).join('');
+}
 function countryOptionsMarkup(){return ''}
 function countryMenuMarkup(){return `<div class="country-menu" data-country-menu>${countryOptions.map(([code,name])=>`<button type="button" class="country-option" data-country-code="${code}"><b>${code}</b><span>${name}</span></button>`).join('')}</div>`}
 
@@ -1540,8 +1734,24 @@ function countryMenuMarkup(){return `<div class="country-menu" data-country-menu
     return `${p(d.getDate())}.${p(d.getMonth()+1)}.${yy} ${p(d.getHours())}:${p(d.getMinutes())}`;
   }
   function registeredCell(r){const text=formatRegisteredAt(r.createdAt);return `<td class="registered-cell"><b title="${esc(text)}">${esc(text)}</b></td>`}
-  function pointTableText(p){if(!p)return {short:'—',full:''};const code=formatPostal(p.postalCity||p.address||'');const when=[pointDates(p),pointTimes(p)].filter(Boolean).join(' · ');const short=[when,code].filter(Boolean).join(' · ')||'—';return {short,full:fullPointSummary(p)||short}}
-  function routePointCell(r,kind,label){const arr=(r[kind]||[]).filter(Boolean),first=arr[0],data=pointTableText(first);const extra=arr.length>1?` <span class="point-extra">… +${arr.length-1}</span>`:'';const full=(arr.length?arr.map(fullPointSummary).filter(Boolean).join('\n'):'')||data.short;return `<td title="${esc(full)}"><div class="point-cell"><b>${esc(data.short)}${extra}</b><small>${esc(label)}</small></div></td>`}
+  function pointTableText(p){
+    if(!p)return {code:'—',country:'',flag:'',date:'',time:'',short:'—',full:''};
+    const raw=String(p.postalCity||p.address||'').trim();
+    const country=normalizeCountryCode(p.country)||countryCodeFromPostal(raw);
+    const code=formatPostal(raw);
+    const date=pointDates(p),time=pointTimes(p);
+    const flag=countryFlag(country);
+    const short=[country?`${country}`:'',code.replace(/^([A-Z]{2})\s*/,'').trim(),date,time].filter(Boolean).join(' · ')||'—';
+    return {code,country,flag,date,time,short,full:fullPointSummary(p)||short};
+  }
+  function routePointCell(r,kind,label){
+    const arr=(r[kind]||[]).filter(Boolean),first=arr[0],data=pointTableText(first);
+    const extra=arr.length>1?`<span class="point-extra">… +${arr.length-1}</span>`:'';
+    const full=(arr.length?arr.map(fullPointSummary).filter(Boolean).join('\n'):'')||data.short;
+    if(!first)return `<td title="${esc(label)}"><div class="point-cell empty"><span class="muted-dash">—</span></div></td>`;
+    const postalOnlyText=data.code.replace(/^([A-Z]{2})\s*/,'').trim();
+    return `<td title="${esc(full)}"><div class="point-cell"><span class="country-flag" aria-hidden="true">${esc(data.flag)}</span><span class="point-country">${esc(data.country||'')}</span><span class="point-code">${esc(postalOnlyText||data.code)}</span>${data.date?`<span class="point-date">${esc(data.date)}</span>`:''}${data.time?`<span class="point-time">${esc(data.time)}</span>`:''}${extra}</div></td>`;
+  }
   function oneLineCell(value,cls='one-line'){const v=String(value||'—').trim()||'—';return `<td title="${esc(v)}"><div class="${cls}">${esc(v)}</div></td>`}
   function ldmCell(r){return oneLineCell(r.ldm?ldmDisplay(r.ldm):'—','one-line')}
   function weightCell(r){return oneLineCell(r.weight?`${r.weight} t`:'—','one-line')}
@@ -2022,7 +2232,7 @@ function clientFaqHtml(){return '';}
 function renderClient(){
   const c=state.current;const mine=state.requests.filter(r=>r.clientId===c.id);const ordered=sortedRequests(mine,'client');
   const rows=ordered.length?ordered.map(clientRow).join(''):`<tr><td colspan="13"><div class="empty">${esc(ui('clientEmpty'))}</div></td></tr>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('myInquiries'))}</h1><p>${esc(ui('clientLead'))}</p></div><div class="profile-head-actions"><button class="btn red add-load" data-action="add-request">+ ${esc(ui('addInquiry'))}</button><button class="btn add-load" data-action="add-recurring">+ Dodaj stałe przesyłki</button></div></div><section class="card table-card modern-table">${tableToolbar('client')}<div class="table-wrap"><table class="tbl compact-list v139-list"><colgroup><col class="col-reg"><col class="col-code"><col class="col-point"><col class="col-point"><col class="col-point"><col class="col-small"><col class="col-small"><col class="col-access"><col class="col-req"><col class="col-note"><col class="col-money"><col class="col-status"><col class="col-actions"></colgroup><thead><tr><th>${sortHead(ui('regDate'),'createdAt','client')}</th><th>${sortHead(ui('no'),'code','client')}</th><th>Załadunek<br><span class="muted-small">data/godz./kod</span></th><th>Pkt pośredni<br><span class="muted-small">data/godz./kod</span></th><th>Rozładunek<br><span class="muted-small">data/godz./kod</span></th><th>${sortHead('LDM','cargo','client')}</th><th>Waga</th><th>Strona</th><th>Wymagania</th><th>Notatka</th><th>${sortHead(ui('budget'),'budget','client')}</th><th>${sortHead(ui('status'),'status','client')}</th><th>${esc(ui('operations'))}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`);
+  return layout(`<div class="head"><div><h1>${esc(ui('myInquiries'))}</h1><p>${esc(ui('clientLead'))}</p></div><div class="profile-head-actions"><button class="btn red add-load" data-action="add-request">+ ${esc(ui('addInquiry'))}</button><button class="btn add-load" data-action="add-recurring">+ Dodaj stałe przesyłki</button></div></div><section class="card table-card modern-table">${tableToolbar('client')}<div class="table-wrap"><table class="tbl compact-list v139-list"><colgroup><col class="col-reg"><col class="col-code"><col class="col-point"><col class="col-point"><col class="col-point"><col class="col-small"><col class="col-small"><col class="col-access"><col class="col-req"><col class="col-note"><col class="col-money"><col class="col-status"><col class="col-actions"></colgroup><thead><tr><th>${sortHead(ui('regDate'),'createdAt','client')}</th><th>${sortHead(ui('no'),'code','client')}</th><th>Załadunek</th><th>Pośredni</th><th>Rozładunek</th><th>${sortHead('LDM','cargo','client')}</th><th>Waga</th><th>Strona</th><th>Wymagania</th><th>Notatka</th><th>${sortHead(ui('budget'),'budget','client')}</th><th>${sortHead(ui('status'),'status','client')}</th><th>${esc(ui('operations'))}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`);
 }
 function clientRow(r){
   normalizeRequest(r);
@@ -2048,7 +2258,7 @@ function renderAdmin(){
   state.requests.forEach(r=>{if(counts[r.status]!==undefined)counts[r.status]++});
   const ordered=sortedRequests(state.requests,'admin');
   const rows=ordered.length?ordered.map(adminRow).join(''):`<tr><td colspan="14"><div class="empty">Brak zapytań od klientów.</div></td></tr>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('operational'))}</h1><p>${esc(ui('adminLead'))}</p></div></div><div class="metrics"><div class="metric"><span>${esc(ui('waiting'))}</span><b>${counts.waiting}</b></div><div class="metric"><span>${esc(ui('priceConfirm'))}</span><b>${counts.budget}</b></div><div class="metric"><span>${esc(ui('offerPrep'))}</span><b>${counts.searching}</b></div><div class="metric"><span>${esc(ui('inProgress'))}</span><b>${counts.accepted}</b></div></div><section class="card table-card modern-table">${tableToolbar('admin')}<div class="table-wrap"><table class="tbl compact-list admin-list v139-list"><colgroup><col class="col-reg"><col class="col-code"><col class="col-client"><col class="col-point"><col class="col-point"><col class="col-point"><col class="col-small"><col class="col-small"><col class="col-access"><col class="col-req"><col class="col-note"><col class="col-money"><col class="col-status"><col class="col-actions"></colgroup><thead><tr><th>${sortHead(ui('regDate'),'createdAt','admin')}</th><th>${sortHead(ui('no'),'code','admin')}</th><th>${sortHead(ui('client'),'client','admin')}</th><th>Załadunek<br><span class="muted-small">data/godz./kod</span></th><th>Pkt pośredni<br><span class="muted-small">data/godz./kod</span></th><th>Rozładunek<br><span class="muted-small">data/godz./kod</span></th><th>${sortHead('LDM','cargo','admin')}</th><th>Waga</th><th>Strona</th><th>Wymagania</th><th>Notatka</th><th>${sortHead(ui('price'),'budget','admin')}</th><th>${sortHead(ui('status'),'status','admin')}</th><th>${esc(ui('operations'))}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`);
+  return layout(`<div class="head"><div><h1>${esc(ui('operational'))}</h1><p>${esc(ui('adminLead'))}</p></div></div><div class="metrics"><div class="metric"><span>${esc(ui('waiting'))}</span><b>${counts.waiting}</b></div><div class="metric"><span>${esc(ui('priceConfirm'))}</span><b>${counts.budget}</b></div><div class="metric"><span>${esc(ui('offerPrep'))}</span><b>${counts.searching}</b></div><div class="metric"><span>${esc(ui('inProgress'))}</span><b>${counts.accepted}</b></div></div><section class="card table-card modern-table">${tableToolbar('admin')}<div class="table-wrap"><table class="tbl compact-list admin-list v139-list"><colgroup><col class="col-reg"><col class="col-code"><col class="col-client"><col class="col-point"><col class="col-point"><col class="col-point"><col class="col-small"><col class="col-small"><col class="col-access"><col class="col-req"><col class="col-note"><col class="col-money"><col class="col-status"><col class="col-actions"></colgroup><thead><tr><th>${sortHead(ui('regDate'),'createdAt','admin')}</th><th>${sortHead(ui('no'),'code','admin')}</th><th>${sortHead(ui('client'),'client','admin')}</th><th>Załadunek</th><th>Pośredni</th><th>Rozładunek</th><th>${sortHead('LDM','cargo','admin')}</th><th>Waga</th><th>Strona</th><th>Wymagania</th><th>Notatka</th><th>${sortHead(ui('price'),'budget','admin')}</th><th>${sortHead(ui('status'),'status','admin')}</th><th>${esc(ui('operations'))}</th></tr></thead><tbody>${rows}</tbody></table></div></section>`);
 }
 function offerEmailButton(id){
   return `<button type="button" class="email-action-tile" data-open-offer-mail-langs="${esc(id)}"><span class="mail-logo">✉</span><span>Email</span></button>`
