@@ -14,3 +14,4 @@ Strona online używa czystych adresów, np.:
 ## Otwieranie lokalne
 Dla lokalnego podglądu otwieraj pliki `home.html`, `projects.html`, `articles.html`, `loadplanner.html` itd.
 Pliki `.html` zostają celowo, aby lokalny podgląd działał bez serwera.
+
