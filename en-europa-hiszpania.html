@@ -214,17 +214,6 @@ body{background:#f3ede6!important;}
 <link href="nav-unified.css?v=77" rel="stylesheet"/>
 <link href="site-overrides-v77.css?v=77" rel="stylesheet"/>
 <link href="site-mobile.css?v=107" rel="stylesheet"/>
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
 <style id="country-core-snapshot-v1">.core-snapshot{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin:0 0 24px}.core-snapshot>div{padding:17px 18px;border:1px solid #e2d6ce;border-radius:14px;background:#fffaf7}.core-snapshot b{display:block;color:#e31e24;font:900 .67rem/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}.core-snapshot p{margin:9px 0 0!important;color:#514741!important;line-height:1.62!important}.core-sector-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.core-sector-row span{padding:7px 9px;border:1px solid #eadfd8;border-radius:999px;background:#fff;color:#392f2a;font:800 .74rem/1.2 Inter,sans-serif}@media(max-width:760px){.core-snapshot{grid-template-columns:1fr}}</style>
 <style id="es-toc-matches-pt-pl">
 .country-guide .guide-toc{margin:0 0 34px!important;padding:22px 24px!important;border:1px solid #e0d3ca!important;border-top:5px solid #e31e24!important;border-radius:0 16px 16px 16px!important;background:#fffdfb!important;}

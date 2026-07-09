@@ -45,17 +45,6 @@ footer#kontakt .iso-text{font-size:.72rem!important;font-weight:700!important;te
 <link href="nav-unified.css?v=77" rel="stylesheet"/>
 <link href="site-overrides-v77.css?v=77" rel="stylesheet"/>
 <link href="site-mobile.css?v=107" rel="stylesheet"/>
-<script>
-(function () {
-  if (location.protocol === 'file:') return;
-  var file = location.pathname.split('index.html').pop();
-  if (!file || !/\.html$/i.test(file)) return;
-  if (/^(index|404)\.html$/i.test(file)) return;
-  var clean = file.replace(/\.html$/i, '');
-  var prefix = location.pathname.slice(0, -file.length);
-  location.replace(prefix + clean + 'index.html' + location.search + location.hash);
-})();
-</script>
 <style id="v78-country-guide-article-surface">
 /* v78 — shared country-guide article surface: framed white sheet and dark navigation over the hero */
 body{background:#f4eee9!important;}
