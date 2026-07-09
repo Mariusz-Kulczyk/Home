@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == "contact@mkulczyk.pl";
+    }
+
+    function ownsExistingByEmail() {
+      return signedIn()
+        && resource.data.clientEmail == request.auth.token.email;
+    }
+
+    function ownsNewByEmail() {
+      return signedIn()
+        && request.resource.data.clientEmail == request.auth.token.email;
+    }
+
+    function ownsExistingByUid() {
+      return signedIn()
+        && resource.data.ownerUid == request.auth.uid;
+    }
+
+    function ownsNewByUid() {
+      return signedIn()
+        && request.resource.data.ownerUid == request.auth.uid;
+    }
+
+    match /admin/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /settings/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /clients/{clientId} {
+      allow read, write, delete: if isAdmin();
+
+      allow read: if signedIn()
+        && (
+          resource.data.email == request.auth.token.email
+          || resource.data.ownerUid == request.auth.uid
+        );
+
+      allow create: if signedIn()
+        && request.resource.data.role == "client"
+        && (
+          request.resource.data.email == request.auth.token.email
+          || request.resource.data.ownerUid == request.auth.uid
+        );
+
+      allow update: if signedIn()
+        && request.resource.data.role == "client"
+        && (
+          resource.data.email == request.auth.token.email
+          || resource.data.ownerUid == request.auth.uid
+        )
+        && (
+          request.resource.data.email == resource.data.email
+          || request.resource.data.email == request.auth.token.email
+          || request.resource.data.ownerUid == request.auth.uid
+        );
+    }
+
+    match /requests/{requestId} {
+      allow read, write, delete: if isAdmin();
+
+      allow read: if ownsExistingByEmail() || ownsExistingByUid();
+
+      allow create: if ownsNewByEmail() || ownsNewByUid();
+
+      allow update: if (ownsExistingByEmail() || ownsExistingByUid())
+        && (ownsNewByEmail() || ownsNewByUid());
+    }
+
+    match /notifications/{notificationId} {
+      allow read, write, delete: if isAdmin();
+
+      allow create: if signedIn()
+        && (
+          request.resource.data.clientEmail == request.auth.token.email
+          || request.resource.data.ownerUid == request.auth.uid
+          || request.resource.data.targetEmail == "contact@mkulczyk.pl"
+        );
+    }
+  }
+}
