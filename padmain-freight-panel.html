@@ -1783,12 +1783,28 @@ function compactPostalWithCountry(country,raw){
   if(c&&compact&&compact!==c)return compact.startsWith(c)?compact:`${c}${compact}`;
   return compact;
 }
+function cleanPostalFragment(v,country=''){
+  const c=normalizeCountryCode(country);
+  const raw=String(v||'').trim().toUpperCase();
+  if(!raw)return '';
+  let candidate=postalOnly(raw)||raw.replace(/\s+/g,'');
+  const detected=countryCodeFromPostal(candidate);
+  if(c&&candidate.startsWith(c))candidate=candidate.slice(c.length);
+  else if(detected&&candidate.startsWith(detected))candidate=candidate.slice(detected.length);
+  return candidate.replace(/[^A-Z0-9]/g,'');
+}
+function finalPointCode(country,postalCode){
+  const c=normalizeCountryCode(country)||countryCodeFromPostal(postalCode);
+  const postal=cleanPostalFragment(postalCode,c);
+  if(c&&postal)return `${c}${postal}`;
+  if(c)return c;
+  return postal||'';
+}
 function pointDisplayCode(p={}){
   const raw=String(p.postalCity||p.postal||p.address||'').trim();
   const country=pointCountryCode(p,raw);
-  const code=compactPostalWithCountry(country,raw)||compactPostalWithCountry(country,p.postal)||compactPostalWithCountry(country,p.address);
-  if(code)return code.replace(/\s+/g,'');
-  return country||'';
+  const source=p.postal||p.postalCity||raw||p.address||'';
+  return finalPointCode(country,source)||country||'';
 }
 function countryOptionsMarkup(){return ''}
 function countryMenuMarkup(){return `<div class="country-menu" data-country-menu>${countryOptions.map(([code,name])=>`<button type="button" class="country-option" data-country-code="${code}"><b>${code}</b><span>${name}</span></button>`).join('')}</div>`}
@@ -2652,9 +2668,13 @@ function confirmArchiveNotice(id){const r=state.requests.find(x=>x.id===id);if(!
 function deleteRequest(id){openDeleteModal(id)}
 function editRequest(id){const r=state.requests.find(x=>x.id===id);if(r)openRequestWizard(id)}
 function postalParts(p){
-  const code=postalOnly((p&&p.postalCity)||(p&&p.address)||'');
+  const explicitCountry=normalizeCountryCode(p&&p.country);
+  const base=(p&&((p.postalCity)||(p.postal)||(p.address)))||'';
+  const code=postalOnly(base)||String(base||'').trim().toUpperCase();
   const m=code.match(/^([A-Z]{2})(.*)$/);
-  return {country:m?(normalizeCountryCode(m[1])||m[1]):'PL',postal:m?m[2]:''};
+  const country=explicitCountry||(m?(normalizeCountryCode(m[1])||m[1]):'PL');
+  const postal=cleanPostalFragment((p&&p.postal)||code,country);
+  return {country,postal};
 }
 function wizardPointTitle(kind,index){
   const label={loads:'Załadunek',stops:'Punkt pośredni',unloads:'Rozładunek'}[kind]||'Punkt';
@@ -2706,12 +2726,12 @@ function wizardPointsFromDom(kind){
   return [...document.querySelectorAll(`#requestWizard .wizard-point-card[data-point-kind="${kind}"]`)].map(card=>{
     const field=name=>String(card.querySelector(`[data-point-field="${name}"]`)?.value||'').trim();
     const country=normalizeCountryCode(field('country'));
-    const postalRaw=field('postal').toUpperCase().replace(/\s+/g,'');
-    const postal=country&&postalRaw.startsWith(country)?postalRaw.slice(country.length):postalRaw;
+    const postalRaw=field('postal').toUpperCase();
+    const postal=cleanPostalFragment(postalRaw,country);
     return {address:field('address'),postalCity:`${country}${postal}`,country,postal,dateStart:field('dateStart'),timeStart:field('timeStart'),dateEnd:field('dateEnd'),timeEnd:field('timeEnd'),type:kind==='stops'?'Punkt pośredni':'',__card:card};
   });
 }
-function cleanWizardPoint(p){const {__card,country,postal,...clean}=p;return clean}
+function cleanWizardPoint(p){const {__card,...clean}=p;return clean}
 function getWizardData(){
   const loads=wizardPointsFromDom('loads'),stops=wizardPointsFromDom('stops'),unloads=wizardPointsFromDom('unloads');
   const req=[...document.querySelectorAll('#requestWizard .wizard-check input:checked')].map(x=>x.value);
