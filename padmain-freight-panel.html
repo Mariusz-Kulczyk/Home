@@ -1922,6 +1922,7 @@ function countryMenuMarkup(){return `<div class="country-menu" data-country-menu
 function ensureDefaultClients(){
   state.admin={...structuredClone(defaults.admin),...(state.admin||{})};
   state.clients.forEach(c=>{c.role='client';c.login=c.email||c.login||c.id;c.accessCode='';c.companyCode=c.companyCode||String(c.company||'KL').slice(0,2).toUpperCase();c.email=c.email||'';c.contact=c.contact||c.name||'';c.name=c.name||c.contact||'';c.phone=c.phone||'';c.vatEu=c.vatEu||'';c.language=c.language||'pl';});
+  normalizeClientDirectory(false);
 }
 function localSnapshot(){return {notifyEmail:state.notifyEmail,currency:state.currency,lang:state.lang,notifyBrowser:state.notifyBrowser}}
 function clearOldLocalBackups(){try{['mkLtlModelV44FirebaseBackup','mkLtlModelV23','mkLtlModelV17','mkLtlModelV16','mkLtlModelV15'].forEach(k=>localStorage.removeItem(k));}catch(e){}}
@@ -1936,10 +1937,47 @@ function clientIdFromEmail(email){
   return `client_${key||Date.now()}`;
 }
 function minimalClientProfile(email,extra={}){
-  const mail=String(email||extra.email||'').trim();
+  const mail=normalizeLogin(email||extra.email||extra.login||'');
   const company=String(extra.company||mail||'Klient').trim();
   const code=String(extra.companyCode||companyCodeFromText(company||mail)).trim().toUpperCase();
-  return {id:extra.id||clientIdFromEmail(mail),role:'client',company,companyCode:code,vatEu:extra.vatEu||'',language:extra.language||state.lang||'pl',name:extra.name||extra.contact||'',contact:extra.contact||extra.name||'',email:mail,phone:extra.phone||'',login:mail,accessCode:'',firebaseEmailOnly:Boolean(extra.firebaseEmailOnly??true),createdFromAuth:Boolean(extra.createdFromAuth||false),createdAt:extra.createdAt||new Date().toISOString()};
+  return {id:clientIdFromEmail(mail),role:'client',company,companyCode:code,vatEu:extra.vatEu||'',language:extra.language||state.lang||'pl',name:extra.name||extra.contact||'',contact:extra.contact||extra.name||'',email:mail,phone:extra.phone||'',login:mail,accessCode:'',firebaseEmailOnly:Boolean(extra.firebaseEmailOnly??true),createdFromAuth:Boolean(extra.createdFromAuth||false),createdAt:extra.createdAt||new Date().toISOString(),sourceIds:Array.isArray(extra.sourceIds)?extra.sourceIds:(extra.id?[extra.id]:[])};
+}
+function mergeClientData(base,add){
+  const merged={...base,role:'client',email:base.email||add.email,login:base.email||base.login||add.email,accessCode:''};
+  ['company','companyCode','vatEu','language','name','contact','phone'].forEach(k=>{
+    const current=String(merged[k]||'').trim();
+    const generic=[merged.email,'Nowy klient','Klient','KL'].includes(current);
+    const candidate=String(add[k]||'').trim();
+    if((!current||generic)&&candidate)merged[k]=add[k];
+  });
+  merged.firebaseEmailOnly=Boolean(merged.firebaseEmailOnly&&add.firebaseEmailOnly);
+  merged.createdFromAuth=Boolean(merged.createdFromAuth||add.createdFromAuth);
+  merged.sourceIds=[...new Set([...(merged.sourceIds||[]),...(add.sourceIds||[]),base.id,add.id].filter(Boolean))];
+  merged.id=clientIdFromEmail(merged.email);
+  return merged;
+}
+function normalizeClientDirectory(markDeleted=false){
+  let changed=false;
+  const byEmail=new Map();
+  (state.clients||[]).forEach(c=>{
+    const mail=normalizeLogin(c.email||c.login||'');
+    if(!mail||isAdminEmail(mail))return;
+    const clean=minimalClientProfile(mail,{...c,sourceIds:[...(c.sourceIds||[]),c.id].filter(Boolean)});
+    if(c.id&&c.id!==clean.id&&markDeleted)cloudDeleted.clients.add(c.id);
+    if(!byEmail.has(mail))byEmail.set(mail,clean);
+    else{byEmail.set(mail,mergeClientData(byEmail.get(mail),clean));changed=true;}
+    if(c.id!==clean.id||c.email!==mail)changed=true;
+  });
+  state.clients=[...byEmail.values()];
+  (state.requests||[]).forEach(r=>{
+    const mail=normalizeLogin(r.clientEmail||getClient(r.clientId)?.email||'');
+    if(mail&&byEmail.has(mail)){
+      const c=byEmail.get(mail);
+      if(r.clientId!==c.id||r.clientEmail!==mail)changed=true;
+      r.clientId=c.id;r.clientEmail=mail;
+    }
+  });
+  return changed;
 }
 function mergeClientProfile(profile){
   if(!profile||!profile.email||isAdminEmail(profile.email))return false;
@@ -1948,14 +1986,10 @@ function mergeClientProfile(profile){
   let idx=state.clients.findIndex(c=>normalizeLogin(c.email)===email||c.id===clean.id);
   if(idx<0){state.clients.push(clean);return true;}
   const existing=state.clients[idx];
-  const merged={...existing,role:'client',email:existing.email||clean.email,login:existing.email||existing.login||clean.email,accessCode:''};
-  ['company','companyCode','vatEu','language','name','contact','phone'].forEach(k=>{
-    const current=String(merged[k]||'').trim();
-    const looksEmpty=!current||current==='Nowy klient'||current==='Klient'||current===merged.email;
-    if(looksEmpty&&clean[k])merged[k]=clean[k];
-  });
-  merged.firebaseEmailOnly=Boolean(merged.firebaseEmailOnly||clean.firebaseEmailOnly);
+  const merged=mergeClientData(existing,clean);
+  if(existing.id&&existing.id!==merged.id)cloudDeleted.clients.add(existing.id);
   state.clients[idx]=merged;
+  normalizeClientDirectory(false);
   return false;
 }
 function mergeClientProfilesFromRequests(){
@@ -1981,13 +2015,32 @@ function mergeLegacyClientProfilesFromLocal(){
 }
 function getClientByEmail(email){const n=normalizeLogin(email||'');return n?state.clients.find(c=>normalizeLogin(c.email)===n):null}
 function getClientForRequest(r){return getClient(r?.clientId)||getClientByEmail(r?.clientEmail)||null}
+function currentAuthEmail(){return normalizeLogin((fbAuth?.currentUser?.email)||(authUser?.email)||(state.current?.email)||'')}
+function currentClientId(){const mail=currentAuthEmail();return (state.current?.id&&normalizeLogin(state.current?.email)===mail)?state.current.id:clientIdFromEmail(mail)}
+function ensureCurrentClientIdentity(){
+  const mail=currentAuthEmail();if(!mail||isAdminEmail(mail))return null;
+  let c=getClientByEmail(mail)||state.current||minimalClientProfile(mail,{createdFromAuth:true,firebaseEmailOnly:true});
+  c={...minimalClientProfile(mail,c),id:clientIdFromEmail(mail),email:mail,login:mail,role:'client',accessCode:''};
+  const idx=state.clients.findIndex(x=>normalizeLogin(x.email)===mail||x.id===c.id);
+  if(idx>=0)state.clients[idx]=mergeClientData(state.clients[idx],c);else state.clients.push(c);
+  state.current=state.clients.find(x=>normalizeLogin(x.email)===mail)||c;
+  return state.current;
+}
+function prepareOwnedRequestForSave(r){
+  const mail=currentAuthEmail();const c=ensureCurrentClientIdentity()||{};
+  if(mail&&!isAdminEmail(mail)){r.clientEmail=mail;r.clientId=c.id||clientIdFromEmail(mail);}
+  return plain({...r,clientEmail:r.clientEmail||c.email||mail||'',clientId:r.clientId||c.id||clientIdFromEmail(mail),ownerEmail:mail||r.clientEmail||'',ownerUid:fbAuth?.currentUser?.uid||''});
+}
+function prepareOwnedNotificationForSave(n){
+  const mail=currentAuthEmail();return plain({...n,clientEmail:n.clientEmail||mail,targetEmail:n.targetEmail||ADMIN_EMAIL});
+}
 async function saveOwnClientProfile(client){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!client)return false;
   const email=normalizeLogin(fbAuth.currentUser.email||'');
   if(!email||isAdminEmail(email)||normalizeLogin(client.email)!==email)return false;
   try{
     const batch=writeBatch(fbDb);
-    const clean=plain({...client,role:'client',login:client.email||client.login||'',accessCode:''});
+    const clean=plain({...client,role:'client',email,login:email,accessCode:'',ownerUid:fbAuth.currentUser.uid||''});
     batch.set(doc(fbDb,'clients',client.id||clientIdFromEmail(email)),clean,{merge:true});
     await batch.commit();
     return true;
@@ -2018,7 +2071,7 @@ function syncLoggedInSession(){
   if(email&&!state.current)return setCurrentFromAuthEmail(email);
   return Boolean(state.current);
 }
-function withClientEmail(r){const c=getClientForRequest(r)||{};return {...plain(r),clientEmail:r.clientEmail||c.email||''}}
+function withClientEmail(r){const c=getClientForRequest(r)||{};return {...plain(r),clientEmail:normalizeLogin(r.clientEmail||c.email||currentAuthEmail()||''),clientId:r.clientId||c.id||clientIdFromEmail(r.clientEmail||c.email||currentAuthEmail()||'')}}
 async function docsToArray(q){const snap=await getDocs(q);return snap.docs.map(d=>({id:d.id,...d.data()}));}
 async function loadCloudData(){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb)return false;
@@ -2040,15 +2093,17 @@ async function loadCloudData(){
       state.notifications=Array.isArray(notifications)?notifications:[];
       const mergedFromRequests=mergeClientProfilesFromRequests();
       const mergedFromLegacy=mergeLegacyClientProfilesFromLocal();
+      const mergedDirectory=normalizeClientDirectory(true);
       ensureDefaultClients();
       state.current=state.admin;
       state.view='loads';
-      if(mergedFromRequests||mergedFromLegacy)store();
+      if(mergedFromRequests||mergedFromLegacy||mergedDirectory)store();
     }else{
       const clients=await docsToArray(query(collection(fbDb,'clients'),where('email','==',fbAuth.currentUser.email||'')));
-      const client=clients[0]||minimalClientProfile(fbAuth.currentUser.email||'',{id:'client_'+fbAuth.currentUser.uid,createdFromAuth:true,firebaseEmailOnly:true});
-      state.clients=[{...minimalClientProfile(client.email||fbAuth.currentUser.email||'',client),role:'client',accessCode:''}];
+      const client=clients[0]||minimalClientProfile(fbAuth.currentUser.email||'',{createdFromAuth:true,firebaseEmailOnly:true});
+      state.clients=[{...minimalClientProfile(client.email||fbAuth.currentUser.email||'',client),id:clientIdFromEmail(client.email||fbAuth.currentUser.email||''),role:'client',accessCode:''}];
       state.current=state.clients[0];
+      ensureCurrentClientIdentity();
       state.requests=await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',fbAuth.currentUser.email||'')));
       state.notifications=[];
       state.view='loads';
@@ -2077,8 +2132,9 @@ async function cloudSaveNow(){
       cloudDeleted.notifications.forEach(id=>batch.delete(doc(fbDb,'notifications',id)));
       cloudDeleted.clients.forEach(id=>batch.delete(doc(fbDb,'clients',id)));
     }else{
-      state.requests.filter(r=>normalizeLogin(r.clientEmail||getClientForRequest(r)?.email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
-      state.notifications.filter(n=>normalizeLogin(n.clientEmail)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL)).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
+      ensureCurrentClientIdentity();
+      state.requests.filter(r=>normalizeLogin(r.clientEmail||getClientForRequest(r)?.email||email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),prepareOwnedRequestForSave(r),{merge:true}));
+      state.notifications.filter(n=>normalizeLogin(n.clientEmail||email)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL)).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),prepareOwnedNotificationForSave(n),{merge:true}));
     }
     await batch.commit();
     cloudDeleted.requests.clear();cloudDeleted.notifications.clear();cloudDeleted.clients.clear();
@@ -2454,11 +2510,19 @@ function sortedClients(){
   return [...state.clients].sort((a,b)=>collator.compare(String(val(a)),String(val(b)))*(ui.dir==='asc'?1:-1));
 }
 function accountSortHead(label,key){const ui=tableUi.accounts;return `<button type="button" data-account-sort-key="${key}">${esc(label)} ${ui.key===key?(ui.dir==='asc'?'↑':'↓'):''}</button>`}
+function clientRequestInfo(c){
+  const mail=normalizeLogin(c.email||'');
+  const reqs=(state.requests||[]).filter(r=>normalizeLogin(r.clientEmail)===mail||r.clientId===c.id);
+  const last=reqs.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')))[0];
+  const active=reqs.filter(r=>!['archived','cancelled'].includes(r.status)).length;
+  return {total:reqs.length,active,lastCode:last?.code||'',lastDate:last?.createdAt?formatRegisteredAt(last.createdAt):''};
+}
 function renderClients(){
   mergeClientProfilesFromRequests();
+  normalizeClientDirectory(false);
   const q=String(tableUi.accounts.query||'').trim().toLocaleLowerCase('pl-PL');
-  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>`<tr><td><b>${esc(c.company||c.email||'—')}</b><br><span class="info">${esc(c.companyCode||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td>${esc(c.email||'—')}<br><span class="info">${c.firebaseEmailOnly?'profil z logowania Firebase':'login Firebase = e-mail'}</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`).join('');
-  return layout(`<div class="head"><div><h1>Klienci i konta</h1><p>Profile klientów zapisują się w Firestore. Konto logowania i hasło są w Firebase Authentication.</p></div><div class="account-actions"><button class="btn red" data-add-client>+ Dodaj profil z e-maila</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie kont</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Strona nie może pobrać pełnej listy Authentication. Profil pojawi się po pierwszym logowaniu klienta albo po ręcznym dodaniu e-maila.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail Firebase','email')}</th><th>${accountSortHead('Język','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="6"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
+  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>{const info=clientRequestInfo(c);const src=c.createdFromAuth?'Firebase Auth':(c.firebaseEmailOnly?'z zapytania / logowania':'profil ręczny');return `<tr><td><b>${esc(c.company||c.email||'—')}</b><br><span class="info">Kod: ${esc(c.companyCode||'—')} · ID: ${esc(c.id||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td><b>${esc(c.email||'—')}</b><br><span class="info">Źródło: ${esc(src)}</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span><br><span class="info">Zapytania: ${info.total} / aktywne: ${info.active}${info.lastCode?` · ostatnie: ${esc(info.lastCode)}`:''}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`}).join('');
+  return layout(`<div class="head"><div><h1>Klienci i konta</h1><p>Profile są scalane po e-mailu Firebase. Dla każdego konta widać teraz źródło, ID oraz liczbę przypisanych zapytań.</p></div><div class="account-actions"><button class="btn red" data-add-client>+ Dodaj profil z e-maila</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie kont</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Jeżeli wcześniej powstały 2–3 profile tego samego klienta, panel pokaże jeden po e-mailu i po następnym zapisie admina spróbuje usunąć duplikaty z Firestore.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod / ID','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail / źródło','email')}</th><th>${accountSortHead('Język / zapytania','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="6"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
 }
 function openClientAddModal(){
   if(state.current?.role!=='admin'){loginModal();return}
@@ -2537,8 +2601,8 @@ function renderSettings(){
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
-function addRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=state.current;const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:false,loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
-function addRecurringRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=state.current;const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:true,shipmentPlanStart:'',shipmentPlanEnd:'',scheduleMode:'weekdays',scheduleQty:'',scheduleNote:'',weekdaySchedule:{},loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
+function addRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=ensureCurrentClientIdentity()||state.current;const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:false,loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
+function addRecurringRequest(){syncLoggedInSession();if(!state.current||state.current.role!=='client'){loginModal();return}const c=ensureCurrentClientIdentity()||state.current;const r={id:'r'+Date.now(),createdAt:new Date().toISOString(),clientId:c.id,code:nextCode(c),editing:false,isNewDraft:true,status:'draft',submitted:false,recurring:true,shipmentPlanStart:'',shipmentPlanEnd:'',scheduleMode:'weekdays',scheduleQty:'',scheduleNote:'',weekdaySchedule:{},loads:[],stops:[],unloads:[],ldm:'',notes:'',clientNote:'',weight:'',access:'',requirements:[],tempMin:'',tempMax:'',budget:'',currency:state.currency,budgetProposalPending:false,clientProposal:'',clientProposalCurrency:state.currency,clientEmail:c.email||''};state.requests.unshift(r);store();render();openRequestWizard(r.id)}
 function draftFromRow(id){const row=document.querySelector(`[data-edit-row="${id}"]`);const r=state.requests.find(x=>x.id===id);if(!row||!r)return;r.ldm=row.querySelector('[name="ldm"]')?.value||'';r.notes=row.querySelector('[name="notes"]')?.value||'';r.clientNote=row.querySelector('[name="clientNote"]')?.value||'';r.weight=row.querySelector('[name="weight"]')?.value||'';r.access=row.querySelector('[name="access"]')?.value||'';r.budget=row.querySelector('[name="budget"]')?.value.trim()||'';r.currency=row.querySelector('[name="currency"]')?.value||state.currency;store()}
 function pointStartKey(p){const d=dateForStart(p);return d?`${d}T${p.timeStart||'00:00'}`:''}
 function pointEndKey(p){const d=dateForEnd(p);return d?`${d}T${p.timeEnd||'23:59'}`:''}
@@ -2874,6 +2938,7 @@ async function saveRequestWizard(id){
   const max=wizardMaxStep();for(let i=1;i<max;i++){if(!validateWizardStep(i))return;}
   const r=state.requests.find(x=>x.id===id);if(!r)return;const data=getWizardData();
   Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',budgetProposalPending:false});
+  if(state.current?.role==='client'){const c=ensureCurrentClientIdentity();if(c){r.clientId=c.id;r.clientEmail=normalizeLogin(c.email);}}
   if(!r.requirements.includes('temperature')){r.tempMin='';r.tempMax=''}
   addNotification(r.recurring?'Nowe stałe przesyłki':'Nowe zgłoszenie klienta',r,r.recurring?'Klient wysłał plan stałych przesyłek.':'Klient wysłał nowe zapytanie.');$('#requestWizard')?.remove();render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.');
 }
