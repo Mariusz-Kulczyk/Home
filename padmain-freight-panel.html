@@ -1724,6 +1724,9 @@ try{
     if(user){
       try{localStorage.setItem('mkFirebaseAuthEmail',user.email||'');}catch(e){}
       if(typeof setCurrentFromAuthEmail==='function')setCurrentFromAuthEmail(user.email||'');
+      if(typeof ensureAuthProfileOnLogin==='function'){
+        try{await ensureAuthProfileOnLogin(user);}catch(e){console.warn('Auth profile pre-create skipped',e)}
+      }
       if(document.querySelector('#app')){
         try{await loadCloudData();}catch(e){}
         if(typeof render==='function')render();
@@ -2049,6 +2052,29 @@ function prepareOwnedRequestForSave(r){
 function prepareOwnedNotificationForSave(n){
   const mail=currentAuthEmail();return plain({...n,clientEmail:n.clientEmail||mail,targetEmail:n.targetEmail||ADMIN_EMAIL});
 }
+async function ensureAuthProfileOnLogin(user){
+  if(!cloudOnline||!fbDb||!user||!user.email)return false;
+  const email=normalizeLogin(user.email||'');
+  if(!email||isAdminEmail(email))return false;
+  try{
+    const id=clientIdFromEmail(email);
+    const profile=minimalClientProfile(email,{
+      company:email,
+      contact:email,
+      createdFromAuth:true,
+      firebaseEmailOnly:true,
+      ownerUid:user.uid||'',
+      lastLoginAt:new Date().toISOString()
+    });
+    delete profile.accessCode;
+    await setDoc(doc(fbDb,'clients',id),cleanClientForSave({...profile,ownerUid:user.uid||'',lastLoginAt:profile.lastLoginAt}),{merge:true});
+    mergeClientProfile({...profile,ownerUid:user.uid||''});
+    return true;
+  }catch(e){
+    console.warn('Auth profile create error',e);
+    return false;
+  }
+}
 async function saveOwnClientProfile(client){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!client)return false;
   const email=normalizeLogin(fbAuth.currentUser.email||'');
@@ -2113,6 +2139,7 @@ async function loadCloudData(){
       if(mergedFromRequests||mergedFromLegacy||mergedDirectory)store();
     }else{
       const authEmail=normalizeLogin(fbAuth.currentUser.email||'');
+      await ensureAuthProfileOnLogin(fbAuth.currentUser);
       const clientDoc=await getDoc(doc(fbDb,'clients',clientIdFromEmail(authEmail)));
       const clients=clientDoc.exists()?[{id:clientDoc.id,...clientDoc.data()}]:await docsToArray(query(collection(fbDb,'clients'),where('email','==',authEmail)));
       const client=clients[0]||minimalClientProfile(authEmail,{createdFromAuth:true,firebaseEmailOnly:true});
