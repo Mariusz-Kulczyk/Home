@@ -1420,6 +1420,26 @@ body{
 }
 .topbar-left .crumb{min-width:0!important;}
 
+
+/* V136 — powiadomienia systemowe admina dla contact@mkulczyk.pl */
+.notification-item.high{
+  border-left-color:#b3131b!important;
+  background:linear-gradient(90deg,#fff7f7 0%,#ffffff 55%)!important;
+}
+.notification-item.high b:before{
+  content:'!';
+  display:inline-grid;
+  place-items:center;
+  width:16px;
+  height:16px;
+  margin-right:6px;
+  border-radius:999px;
+  background:#b3131b;
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+
 </style>
 </head>
 <body>
@@ -1442,7 +1462,7 @@ const firebaseConfig={
   measurementId:"G-2JY2R3VYN4"
 };
 const ADMIN_EMAIL='contact@mkulczyk.pl';
-let fbApp=null,fbAuth=null,fbDb=null,authUser=null,authReady=null,cloudOnline=false,cloudBusy=false,cloudSaveTimer=null;
+let fbApp=null,fbAuth=null,fbDb=null,authUser=null,authReady=null,cloudOnline=false,cloudBusy=false,cloudSaveTimer=null,cloudLastError=null;
 const cloudDeleted={requests:new Set(),notifications:new Set(),clients:new Set()};
 try{
   fbApp=initializeApp(firebaseConfig);
@@ -1464,11 +1484,8 @@ try{
   }));
   cloudOnline=true;
 }catch(firebaseInitError){console.warn('Firebase init error',firebaseInitError);}
-const ADMIN={id:'admin',role:'admin',company:'M. KULCZYK',companyCode:'MK',name:'Mariusz Kulczyk',contact:'Mariusz Kulczyk',email:'contact@mkulczyk.pl',phone:'',login:'contact@mkulczyk.pl',accessCode:'123',language:'pl',vatEu:''};
-const defaults={admin:structuredClone(ADMIN),clients:[
-  {id:'testclient',role:'client',company:'Test Client',companyCode:'TC',vatEu:'',language:'pl',name:'Klient Testowy',contact:'Klient Testowy',email:'test@mkulczyk.pl',phone:'+48 500 100 100',login:'test',accessCode:'123'},
-  {id:'nordcargo',role:'client',company:'NordCargo',companyCode:'NC',vatEu:'',language:'pl',name:'Anna Nowak',contact:'Anna Nowak',email:'nord@mkulczyk.pl',phone:'+48 600 700 800',login:'nord',accessCode:'123'}
-],requests:[],notifications:[],notifyEmail:'contact@mkulczyk.pl',currency:'PLN',notifyBrowser:false};
+const ADMIN={id:'admin',role:'admin',company:'M. KULCZYK',companyCode:'MK',name:'Mariusz Kulczyk',contact:'Mariusz Kulczyk',email:'contact@mkulczyk.pl',phone:'',login:'contact@mkulczyk.pl',accessCode:'',language:'pl',vatEu:''};
+const defaults={admin:structuredClone(ADMIN),clients:[],requests:[],notifications:[],notifyEmail:'contact@mkulczyk.pl',currency:'PLN',notifyBrowser:false};
 const state={admin:structuredClone(defaults.admin),clients:structuredClone(defaults.clients),requests:[],notifications:[],notifyEmail:defaults.notifyEmail,currency:defaults.currency,notifyBrowser:false,current:null,view:'loads',lang:'pl'};
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -1554,14 +1571,13 @@ function countryMenuMarkup(){return `<div class="country-menu" data-country-menu
 
 function ensureDefaultClients(){
   state.admin={...structuredClone(defaults.admin),...(state.admin||{})};
-  const existing=new Set(state.clients.map(c=>c.id));
-  defaults.clients.forEach(def=>{if(!existing.has(def.id))state.clients.push(structuredClone(def));});
-  state.clients.forEach(c=>{const def=defaults.clients.find(x=>x.id===c.id)||{};c.role='client';c.login=c.login||def.login||c.email||c.id;c.accessCode=c.accessCode||def.accessCode||'123';c.companyCode=c.companyCode||def.companyCode||String(c.company||'KL').slice(0,2).toUpperCase();c.email=c.email||def.email||'';c.contact=c.contact||def.contact||c.name||'';c.name=c.name||def.name||c.contact||'';c.phone=c.phone||def.phone||'';c.vatEu=c.vatEu||def.vatEu||'';c.language=c.language||def.language||'pl';});
+  state.clients.forEach(c=>{c.role='client';c.login=c.email||c.login||c.id;c.accessCode='';c.companyCode=c.companyCode||String(c.company||'KL').slice(0,2).toUpperCase();c.email=c.email||'';c.contact=c.contact||c.name||'';c.name=c.name||c.contact||'';c.phone=c.phone||'';c.vatEu=c.vatEu||'';c.language=c.language||'pl';});
 }
-function localSnapshot(){return {admin:state.admin,clients:state.clients,requests:state.requests,notifications:state.notifications,notifyEmail:state.notifyEmail,currency:state.currency,lang:state.lang,notifyBrowser:state.notifyBrowser}}
-function saveLocal(){try{localStorage.setItem('mkLtlModelV44FirebaseBackup',JSON.stringify(localSnapshot()));localStorage.setItem('mkLtlModelV23',JSON.stringify(localSnapshot()));}catch(e){}}
+function localSnapshot(){return {notifyEmail:state.notifyEmail,currency:state.currency,lang:state.lang,notifyBrowser:state.notifyBrowser}}
+function clearOldLocalBackups(){try{['mkLtlModelV44FirebaseBackup','mkLtlModelV23','mkLtlModelV17','mkLtlModelV16','mkLtlModelV15'].forEach(k=>localStorage.removeItem(k));}catch(e){}}
+function saveLocal(){try{localStorage.setItem('mkPfeUiPrefs',JSON.stringify(localSnapshot()));clearOldLocalBackups();}catch(e){}}
 function plain(obj){return JSON.parse(JSON.stringify(obj||{}));}
-function loginAlias(v){const raw=String(v||'').trim();const key=normalizeLogin(raw);return ({test:'test@mkulczyk.pl',nord:'nord@mkulczyk.pl','nordcargo':'nord@mkulczyk.pl'}[key]||raw)}
+function loginAlias(v){return String(v||'').trim()}
 function isAdminEmail(email){return normalizeLogin(email)===normalizeLogin(ADMIN_EMAIL)}
 function setCurrentFromAuthEmail(email){
   const normalized=normalizeLogin(email||'');
@@ -1603,13 +1619,12 @@ async function loadCloudData(){
       ]);
       if(adminDoc.exists())state.admin={...state.admin,...adminDoc.data(),role:'admin'};
       if(settingsDoc.exists()){const x=settingsDoc.data();state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.notifyBrowser=Boolean(x.notifyBrowser);}
-      state.clients=clients.length?clients.map(c=>({...c,role:'client'})):structuredClone(defaults.clients);
+      state.clients=Array.isArray(clients)?clients.map(c=>({...c,role:'client',accessCode:''})):[];
       state.requests=Array.isArray(requests)?requests:[];
       state.notifications=Array.isArray(notifications)?notifications:[];
       ensureDefaultClients();
       state.current=state.admin;
       state.view='loads';
-      if(!clients.length)store();
     }else{
       const clients=await docsToArray(query(collection(fbDb,'clients'),where('email','==',fbAuth.currentUser.email||'')));
       const client=clients[0]||{id:'client_'+fbAuth.currentUser.uid,role:'client',company:fbAuth.currentUser.email||'Klient',companyCode:'KL',vatEu:'',language:'pl',name:fbAuth.currentUser.email||'Klient',contact:fbAuth.currentUser.email||'',email:fbAuth.currentUser.email||'',phone:'',login:fbAuth.currentUser.email||'',accessCode:''};
@@ -1625,16 +1640,17 @@ async function loadCloudData(){
   }catch(err){console.warn('Firebase load error',err);setCurrentFromAuthEmail(fbAuth?.currentUser?.email||'');return false;}
 }
 async function cloudSaveNow(){
-  if(!cloudOnline||!fbAuth?.currentUser||!fbDb||cloudBusy)return;
-  cloudBusy=true;
+  if(cloudBusy){await new Promise(resolve=>setTimeout(resolve,350));}
+  if(!cloudOnline||!fbAuth?.currentUser||!fbDb||cloudBusy){cloudLastError='Brak aktywnego połączenia Firebase.';return false;}
+  cloudBusy=true;cloudLastError=null;
   try{
     const email=normalizeLogin(fbAuth.currentUser.email||'');
     const isAdmin=isAdminEmail(email);
     const batch=writeBatch(fbDb);
     if(isAdmin){
-      batch.set(doc(fbDb,'admin','profile'),plain({...state.admin,role:'admin'}),{merge:true});
+      batch.set(doc(fbDb,'admin','profile'),plain({...state.admin,role:'admin',accessCode:''}),{merge:true});
       batch.set(doc(fbDb,'settings','global'),plain({notifyEmail:state.notifyEmail,currency:state.currency,notifyBrowser:state.notifyBrowser}),{merge:true});
-      state.clients.forEach(c=>batch.set(doc(fbDb,'clients',c.id),plain({...c,role:'client'}),{merge:true}));
+      state.clients.forEach(c=>batch.set(doc(fbDb,'clients',c.id),plain({...c,role:'client',login:c.email||c.login||'',accessCode:''}),{merge:true}));
       state.requests.forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
       state.notifications.forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
       cloudDeleted.requests.forEach(id=>batch.delete(doc(fbDb,'requests',id)));
@@ -1642,16 +1658,26 @@ async function cloudSaveNow(){
       cloudDeleted.clients.forEach(id=>batch.delete(doc(fbDb,'clients',id)));
     }else{
       state.requests.filter(r=>normalizeLogin(r.clientEmail||getClient(r.clientId)?.email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
-      state.notifications.filter(n=>normalizeLogin(n.clientEmail)===email).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
+      state.notifications.filter(n=>normalizeLogin(n.clientEmail)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL)).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
     }
     await batch.commit();
     cloudDeleted.requests.clear();cloudDeleted.notifications.clear();cloudDeleted.clients.clear();
-  }catch(err){console.warn('Firebase save error',err);}
+    return true;
+  }catch(err){cloudLastError=err;console.warn('Firebase save error',err);return false;}
   finally{cloudBusy=false;}
 }
-function store(){saveLocal();if(cloudSaveTimer)clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(cloudSaveNow,250);}
+async function storeCloudNow(successText='Zapisano na serwerze.'){
+  saveLocal();
+  if(cloudSaveTimer){clearTimeout(cloudSaveTimer);cloudSaveTimer=null;}
+  const ok=await cloudSaveNow();
+  if(ok&&successText)toast(successText);
+  if(!ok)toast('Nie zapisano na serwerze Firebase. Sprawdź logowanie albo reguły Firestore.');
+  return ok;
+}
+function store(){saveLocal();if(fbAuth?.currentUser&&fbDb){if(cloudSaveTimer)clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(cloudSaveNow,250);}}
 async function load(){
-  try{const raw=localStorage.getItem('mkLtlModelV44FirebaseBackup')||localStorage.getItem('mkLtlModelV23')||localStorage.getItem('mkLtlModelV17')||localStorage.getItem('mkLtlModelV16')||localStorage.getItem('mkLtlModelV15');const x=JSON.parse(raw);if(x){state.admin=x.admin||state.admin;state.clients=Array.isArray(x.clients)&&x.clients.length?x.clients:state.clients;state.requests=Array.isArray(x.requests)?x.requests:[];state.notifications=Array.isArray(x.notifications)?x.notifications:[];state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.lang=x.lang||state.lang;state.notifyBrowser=Boolean(x.notifyBrowser);state.requests.forEach(normalizeRequest)}}catch(e){}
+  try{const raw=localStorage.getItem('mkPfeUiPrefs');const x=JSON.parse(raw);if(x){state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.lang=x.lang||state.lang;state.notifyBrowser=Boolean(x.notifyBrowser);}}catch(e){}
+  clearOldLocalBackups();
   try{const urlLang=new URLSearchParams(location.search).get('lang');if(['pl','en','de'].includes(urlLang))state.lang=urlLang;}catch(e){}
   ensureDefaultClients();state.notifyEmail=state.notifyEmail||defaults.notifyEmail;
   const savedEmail=(()=>{try{return localStorage.getItem('mkFirebaseAuthEmail')||''}catch(e){return ''}})();
@@ -1697,24 +1723,18 @@ function accountMatches(account,login){const values=[account.login,account.email
 async function loginWithCode(){
   const loginRaw=String($('#loginEmail')?.value||'').trim();
   const code=String($('#loginCode')?.value||'').trim();
-  if(!loginRaw||!code){toast('Wpisz login i kod dostępu.');return}
+  if(!loginRaw||!code){toast('Wpisz e-mail i hasło Firebase.');return}
+  if(!cloudOnline||!fbAuth){toast('Logowanie wymaga połączenia z Firebase.');return}
   try{
-    if(cloudOnline&&fbAuth){
-      const cred=await signInWithEmailAndPassword(fbAuth,loginAlias(loginRaw),code);
-      const signedEmail=cred?.user?.email||loginAlias(loginRaw);
-      try{localStorage.setItem('mkFirebaseAuthEmail',signedEmail);}catch(e){}
-      setCurrentFromAuthEmail(signedEmail);
-      await loadCloudData();
-      setCurrentFromAuthEmail(signedEmail);
-      document.querySelector('#loginModal')?.remove();
-      render();toast('Zalogowano.');return;
-    }
-  }catch(err){console.warn('Firebase login error',err);toast('Nieprawidłowy login albo kod dostępu w Firebase.');return}
-  const login=normalizeLogin(loginRaw);
-  if(accountMatches(state.admin,login)&&code===state.admin.accessCode){state.current=state.admin;state.view='loads';try{localStorage.setItem('mkFirebaseAuthEmail',state.admin.email||state.admin.login||'')}catch(e){}render();return}
-  const client=state.clients.find(c=>accountMatches(c,login)&&String(c.accessCode||'123')===code);
-  if(client){state.current=client;state.view='loads';try{localStorage.setItem('mkFirebaseAuthEmail',client.email||client.login||'')}catch(e){}render();return}
-  toast('Nieprawidłowy login albo kod dostępu.');
+    const cred=await signInWithEmailAndPassword(fbAuth,loginAlias(loginRaw),code);
+    const signedEmail=cred?.user?.email||loginAlias(loginRaw);
+    try{localStorage.setItem('mkFirebaseAuthEmail',signedEmail);}catch(e){}
+    setCurrentFromAuthEmail(signedEmail);
+    await loadCloudData();
+    setCurrentFromAuthEmail(signedEmail);
+    document.querySelector('#loginModal')?.remove();
+    render();toast('Zalogowano.');return;
+  }catch(err){console.warn('Firebase login error',err);toast('Nieprawidłowy e-mail albo hasło Firebase.');return}
 }
 async function logout(){try{if(cloudOnline&&fbAuth)await signOut(fbAuth);}catch(e){}try{localStorage.removeItem('mkFirebaseAuthEmail')}catch(e){}authUser=null;state.current=null;render()}
 function sidebarLoadPlanner(){const lp=state.lang==='en'?'loadplanner-en.html':(state.lang==='de'?'loadplanner-de.html':'loadplanner.html');const br=state.lang==='en'?'barometr-en.html':(state.lang==='de'?'barometr-de.html':'barometr.html');return `<a class="sidebar-tool sidebar-loadplanner-placeholder sidebar-brand-loadplanner" href="${lp}" title="Load Planner 3D"><span class="sidebar-tool-icon">▧</span><div><b>Load Planner 3D</b></div></a><a class="sidebar-tool sidebar-barometer" href="${br}" title="Barometr"><span class="sidebar-tool-icon">◉</span><div><b>Barometr</b></div></a>`}
@@ -1984,32 +2004,32 @@ function adminRow(r){
 }
 function sortedClients(){
   const ui=tableUi.accounts,collator=new Intl.Collator('pl',{numeric:true,sensitivity:'base'});
-  const val=c=>({company:c.company||'',code:c.companyCode||'',vat:c.vatEu||'',contact:c.contact||c.name||'',email:c.email||'',language:c.language||'',login:c.login||'',accessCode:c.accessCode||''}[ui.key]||'');
+  const val=c=>({company:c.company||'',code:c.companyCode||'',vat:c.vatEu||'',contact:c.contact||c.name||'',email:c.email||'',language:c.language||''}[ui.key]||'');
   return [...state.clients].sort((a,b)=>collator.compare(String(val(a)),String(val(b)))*(ui.dir==='asc'?1:-1));
 }
 function accountSortHead(label,key){const ui=tableUi.accounts;return `<button type="button" data-account-sort-key="${key}">${esc(label)} ${ui.key===key?(ui.dir==='asc'?'↑':'↓'):''}</button>`}
 function renderClients(){
   const q=String(tableUi.accounts.query||'').trim().toLocaleLowerCase('pl-PL');
-  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.login,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>`<tr><td><b>${esc(c.company)}</b><br><span class="info">${esc(c.companyCode)}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td>${esc(c.email||'—')}<br><span class="info">login: ${esc(c.login||'—')}</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span></td><td>${esc(c.accessCode||'—')}</td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`).join('');
-  return layout(`<div class="head"><div><h1>Klienci i konta</h1><p>Admin może dodawać, edytować i usuwać profile klientów, VAT EU, język oraz kod dostępu profilu.</p></div><div class="account-actions"><button class="btn red" data-add-client>+ Dodaj konto</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie kont</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, login, e-mail…"></label><span class="info">Sortowanie działa po kliknięciu nagłówka.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail / login','email')}</th><th>${accountSortHead('Język','language')}</th><th>${accountSortHead('Kod dostępu','accessCode')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="7"><div class="empty">Brak kont dla tego wyszukiwania.</div></td></tr>`}</tbody></table></section>`);
+  const rows=sortedClients().filter(c=>!q||[c.company,c.companyCode,c.vatEu,c.contact,c.name,c.email,c.language].join(' ').toLocaleLowerCase('pl-PL').includes(q)).map(c=>`<tr><td><b>${esc(c.company||'—')}</b><br><span class="info">${esc(c.companyCode||'—')}</span></td><td>${esc(c.vatEu||'—')}</td><td>${esc(c.contact||c.name||'—')}<br><span class="info">${esc(c.phone||'')}</span></td><td>${esc(c.email||'—')}<br><span class="info">login Firebase = e-mail</span></td><td><span class="account-lang">${esc(String(c.language||'pl').toUpperCase())}</span></td><td><div class="account-actions-inline"><button class="btn small" data-edit-client="${esc(c.id)}">Edytuj</button><button class="btn danger small" data-delete-client="${esc(c.id)}">Usuń</button></div></td></tr>`).join('');
+  return layout(`<div class="head"><div><h1>Klienci i konta</h1><p>Profile klientów zapisują się w Firestore. Hasła i konta logowania są tylko w Firebase Authentication.</p></div><div class="account-actions"><button class="btn red" data-add-client>+ Dodaj profil klienta</button></div></div><section class="card"><div class="account-tools"><label class="table-search"><span>Wyszukiwanie kont</span><input type="search" data-account-search value="${esc(tableUi.accounts.query)}" placeholder="Firma, VAT, e-mail…"></label><span class="info">Dane klientów nie są już zapisywane w localStorage przeglądarki.</span></div><table class="account-table"><thead><tr><th>${accountSortHead('Firma / kod','company')}</th><th>${accountSortHead('VAT EU','vat')}</th><th>${accountSortHead('Osoba','contact')}</th><th>${accountSortHead('E-mail Firebase','email')}</th><th>${accountSortHead('Język','language')}</th><th>Operacje</th></tr></thead><tbody>${rows||`<tr><td colspan="6"><div class="empty">Brak profili klientów na serwerze.</div></td></tr>`}</tbody></table></section>`);
 }
 function openClientAddModal(){
   if(state.current?.role!=='admin'){loginModal();return}
   const id='client'+Date.now();
-  const c={id,role:'client',company:'Nowy klient',companyCode:'KL',vatEu:'',language:'pl',name:'',contact:'',email:'',phone:'',login:'',accessCode:'123'};
+  const c={id,role:'client',company:'Nowy klient',companyCode:'KL',vatEu:'',language:'pl',name:'',contact:'',email:'',phone:'',login:'',accessCode:''};
   state.clients.push(c);store();openClientEditModal(id);
 }
 function openClientEditModal(id){
   if(state.current?.role!=='admin'){loginModal();return}
   const c=state.clients.find(x=>x.id===id);if(!c)return;
   document.querySelector('.modal')?.remove();
-  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="clientEditModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Edytuj konto klienta</h2><p>Profil zapisuje się w Firestore. Konto logowania z tym samym e-mailem dodaj w Firebase Authentication.</p><div class="edit-form"><label>Firma<input id="clientCompany" value="${esc(c.company||'')}"></label><label>Kod klienta<input id="clientCode" maxlength="8" value="${esc(c.companyCode||'')}"></label><label>VAT EU<input id="clientVat" value="${esc(c.vatEu||'')}"></label><label>Język<select id="clientLanguage">${['pl','en','de'].map(x=>`<option value="${x}" ${String(c.language||'pl')===x?'selected':''}>${x.toUpperCase()}</option>`).join('')}</select></label><label>Osoba kontaktowa<input id="clientContact" value="${esc(c.contact||c.name||'')}"></label><label>Telefon<input id="clientPhone" value="${esc(c.phone||'')}"></label><label>E-mail<input id="clientEmail" type="email" value="${esc(c.email||'')}"></label><label>Login<input id="clientLogin" value="${esc(c.login||'')}"></label><label class="full">Kod dostępu / hasło Firebase<input id="clientAccessCode" value="${esc(c.accessCode||'')}" placeholder="Hasło ustawiasz też w Firebase Authentication"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-save-client="${esc(id)}">Zapisz konto</button></div></section></div>`);
+  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="clientEditModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Edytuj profil klienta</h2><p>Profil zapisuje się w Firestore. Hasło i konto logowania dodajesz osobno w Firebase Authentication → Users na ten sam e-mail.</p><div class="edit-form"><label>Firma<input id="clientCompany" value="${esc(c.company||'')}"></label><label>Kod klienta<input id="clientCode" maxlength="8" value="${esc(c.companyCode||'')}"></label><label>VAT EU<input id="clientVat" value="${esc(c.vatEu||'')}"></label><label>Język<select id="clientLanguage">${['pl','en','de'].map(x=>`<option value="${x}" ${String(c.language||'pl')===x?'selected':''}>${x.toUpperCase()}</option>`).join('')}</select></label><label>Osoba kontaktowa<input id="clientContact" value="${esc(c.contact||c.name||'')}"></label><label>Telefon<input id="clientPhone" value="${esc(c.phone||'')}"></label><label class="full">E-mail Firebase<input id="clientEmail" type="email" value="${esc(c.email||'')}"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-save-client="${esc(id)}">Zapisz profil</button></div></section></div>`);
 }
-function saveClientAccount(id){
+async function saveClientAccount(id){
   if(state.current?.role!=='admin'){loginModal();return}
   const c=state.clients.find(x=>x.id===id);if(!c)return;
-  c.company=$('#clientCompany')?.value.trim()||c.company;c.companyCode=($('#clientCode')?.value.trim()||c.companyCode).toUpperCase();c.vatEu=$('#clientVat')?.value.trim()||'';c.language=$('#clientLanguage')?.value||'pl';c.contact=$('#clientContact')?.value.trim()||'';c.name=c.contact;c.phone=$('#clientPhone')?.value.trim()||'';c.email=$('#clientEmail')?.value.trim()||'';c.login=$('#clientLogin')?.value.trim()||c.email||c.companyCode||c.id;c.accessCode=$('#clientAccessCode')?.value.trim()||'123';
-  store();document.querySelector('#clientEditModal')?.remove();render();toast('Konto klienta zapisane.');
+  c.company=$('#clientCompany')?.value.trim()||c.company;c.companyCode=($('#clientCode')?.value.trim()||c.companyCode).toUpperCase();c.vatEu=$('#clientVat')?.value.trim()||'';c.language=$('#clientLanguage')?.value||'pl';c.contact=$('#clientContact')?.value.trim()||'';c.name=c.contact;c.phone=$('#clientPhone')?.value.trim()||'';c.email=$('#clientEmail')?.value.trim()||'';c.login=c.email;c.accessCode='';
+  document.querySelector('#clientEditModal')?.remove();render();await storeCloudNow('Profil klienta zapisany na serwerze.');
 }
 function openDeleteClientModal(id){
   if(state.current?.role!=='admin'){loginModal();return}
@@ -2018,17 +2038,17 @@ function openDeleteClientModal(id){
   document.querySelector('.modal')?.remove();
   document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="deleteClientModal"><section class="modal-card delete-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Usunąć konto klienta?</h2><p>Usuniesz profil klienta <b>${esc(c.company||c.email||id)}</b> z listy „Klienci i konta”.</p><p class="account-delete-note">To usuwa profil zapisany w Firestore. Jeżeli konto logowania ma zniknąć całkowicie, usuń również tego użytkownika w Firebase → Authentication → Users.</p>${linked?`<p class="account-delete-note">Uwaga: klient ma ${linked} zapytań w systemie. Zapytania pozostają w bazie i archiwum.</p>`:''}<div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn danger" data-confirm-delete-client="${esc(id)}">Usuń profil</button></div></section></div>`);
 }
-function confirmDeleteClient(id){
+async function confirmDeleteClient(id){
   if(state.current?.role!=='admin'){loginModal();return}
   const c=state.clients.find(x=>x.id===id);if(!c)return;
   cloudDeleted.clients.add(id);
   state.clients=state.clients.filter(x=>x.id!==id);
-  store();document.querySelector('#deleteClientModal')?.remove();render();toast('Profil klienta usunięty. Użytkownika Auth usuń w Firebase, jeśli ma stracić login.');
+  document.querySelector('#deleteClientModal')?.remove();render();await storeCloudNow('Profil klienta usunięty z serwera. Użytkownika Auth usuń w Firebase, jeśli ma stracić login.');
 }
 function renderProfile(){
   const c=state.current||{};
   const role=c.role==='admin'?'Administrator / M.Kulczyk':'Klient';
-  const rows=[['Profil',role],['Firma',c.company||'—'],['Osoba',c.name||c.contact||'—'],['E-mail',c.email||'—'],['Telefon',c.phone||'—'],['Kod klienta',c.companyCode||'—'],['Kod dostępu',c.accessCode||'123']];
+  const rows=[['Profil',role],['Firma',c.company||'—'],['Osoba',c.name||c.contact||'—'],['E-mail',c.email||'—'],['Telefon',c.phone||'—'],['Kod klienta',c.companyCode||'—']];
   const addUser=c.role==='client'?`<div class="profile-tile profile-add-user"><div><span>Użytkownicy</span><b>Dodaj użytkownika</b></div><button class="btn red" data-add-user-info>Dodaj użytkownika</button></div>`:'';
   const editBtn=c.role==='admin'?`<button class="btn red" data-edit-profile>Edytuj</button>`:'';
   return layout(`<div class="head"><div><h1>Profil</h1><p>Dane konta używane w panelu i w szablonach wiadomości.</p></div><div class="profile-head-actions"><button class="btn" data-nav="loads">Wróć do listy</button>${editBtn}</div></div><section class="card profile-card"><div class="profile-grid">${rows.map(([k,v])=>`<div class="profile-tile"><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}${addUser}</div></section>`)
@@ -2036,12 +2056,12 @@ function renderProfile(){
 function openProfileEditModal(){
   const c=state.admin;
   document.querySelector('.modal')?.remove();
-  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="profileEditModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Edytuj profil admina</h2><p>Kod dostępu jest nazwany kodem, nie hasłem. Domyślnie ustawiony jest 123, później możesz go zmienić.</p><div class="edit-form"><label>Firma<input id="adminCompany" value="${esc(c.company||'')}"></label><label>Kod klienta<input id="adminCompanyCode" value="${esc(c.companyCode||'MK')}"></label><label>Osoba<input id="adminName" value="${esc(c.name||c.contact||'')}"></label><label>Telefon<input id="adminPhone" value="${esc(c.phone||'')}"></label><label>E-mail / login<input id="adminEmail" type="email" value="${esc(c.email||'contact@mkulczyk.pl')}"></label><label>Kod dostępu<input id="adminAccessCode" value="${esc(c.accessCode||'123')}"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-save-profile>Zapisz profil</button></div></section></div>`);
+  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="profileEditModal"><section class="modal-card edit-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Edytuj profil admina</h2><p>Hasło administratora zmieniasz wyłącznie w Firebase Authentication.</p><div class="edit-form"><label>Firma<input id="adminCompany" value="${esc(c.company||'')}"></label><label>Kod klienta<input id="adminCompanyCode" value="${esc(c.companyCode||'MK')}"></label><label>Osoba<input id="adminName" value="${esc(c.name||c.contact||'')}"></label><label>Telefon<input id="adminPhone" value="${esc(c.phone||'')}"></label><label class="full">E-mail Firebase<input id="adminEmail" type="email" value="${esc(c.email||'contact@mkulczyk.pl')}"></label></div><div class="modal-actions"><button class="btn" data-close-modal>Anuluj</button><button class="btn red" data-save-profile>Zapisz profil</button></div></section></div>`);
 }
 function saveProfile(){
-  const a=state.admin;a.company=$('#adminCompany')?.value.trim()||a.company;a.companyCode=($('#adminCompanyCode')?.value.trim()||'MK').toUpperCase();a.name=$('#adminName')?.value.trim()||a.name;a.contact=a.name;a.phone=$('#adminPhone')?.value.trim()||'';a.email=$('#adminEmail')?.value.trim()||'contact@mkulczyk.pl';a.login=a.email;a.accessCode=$('#adminAccessCode')?.value.trim()||'123';
+  const a=state.admin;a.company=$('#adminCompany')?.value.trim()||a.company;a.companyCode=($('#adminCompanyCode')?.value.trim()||'MK').toUpperCase();a.name=$('#adminName')?.value.trim()||a.name;a.contact=a.name;a.phone=$('#adminPhone')?.value.trim()||'';a.email=$('#adminEmail')?.value.trim()||'contact@mkulczyk.pl';a.login=a.email;a.accessCode='';
   if(state.current?.role==='admin')state.current=state.admin;
-  store();document.querySelector('#profileEditModal')?.remove();render();toast('Profil admina zapisany.');
+  document.querySelector('#profileEditModal')?.remove();render();storeCloudNow('Profil admina zapisany na serwerze.');
 }
 function openAddUserInfo(){
   document.querySelector('.modal')?.remove();
@@ -2050,8 +2070,8 @@ function openAddUserInfo(){
 function renderSettings(){
   const currencies=['PLN','EUR','GBP'];
   const unread=unreadNotifications();
-  const notes=state.notifications.length?state.notifications.map(n=>`<div class="notification-item ${n.read?'read':''}"><div><b>${esc(n.kind)} ${n.code?`· ${esc(n.code)}`:''}</b><span>${esc(formatRegisteredAt(n.createdAt))} · ${esc(n.client||'')} ${n.details?`· ${esc(n.details)}`:''}</span></div></div>`).join(''):`<div class="notification-empty">${esc(ui('noNotifications'))}</div>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Adres alertów administratora: ${esc(state.notifyEmail||defaults.notifyEmail)}.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="powiadomienia@mkulczyk.pl" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> ${esc(ui('browserNotify'))}</label></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-mail>${esc(ui('testEmail'))}</button></div></div></form><p class="settings-note"><b>Firebase:</b> zapytania, statusy, archiwum, klienci i powiadomienia zapisują się w Firestore. Prawdziwy e-mail automatyczny wymaga później Cloud Functions albo rozszerzenia Trigger Email.</p></section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
+  const notes=state.notifications.length?state.notifications.map(n=>`<div class="notification-item ${n.read?'read':''} ${n.priority==='high'?'high':''}"><div><b>${esc(n.kind)} ${n.code?`· ${esc(n.code)}`:''}</b><span>${esc(formatRegisteredAt(n.createdAt))} · ${esc(n.client||'')} ${n.details?`· ${esc(n.details)}`:''} · ${esc(n.targetEmail||'contact@mkulczyk.pl')}</span></div></div>`).join(''):`<div class="notification-empty">${esc(ui('noNotifications'))}</div>`;
+  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Adres alertów administratora: ${esc(state.notifyEmail||defaults.notifyEmail)}.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="powiadomienia@mkulczyk.pl" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> ${esc(ui('browserNotify'))}</label></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-mail>${esc(ui('testEmail'))}</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> ważne akcje klientów zapisują się dla contact@mkulczyk.pl w centrum powiadomień administratora i odświeżają się automatycznie. Prawdziwy automatyczny e-mail wymaga później Cloud Functions albo rozszerzenia Trigger Email.</p></section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
@@ -2109,10 +2129,26 @@ function validatePointAgainstRoute(r,kind,p){
 }
 
 
-function addNotification(kind,r,details=''){
+function addNotification(kind,r,details='',priority='high'){
   const c=getClient(r?.clientId)||{};
-  const item={id:'n'+Date.now()+Math.random().toString(16).slice(2),createdAt:new Date().toISOString(),kind,requestId:r?.id||'',code:r?.code||'',client:c.company||'',clientEmail:c.email||r?.clientEmail||'',targetEmail:state.notifyEmail||defaults.notifyEmail,details,read:false};
-  state.notifications.unshift(item);state.notifications=state.notifications.slice(0,80);store();
+  const target='contact@mkulczyk.pl';
+  const item={
+    id:'n'+Date.now()+Math.random().toString(16).slice(2),
+    createdAt:new Date().toISOString(),
+    kind,
+    requestId:r?.id||'',
+    code:r?.code||'',
+    client:c.company||'',
+    clientEmail:c.email||r?.clientEmail||'',
+    targetEmail:target,
+    details,
+    priority,
+    read:false
+  };
+  state.notifyEmail=target;
+  state.notifications.unshift(item);
+  state.notifications=state.notifications.slice(0,120);
+  store();
   if(state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
     try{new Notification(kind,{body:`${item.client||'Klient'} · ${item.code||''}${details?' · '+details:''}`});}catch(e){}
   }
@@ -2148,7 +2184,7 @@ setInterval(refreshAdminBoard,45000);
 
 function requestBrowserNotifications(){if(!('Notification' in window)){toast('Ta przeglądarka nie obsługuje powiadomień systemowych.');return}Notification.requestPermission().then(p=>{state.notifyBrowser=p==='granted';store();render();toast(state.notifyBrowser?'Powiadomienia systemowe włączone.':'Powiadomienia systemowe nie zostały włączone.');})}
 function demoNotifyAdmin(r,kind='Nowe zapytanie'){const to=(state.notifyEmail||'').trim();if(!to){toast('W ustawieniach wpisz e-mail do powiadomień administratora.');return}const c=getClient(r.clientId)||{};const subject=`${kind}: ${r.code||''}`;const body=`${kind}\n\nNumer: ${r.code||''}\nKlient: ${c.company||''}\nZaładunek: ${routeSummary(r.loads||[])}\nRozładunek: ${routeSummary(r.unloads||[])}\nWymagania: ${requirementsText(r)||'brak'}\nNotatka klienta: ${r.clientNote||'brak'}\nBudżet: ${r.budget||'brak'} ${r.currency||state.currency}`;window.location.href=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;toast('Otworzono próbne powiadomienie. Wyślij je z programu pocztowego.')} 
-function updateRequest(id){draftFromRow(id);const r=state.requests.find(x=>x.id===id);if(!r)return;const missing=[];if(!r.loads.length)missing.push('załadunek');if(!r.unloads.length)missing.push('rozładunek');if(!String(r.ldm||'').trim()&&!String(r.notes||'').trim())missing.push('LDM albo lista ładunkowa');if(String(r.weight||'').trim()==='')missing.push('waga');if(!r.access)missing.push('dostęp');if(missing.length){toast(`Uzupełnij pola wymagane: ${missing.join(', ')}.`);return}const dateError=validateRouteDates(r);if(dateError){toast(dateError);return}r.editing=false;r.submitted=true;r.status='waiting';normalizeRequest(r);addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');store();render();demoNotifyAdmin(r,'Nowe zapytanie')} 
+async function updateRequest(id){draftFromRow(id);const r=state.requests.find(x=>x.id===id);if(!r)return;const missing=[];if(!r.loads.length)missing.push('załadunek');if(!r.unloads.length)missing.push('rozładunek');if(!String(r.ldm||'').trim()&&!String(r.notes||'').trim())missing.push('LDM albo lista ładunkowa');if(String(r.weight||'').trim()==='')missing.push('waga');if(!r.access)missing.push('dostęp');if(missing.length){toast(`Uzupełnij pola wymagane: ${missing.join(', ')}.`);return}const dateError=validateRouteDates(r);if(dateError){toast(dateError);return}r.editing=false;r.submitted=true;r.status='waiting';normalizeRequest(r);addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.')} 
 function clientNeedsDeleteReason(r){return state.current?.role==='client'&&['searching','offer','accepted'].includes(r.status)}
 function openDeleteModal(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
@@ -2166,18 +2202,18 @@ function deleteReasonFromModal(){
   if(picked==='Inne')return String($('#deleteOtherReason')?.value||'Inne').trim()||'Inne';
   return picked;
 }
-function archiveRequest(id,reason=''){
+async function archiveRequest(id,reason=''){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   const prev=r.status||'waiting';
   r.archivedFrom=prev;r.archiveReason=reason||'Usunięto z listy';r.archivedAt=new Date().toISOString();r.archivedBy=state.current?.role||'user';
   r.status='archived';r.archiveNoticeConfirmed=false;r.budgetProposalPending=false;
   if(r.archivedBy==='client')addNotification('Klient przeniósł zapytanie do archiwum',r,`Powód: ${r.archiveReason||'nie podano'}`);
-  store();document.querySelector('#deleteModal')?.remove();render();toast('Pozycja przeniesiona do archiwum.');
+  document.querySelector('#deleteModal')?.remove();render();await storeCloudNow('Pozycja przeniesiona do archiwum na serwerze.');
 }
-function permanentlyDeleteRequest(id){
+async function permanentlyDeleteRequest(id){
   cloudDeleted.requests.add(id);
   state.requests=state.requests.filter(r=>r.id!==id);
-  store();document.querySelector('#deleteModal')?.remove();render();toast('Pozycja trwale usunięta z archiwum.');
+  document.querySelector('#deleteModal')?.remove();render();await storeCloudNow('Pozycja trwale usunięta z serwera.');
 }
 function confirmDeleteRequest(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
@@ -2318,12 +2354,12 @@ function openRequestWizard(id){
   document.body.insertAdjacentHTML('beforeend',html);setWizardStep(1);
 }
 function closeRequestWizard(id){const r=state.requests.find(x=>x.id===id);if(r?.isNewDraft&&!r.submitted)state.requests=state.requests.filter(x=>x.id!==id);store();$('#requestWizard')?.remove();render();}
-function saveRequestWizard(id){
+async function saveRequestWizard(id){
   if(!validateWizardStep(1)||!validateWizardStep(2))return;
   const r=state.requests.find(x=>x.id===id);if(!r)return;const data=getWizardData();
   Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',budgetProposalPending:false});
   if(!r.requirements.includes('temperature')){r.tempMin='';r.tempMax=''}
-  addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');store();$('#requestWizard')?.remove();render();toast('Zapytanie zapisane. Status: Oczekujące.');
+  addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');$('#requestWizard')?.remove();render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.');
 }
 function openRouteModal(id,kind){
   draftFromRow(id);
@@ -2359,31 +2395,32 @@ function openBudgetModal(id){
   document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="budgetModal"><section class="modal-card budget-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Zaproponuj cenę</h2><p>Klient otrzyma wyłącznie nową cenę i walutę do potwierdzenia.</p><div class="budget-modal-fields"><label>Cena<input id="proposalBudget" inputmode="decimal" autofocus placeholder="np. 1800" value="${esc(r.status==='counter'?(r.clientProposal||''):(r.budget||''))}"></label><label>Waluta<select id="proposalCurrency">${currs.map(x=>`<option ${(r.status==='counter'?(r.clientProposalCurrency||r.currency):r.currency)===x?'selected':''}>${x}</option>`).join('')}</select></label></div><div class="modal-actions"><button class="btn red" data-submit-budget-proposal="${esc(id)}">Wyślij cenę do klienta</button></div></section></div>`);
 }
 function proposeBudget(id){openBudgetModal(id);return true}
-function submitBudgetProposal(id){
+async function submitBudgetProposal(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   const budget=$('#proposalBudget')?.value.trim()||'';
   const currency=$('#proposalCurrency')?.value||state.currency;
   if(!budget){toast('Wpisz cenę przed wysłaniem propozycji.');return}
   r.budget=budget;r.currency=currency;r.status='budget';r.budgetProposalPending=true;r.clientProposal='';r.clientProposalCurrency=currency;
-  store();document.querySelector('#budgetModal')?.remove();render();toast('Cena została wysłana klientowi do potwierdzenia.');
+  document.querySelector('#budgetModal')?.remove();render();await storeCloudNow('Cena została zapisana na serwerze i wysłana klientowi do potwierdzenia.');
 }
-function acceptBudget(id){
+async function acceptBudget(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   r.status='budgetAccepted';r.budgetProposalPending=false;
-  addNotification('Klient potwierdził cenę',r,`${r.budget||''} ${r.currency||state.currency}`);
-  store();render();toast('Cena potwierdzona. Spedytor może rozpocząć przygotowanie oferty.');
+  addNotification('Klient potwierdził budżet',r,`${r.budget||''} ${r.currency||state.currency}`);
+  render();await storeCloudNow('Cena potwierdzona i zapisana na serwerze.');
 }
-function confirmBudget(id){
+async function confirmBudget(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   if(!String(r.budget||'').trim()){openBudgetModal(id);return}
   r.status='searching';r.budgetProposalPending=false;
-  store();render();toast('Budżet potwierdzony. Status: Oferta w przygotowaniu.');
+  if(state.current?.role==='client')addNotification('Klient potwierdził budżet',r,`${r.budget||''} ${r.currency||state.currency}`);
+  render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.');
 }
-function declineBudgetProposal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.budgetProposalPending=false;if(state.current?.role==='client')addNotification('Klient odrzucił propozycję ceny',r,`${r.budget||''} ${r.currency||state.currency}`);store();render();toast('Propozycja ceny została odrzucona.')} 
+async function declineBudgetProposal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.budgetProposalPending=false;if(state.current?.role==='client')addNotification('Klient odrzucił propozycję ceny',r,`${r.budget||''} ${r.currency||state.currency}`);render();await storeCloudNow('Odrzucenie ceny zapisane na serwerze.')} 
 function openCounterBudgetModal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;document.querySelector('.modal')?.remove();document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="counterBudgetModal"><section class="modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Proponowana cena</h2><p>Podaj własną propozycję. Spedytor zobaczy ją jako negocjację ceny.</p><div class="point-form"><label>Cena<input id="counterBudget" inputmode="decimal" value="${esc(r.budget||'')}"></label><label>Waluta<select id="counterCurrency">${['PLN','EUR','GBP'].map(x=>`<option ${r.currency===x?'selected':''}>${x}</option>`).join('')}</select></label></div><div class="modal-actions"><button class="btn red" data-submit-counter="${esc(id)}">Wyślij propozycję</button></div></section></div>`) }
-function submitCounterBudget(id){const r=state.requests.find(x=>x.id===id);if(!r)return;const budget=$('#counterBudget')?.value.trim()||'';const currency=$('#counterCurrency')?.value||state.currency;if(!budget){toast('Wpisz proponowaną cenę.');return}r.clientProposal=budget;r.clientProposalCurrency=currency;r.status='counter';r.budgetProposalPending=false;addNotification('Klient zaproponował własną cenę',r,`${budget} ${currency}`);store();document.querySelector('#counterBudgetModal')?.remove();render();toast('Propozycja klienta została wysłana do spedytora.')} 
-function approveCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.budget=r.clientProposal||r.budget;r.currency=r.clientProposalCurrency||r.currency;r.clientProposal='';r.clientProposalCurrency=r.currency;r.status='searching';r.budgetProposalPending=false;store();render();toast('Budżet potwierdzony. Status: Oferta w przygotowaniu.')} 
-function declineCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.budgetProposalPending=false;store();render();toast('Negocjacja ceny została odrzucona.')}
+async function submitCounterBudget(id){const r=state.requests.find(x=>x.id===id);if(!r)return;const budget=$('#counterBudget')?.value.trim()||'';const currency=$('#counterCurrency')?.value||state.currency;if(!budget){toast('Wpisz proponowaną cenę.');return}r.clientProposal=budget;r.clientProposalCurrency=currency;r.status='counter';r.budgetProposalPending=false;addNotification('Klient zaproponował drugi budżet',r,`${budget} ${currency}`);document.querySelector('#counterBudgetModal')?.remove();render();await storeCloudNow('Drugi budżet zapisany na serwerze i widoczny dla spedytora.')} 
+async function approveCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.budget=r.clientProposal||r.budget;r.currency=r.clientProposalCurrency||r.currency;r.clientProposal='';r.clientProposalCurrency=r.currency;r.status='searching';r.budgetProposalPending=false;render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.')} 
+async function declineCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.budgetProposalPending=false;render();await storeCloudNow('Negocjacja ceny odrzucona i zapisana na serwerze.')}
 function setOfferSent(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='offer';r.budgetProposalPending=false;store();render();toast('Status zmieniony: Oferta wysłana.');}
 function startRealisation(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='accepted';r.budgetProposalPending=false;store();render();toast('Status zmieniony: W realizacji.');}
 function formatOfferPoint(p,lang='pl'){
@@ -2467,13 +2504,13 @@ function openStatusModal(id){
   document.querySelector('.modal')?.remove();
   document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="statusModal"><section class="modal-card status-modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Zmień status</h2><p>${esc(r.code||'')}</p><label>Status<select id="adminStatusChoice">${allowed.map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${statusLabel(s)}</option>`).join('')}</select></label><div class="modal-actions"><button class="btn red" data-save-status="${esc(id)}">Zapisz status</button></div></section></div>`);
 }
-function setAdminStatus(id,status){
+async function setAdminStatus(id,status){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   if(status==='archived'&&r.status!=='archived'){r.archivedFrom=r.status;r.archiveReason='Przeniesiono do archiwum przez admina';r.archivedAt=new Date().toISOString();r.archivedBy='admin';r.archiveNoticeConfirmed=true;}
   if(status!=='archived'){r.archiveNoticeConfirmed=false;}
   r.status=status;r.budgetProposalPending=status==='budget'&&Boolean(String(r.budget||'').trim());
   if(status!=='budget')r.budgetProposalPending=false;
-  store();document.querySelector('#statusModal')?.remove();render();toast(`Status zmieniony: ${statusLabel(status)}.`);
+  document.querySelector('#statusModal')?.remove();render();await storeCloudNow(`Status zapisany na serwerze: ${statusLabel(status)}.`);
 }
 function testMail(){const sample={code:'TEST-001',clientId:state.clients[0]?.id,loads:[],unloads:[],budget:'',currency:state.currency};demoNotifyAdmin(sample,'Próba powiadomienia')} 
 
@@ -2501,7 +2538,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)r
 document.addEventListener('input',e=>{if(e.target.matches('[data-table-search]')){const role=e.target.dataset.tableSearch;tableUi[role].query=e.target.value;applyTableSearch(role,e.target.value);return}if(e.target.matches('[data-account-search]')){const pos=e.target.selectionStart||0;tableUi.accounts.query=e.target.value;render();setTimeout(()=>{const el=document.querySelector('[data-account-search]');if(el){el.focus();try{el.setSelectionRange(pos,pos)}catch(e){}}},0);return}if(e.target.matches('[data-country-input]')){const raw=e.target.value.toUpperCase();if(e.target.value!==raw)e.target.value=raw;openCountryMenu(e.target);return}if(e.target.id==='routePostalCity'){const raw=e.target.value;const upper=raw.toUpperCase();if(raw!==upper)e.target.value=upper;}if(e.target.matches('[data-point-field="postal"]')){const raw=e.target.value;const upper=raw.toUpperCase();if(raw!==upper)e.target.value=upper;}if(e.target.matches('#wizAccessGroup input')){$('#wizAccessGroup')?.classList.remove('wizard-field-error')}if(e.target.closest('#requestWizard')&&e.target.matches('[data-point-field],#wizLdm,#wizNotes,#wizWeight,#wizAccessGroup input')){e.target.classList.remove('wizard-field-error');const card=e.target.closest('.wizard-point-card');if(card&&!card.querySelector('.wizard-field-error'))card.classList.remove('wizard-card-error');}updateFieldColour(e.target)});
 document.addEventListener('focusin',e=>{if(e.target.matches('[data-country-input]'))openCountryMenu(e.target);},true);
 document.addEventListener('change',e=>{if(e.target.matches('[data-point-field="country"]')){const code=normalizeCountryCode(e.target.value);if(code)e.target.value=code;}if(e.target.matches('[data-temp-toggle]')){$('#tempRange')?.classList.toggle('hidden',!e.target.checked)}if(e.target.dataset.adminStatus){setAdminStatus(e.target.dataset.adminStatus,e.target.value);return}updateFieldColour(e.target)});document.addEventListener('focusin',e=>{if(e.target.id==='wizLdm')e.target.value=normalizedLdm(e.target.value);},true);document.addEventListener('focusout',e=>{if(e.target.matches('[data-point-field="country"]')){const code=normalizeCountryCode(e.target.value);if(code)e.target.value=code;}if(e.target.id==='wizLdm')e.target.value=ldmDisplay(e.target.value);},true);
-document.addEventListener('submit',e=>{if(e.target.id==='accessLoginForm'){e.preventDefault();loginWithCode();return}if(e.target.id==='settingsForm'){e.preventDefault();state.notifyEmail=$('#notifyEmail').value.trim();state.currency=$('#defaultCurrency').value||'PLN';state.notifyBrowser=Boolean($('#notifyBrowser')?.checked);store();render();toast('Ustawienia zapisane.')}});
+document.addEventListener('submit',e=>{if(e.target.id==='accessLoginForm'){e.preventDefault();loginWithCode();return}if(e.target.id==='settingsForm'){e.preventDefault();state.notifyEmail=$('#notifyEmail').value.trim();state.currency=$('#defaultCurrency').value||'PLN';state.notifyBrowser=Boolean($('#notifyBrowser')?.checked);render();storeCloudNow('Ustawienia zapisane na serwerze.')}});
 await load();render();
 })();
 
