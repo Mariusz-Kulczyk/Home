@@ -2150,8 +2150,8 @@ async function cloudSaveNow(){
   try{
     const email=normalizeLogin(fbAuth.currentUser.email||'');
     const isAdmin=isAdminEmail(email);
-    const batch=writeBatch(fbDb);
     if(isAdmin){
+      const batch=writeBatch(fbDb);
       normalizeClientDirectory(true);
       batch.set(doc(fbDb,'admin','profile'),cleanAdminForSave(state.admin),{merge:true});
       batch.set(doc(fbDb,'settings','global'),plain({notifyEmail:state.notifyEmail,currency:state.currency,notifyBrowser:state.notifyBrowser}),{merge:true});
@@ -2161,13 +2161,22 @@ async function cloudSaveNow(){
       cloudDeleted.requests.forEach(id=>batch.delete(doc(fbDb,'requests',id)));
       cloudDeleted.notifications.forEach(id=>batch.delete(doc(fbDb,'notifications',id)));
       cloudDeleted.clients.forEach(id=>batch.delete(doc(fbDb,'clients',id)));
+      await batch.commit();
     }else{
       const currentClient=ensureCurrentClientIdentity();
-      if(currentClient)batch.set(doc(fbDb,'clients',email),cleanClientForSave({...currentClient,id:email,ownerUid:fbAuth.currentUser.uid||''}),{merge:true});
-      state.requests.filter(r=>normalizeLogin(r.clientEmail||getClientForRequest(r)?.email||email)===email).forEach(r=>batch.set(doc(fbDb,'requests',r.id),prepareOwnedRequestForSave(r),{merge:true}));
-      state.notifications.filter(n=>normalizeLogin(n.clientEmail||email)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL)).forEach(n=>batch.set(doc(fbDb,'notifications',n.id),prepareOwnedNotificationForSave(n),{merge:true}));
+      if(!currentClient){cloudLastError='Brak profilu klienta dla tego e-maila.';return false;}
+      const ownedRequests=state.requests.filter(r=>(r.submitted||!r.isNewDraft)&&normalizeLogin(r.clientEmail||getClientForRequest(r)?.email||email)===email);
+      for(const r of ownedRequests){
+        await setDoc(doc(fbDb,'requests',r.id),prepareOwnedRequestForSave(r),{merge:true});
+      }
+      const ownedNotifications=state.notifications.filter(n=>normalizeLogin(n.clientEmail||email)===email||normalizeLogin(n.targetEmail)===normalizeLogin(ADMIN_EMAIL));
+      for(const n of ownedNotifications){
+        try{await setDoc(doc(fbDb,'notifications',n.id),prepareOwnedNotificationForSave(n),{merge:true});}
+        catch(e){console.warn('Firebase notification save skipped',e);}
+      }
+      try{await setDoc(doc(fbDb,'clients',email),{lastLoginAt:new Date().toISOString(),ownerUid:fbAuth.currentUser.uid||'',email,login:email,role:'client'},{merge:true});}
+      catch(e){console.warn('Firebase client last-login save skipped',e);}
     }
-    await batch.commit();
     cloudDeleted.requests.clear();cloudDeleted.notifications.clear();cloudDeleted.clients.clear();
     return true;
   }catch(err){cloudLastError=err;console.warn('Firebase save error',err);return false;}
