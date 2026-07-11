@@ -1718,6 +1718,12 @@ body{
 .table-card table.v144-list.admin-list .admin-actions .btn.small,.table-card table.v144-list.admin-list .admin-actions .email-action-tile,.table-card table.v144-list.admin-list .priority-select{min-width:58px!important;max-width:100%!important}
 .table-card table.v144-list.admin-list .admin-actions .counter-note{width:100%!important;white-space:normal!important;text-align:center!important}
 .table-toolbar .archive-toggle{order:1}.table-toolbar .table-sort-actions{order:2}.table-toolbar .export-chip{order:3}
+
+/* V167 — klient: dźwięk, miganie karty i czerwony bok dla nowych zmian */
+.request-row.row-new-client td{background:#fff8f8!important;border-top:2px solid #e31e24!important;border-bottom:2px solid #e31e24!important}
+.request-row.row-new-client td:first-child{box-shadow:inset 9px 0 0 #e31e24!important;border-left:2px solid #e31e24!important}
+.request-row.row-new-client td:last-child{border-right:2px solid #e31e24!important}
+.request-row.row-new-client .code{color:#b3131b!important;font-weight:950!important}
 </style>
 </head>
 <body>
@@ -2608,6 +2614,15 @@ function statusTag(r,admin=false){
     ?`<button type="button" class="status-tag ${esc(r.status)} status-trigger" data-open-status="${esc(r.id)}" aria-label="${esc(state.lang==='en'?'Change status: ':state.lang==='de'?'Status ändern: ':'Zmień status: ')}${esc(label)}">${esc(label)}</button>`
     :`<span class="client-status-wrap"><span class="status-tag ${esc(r.status)}" title="${esc(clientStatusTooltip(r))}">${esc(label)}</span><small>${esc(clientStatusShort(r))}</small></span>`;
 }
+
+function clientNeedsAttention(r){
+  return Boolean(
+    (r.clientStatusNotice&&!r.clientStatusNoticeAck) ||
+    (r.clientRejectionNote&&!r.clientRejectionAck) ||
+    r.budgetProposalPending ||
+    r.status==='budget'
+  );
+}
 function clientFaqHtml(){return '';}
 function renderDashboard(){
   const active=state.requests.filter(r=>isCurrentSidebarRequest(r));
@@ -2626,6 +2641,11 @@ function renderClient(){
   const mine=state.requests.filter(r=>normalizeLogin(r.clientEmail||'')===normalizeLogin(c.email||'')||r.clientId===c.id);
   const showRecurring=state.view==='recurring';
   const source=sortedRequests(clientScopeRows(mine.filter(r=>showRecurring?Boolean(r.recurring):!r.recurring)),'client');
+  const clientAttention=source.filter(clientNeedsAttention).length;
+  if(state.current?.role==='client'){
+    if(clientAttention&&!titleBlinkTimer)setTimeout(()=>startTitleBlink(clientAttention),0);
+    if(!clientAttention&&titleBlinkTimer)stopTitleBlink();
+  }
   const rows=source.map(r=>clientRow(r,showRecurring)).join('');
   const title=showRecurring?pfeTableText('recurringList'):pfeTableText('singleList');
   const empty=showRecurring?pfeTableText('emptyRecurring'):pfeTableText('emptySingle');
@@ -2649,12 +2669,13 @@ function clientRow(r,recurringView=false){
   else if(r.status==='finalized') actions=`<span class="counter-note">Zrealizowano</span>${remove}`;
   else actions=`<button class="btn small" data-edit="${esc(r.id)}">Edytuj</button>${remove}`;
   const recurringCells=recurringView?`${planCell(r)}${frequencyCell(r)}`:'';
-  const main=`<tr class="request-row row-${esc(r.status)}" data-table-role="client" data-request-id="${esc(r.id)}" data-search="${esc(requestSearchText(r,c))}">${registeredCell(r)}<td class="code">${esc(r.code)}</td>${recurringCells}${pointPartCells(r,'loads',pfeTableText('loading'))}${pointPartCells(r,'stops',pfeTableText('intermediate'))}${pointPartCells(r,'unloads',pfeTableText('unloading'))}${ldmCell(r)}${weightCell(r)}${accessCell(r)}${requirementsOneCell(r)}${notesCell(r)}${budgetCell(r,pending?'budget-pending':'')}<td class="status-cell">${statusTag(r)}</td><td class="action-cell"><div class="actions">${actions}</div></td></tr>`;
-  if(!pending)return main;
+  const attentionClass=clientNeedsAttention(r)?' row-new-client':'';
+  const main=`<tr class="request-row row-${esc(r.status)}${attentionClass}" data-table-role="client" data-request-id="${esc(r.id)}" data-search="${esc(requestSearchText(r,c))}">${registeredCell(r)}<td class="code">${esc(r.code)}</td>${recurringCells}${pointPartCells(r,'loads',pfeTableText('loading'))}${pointPartCells(r,'stops',pfeTableText('intermediate'))}${pointPartCells(r,'unloads',pfeTableText('unloading'))}${ldmCell(r)}${weightCell(r)}${accessCell(r)}${requirementsOneCell(r)}${notesCell(r)}${budgetCell(r,pending?'budget-pending':'')}<td class="status-cell">${statusTag(r)}</td><td class="action-cell"><div class="actions">${actions}</div></td></tr>`;
   let extra='';
-  if(r.status==='budget')extra+=`<tr class="budget-proposal-row" data-proposal-for="${esc(r.id)}"><td colspan="${recurringView?21:19}"><div class="budget-proposal"><span class="budget-proposal-copy"><strong>Zaproponowano cenę:</strong> ${esc(r.budget||'')} ${esc(r.currency||state.currency)}. Wybierz decyzję.</span><div class="proposal-actions"><button class="btn danger small" data-decline-budget="${esc(r.id)}">Odmów</button><button class="btn small" data-counter-budget="${esc(r.id)}">Proponuję inną</button><button class="btn red small" data-accept-budget="${esc(r.id)}">Potwierdzam cenę</button></div></div></td></tr>`;
-  if(r.clientRejectionNote&&!r.clientRejectionAck)extra+=`<tr class="client-message-row" data-proposal-for="${esc(r.id)}"><td colspan="${recurringView?21:19}"><div class="client-message-bar"><span><b>Informacja od spedytora:</b> ${esc(r.clientRejectionNote)}</span><button class="btn red small" data-ack-client-message="${esc(r.id)}" data-ack-type="reject">OK</button></div></td></tr>`;
-  if(r.clientStatusNotice&&!r.clientStatusNoticeAck)extra+=`<tr class="client-message-row" data-proposal-for="${esc(r.id)}"><td colspan="${recurringView?21:19}"><div class="client-message-bar"><span><b>Zmiana statusu:</b> ${esc(r.clientStatusNotice)}</span><button class="btn red small" data-ack-client-message="${esc(r.id)}" data-ack-type="status">OK</button></div></td></tr>`;
+  const colspan=recurringView?21:19;
+  if(r.status==='budget')extra+=`<tr class="budget-proposal-row" data-proposal-for="${esc(r.id)}"><td colspan="${colspan}"><div class="budget-proposal"><span class="budget-proposal-copy"><strong>Zaproponowano cenę:</strong> ${esc(r.budget||'')} ${esc(r.currency||state.currency)}. Wybierz decyzję.</span><div class="proposal-actions"><button class="btn danger small" data-decline-budget="${esc(r.id)}">Odmów</button><button class="btn small" data-counter-budget="${esc(r.id)}">Proponuję inną</button><button class="btn red small" data-accept-budget="${esc(r.id)}">Potwierdzam cenę</button></div></div></td></tr>`;
+  if(r.clientRejectionNote&&!r.clientRejectionAck)extra+=`<tr class="client-message-row" data-proposal-for="${esc(r.id)}"><td colspan="${colspan}"><div class="client-message-bar"><span><b>Informacja od spedytora:</b> ${esc(r.clientRejectionNote)}</span><button class="btn red small" data-ack-client-message="${esc(r.id)}" data-ack-type="reject">OK</button></div></td></tr>`;
+  if(r.clientStatusNotice&&!r.clientStatusNoticeAck)extra+=`<tr class="client-message-row" data-proposal-for="${esc(r.id)}"><td colspan="${colspan}"><div class="client-message-bar"><span><b>Zmiana statusu:</b> ${esc(r.clientStatusNotice)}</span><button class="btn red small" data-ack-client-message="${esc(r.id)}" data-ack-type="status">OK</button></div></td></tr>`;
   return main+extra;
 }
 function renderAdmin(){
@@ -2948,6 +2969,7 @@ async function refreshCloudLists(force=false){
       saveLocal();
       if(state.current?.role==='admin')render();
     }else{
+      const previous=new Set(state.notifications.map(n=>n.id));
       const [requests,notifications]=await Promise.all([
         docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',email))),
         docsToArray(query(collection(fbDb,'notifications'),where('targetEmail','==',email))).catch(()=>[])
@@ -2956,7 +2978,15 @@ async function refreshCloudLists(force=false){
       state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
       state.requests.forEach(normalizeRequest);
       state.requests=filterDeletedRequests(state.requests);
+      const fresh=Array.isArray(notifications)?notifications.filter(n=>!previous.has(n.id)&&!n.read):[];
       if(Array.isArray(notifications))state.notifications=notifications;
+      if(fresh.length){
+        startTitleBlink(fresh.length);
+        panelAlert(fresh[0].kind||'Nowe powiadomienie', `${fresh[0].code||''}${fresh[0].details?' · '+fresh[0].details:''}`);
+        if(state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
+          try{new Notification('M.Kulczyk — '+titleBlinkWord(),{body:`${fresh[0].kind||'Powiadomienie'}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
+        }
+      }
       saveLocal();
       if(state.current?.role==='client')render();
     }
