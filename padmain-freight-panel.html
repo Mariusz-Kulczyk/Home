@@ -1737,6 +1737,7 @@ const firebaseConfig={
 const ADMIN_EMAIL='contact@mkulczyk.pl';
 let fbApp=null,fbAuth=null,fbDb=null,authUser=null,authReady=null,cloudOnline=false,cloudBusy=false,cloudSaveTimer=null,cloudLastError=null;
 const cloudDeleted={requests:new Set(),notifications:new Set(),clients:new Set()};
+const deletedRequestIds=new Set();
 try{
   fbApp=initializeApp(firebaseConfig);
   fbAuth=getAuth(fbApp);
@@ -1767,9 +1768,9 @@ const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const toast=t=>{const el=$('#toast');el.textContent=t;el.className='toast show';setTimeout(()=>el.className='toast',3200)};
 const statusLabels={
-  pl:{draft:'Uzupełnij dane',waiting:'Oczekujące',budget:'Cena do potwierdzenia',budgetAccepted:'Cena potwierdzona',counter:'Negocjacje cenowe',searching:'Oferta w przygotowaniu',offer:'Oferta wysłana',accepted:'W realizacji',cancelled:'Odrzucono',archived:'Archiwum',finalized:'Zrealizowano'},
-  en:{draft:'Complete details',waiting:'Pending',budget:'Price to confirm',budgetAccepted:'Price confirmed',counter:'Price negotiation',searching:'Offer in preparation',offer:'Offer sent',accepted:'In progress',cancelled:'Rejected',archived:'Archive',finalized:'Completed'},
-  de:{draft:'Daten ergänzen',waiting:'Wartend',budget:'Preis zu bestätigen',budgetAccepted:'Preis bestätigt',counter:'Preisverhandlung',searching:'Angebot in Vorbereitung',offer:'Angebot gesendet',accepted:'In Durchführung',cancelled:'Abgelehnt',archived:'Archiv',finalized:'Abgeschlossen'}
+  pl:{draft:'Uzupełnij dane',waiting:'Oczekujące',budget:'Cena do potwierdzenia',budgetAccepted:'Cena potwierdzona',counter:'Negocjacje cenowe',searching:'Oferta w przygotowaniu',offer:'Oferta wysłana',accepted:'W realizacji',cancelled:'Odrzucono',archived:'Archiwum',deleted:'Usunięto trwale',finalized:'Zrealizowano'},
+  en:{draft:'Complete details',waiting:'Pending',budget:'Price to confirm',budgetAccepted:'Price confirmed',counter:'Price negotiation',searching:'Offer in preparation',offer:'Offer sent',accepted:'In progress',cancelled:'Rejected',archived:'Archive',deleted:'Permanently deleted',finalized:'Completed'},
+  de:{draft:'Daten ergänzen',waiting:'Wartend',budget:'Preis zu bestätigen',budgetAccepted:'Preis bestätigt',counter:'Preisverhandlung',searching:'Angebot in Vorbereitung',offer:'Angebot gesendet',accepted:'In Durchführung',cancelled:'Abgelehnt',archived:'Archiv',deleted:'Endgültig gelöscht',finalized:'Abgeschlossen'}
 };
 const statusLabel=s=>((statusLabels[state.lang]||statusLabels.pl)[s]||statusLabels.pl[s]||s);
 const reqLabels={ramp:'Wysokość rampowa',gps:'GPS',adr:'ADR',gdp:'GDP',waste:'Odpady',ownFleet:'Flota własna',customsCord:'Linka celna',temperature:'Temperatura kontrolowana'};
@@ -2146,6 +2147,24 @@ function syncLoggedInSession(){
 }
 function withClientEmail(r){const c=getClientForRequest(r)||{};const mail=normalizeLogin(r.clientEmail||c.email||currentAuthEmail()||'');return {...plain(r),clientEmail:mail,clientId:mail,ownerEmail:r.ownerEmail||mail}}
 async function docsToArray(q){const snap=await getDocs(q);return snap.docs.map(d=>({id:d.id,...d.data()}));}
+
+function rememberDeletedRequestId(id){
+  if(!id)return;
+  deletedRequestIds.add(id);
+  try{localStorage.setItem('mkDeletedRequestIds',JSON.stringify([...deletedRequestIds].slice(-500)));}catch(e){}
+}
+function loadLocalDeletedRequestIds(){
+  try{(JSON.parse(localStorage.getItem('mkDeletedRequestIds')||'[]')||[]).forEach(id=>id&&deletedRequestIds.add(id));}catch(e){}
+}
+function isPermanentlyDeletedRequest(r){return !r||r.permanentlyDeleted===true||r.status==='deleted'||deletedRequestIds.has(r.id)}
+function filterDeletedRequests(rows){return (Array.isArray(rows)?rows:[]).filter(r=>!isPermanentlyDeletedRequest(r))}
+async function refreshDeletedRequestIdsFromServer(email){
+  if(!cloudOnline||!fbDb||!email)return;
+  try{
+    const rows=isAdminEmail(email)?await docsToArray(collection(fbDb,'requests')):await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',email)));
+    rows.forEach(r=>{if(r&&r.id&&(r.permanentlyDeleted===true||r.status==='deleted'))rememberDeletedRequestId(r.id);});
+  }catch(e){console.warn('Deleted request marker read skipped',e);}
+}
 async function loadCloudData(){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb)return false;
   const email=normalizeLogin(fbAuth.currentUser.email||'');
@@ -2162,7 +2181,7 @@ async function loadCloudData(){
       if(adminDoc.exists())state.admin={...state.admin,...adminDoc.data(),role:'admin'};
       if(settingsDoc.exists()){const x=settingsDoc.data();state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.notifyBrowser=Boolean(x.notifyBrowser);}
       state.clients=Array.isArray(clients)?clients.map(c=>{delete c.accessCode;return {...c,role:'client'}}):[];
-      state.requests=Array.isArray(requests)?requests:[];
+      state.requests=filterDeletedRequests(requests);
       state.notifications=Array.isArray(notifications)?notifications:[];
       const mergedFromRequests=mergeClientProfilesFromRequests();
       const mergedFromLegacy=mergeLegacyClientProfilesFromLocal();
@@ -2187,13 +2206,16 @@ async function loadCloudData(){
         delete client.accessCode;delete client.missingProfile;
         state.clients=[client];
         state.current=client;
-        state.requests=await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',authEmail)));
+        await refreshDeletedRequestIdsFromServer(authEmail);
+        state.requests=filterDeletedRequests(await docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',authEmail))));
         state.notifications=[];
         state.view='loads';
         await saveOwnClientProfile(state.current);
       }
     }
+    state.requests=filterDeletedRequests(state.requests);
     state.requests.forEach(normalizeRequest);
+    state.requests=filterDeletedRequests(state.requests);
     saveLocal();
     return true;
   }catch(err){console.warn('Firebase load error',err);setCurrentFromAuthEmail(fbAuth?.currentUser?.email||'');return false;}
@@ -2205,13 +2227,15 @@ async function cloudSaveNow(){
   try{
     const email=normalizeLogin(fbAuth.currentUser.email||'');
     const isAdmin=isAdminEmail(email);
+    await refreshDeletedRequestIdsFromServer(email);
+    state.requests=filterDeletedRequests(state.requests);
     if(isAdmin){
       const batch=writeBatch(fbDb);
       normalizeClientDirectory(true);
       batch.set(doc(fbDb,'admin','profile'),cleanAdminForSave(state.admin),{merge:true});
       batch.set(doc(fbDb,'settings','global'),plain({notifyEmail:state.notifyEmail,currency:state.currency,notifyBrowser:state.notifyBrowser}),{merge:true});
       state.clients.forEach(c=>{const clean=cleanClientForSave(c);if(clean.email)batch.set(doc(fbDb,'clients',clean.email),clean,{merge:true});});
-      state.requests.forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
+      filterDeletedRequests(state.requests).forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
       state.notifications.forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
       cloudDeleted.requests.forEach(id=>batch.delete(doc(fbDb,'requests',id)));
       cloudDeleted.notifications.forEach(id=>batch.delete(doc(fbDb,'notifications',id)));
@@ -2220,7 +2244,7 @@ async function cloudSaveNow(){
     }else{
       const currentClient=ensureCurrentClientIdentity();
       if(!currentClient){cloudLastError='Brak profilu klienta dla tego e-maila.';return false;}
-      const ownedRequests=state.requests.filter(r=>(r.submitted||!r.isNewDraft)&&normalizeLogin(r.clientEmail||getClientForRequest(r)?.email||email)===email);
+      const ownedRequests=filterDeletedRequests(state.requests).filter(r=>(r.submitted||!r.isNewDraft)&&normalizeLogin(r.clientEmail||getClientForRequest(r)?.email||email)===email);
       for(const r of ownedRequests){
         await setDoc(doc(fbDb,'requests',r.id),prepareOwnedRequestForSave(r),{merge:true});
       }
@@ -2262,6 +2286,7 @@ async function storeCloudNow(successText='Zapisano na serwerze.'){
 }
 function store(){saveLocal();if(fbAuth?.currentUser&&fbDb){if(cloudSaveTimer)clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(cloudSaveNow,250);}}
 async function load(){
+  loadLocalDeletedRequestIds();
   try{const raw=localStorage.getItem('mkPfeUiPrefs');const x=JSON.parse(raw);if(x){state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.lang=x.lang||state.lang;state.notifyBrowser=Boolean(x.notifyBrowser);}}catch(e){}
   mergeLegacyClientProfilesFromLocal();
   clearOldLocalBackups();
@@ -2307,7 +2332,7 @@ function normalizeRequest(r){
   const lastUnloadDate=r.unloads.map(dateForEnd).filter(Boolean).sort().at(-1);
   if(lastUnloadDate&&lastUnloadDate<localToday()){
     if(r.status==='accepted')r.status='finalized';
-    else if(!['draft','cancelled','archived','finalized'].includes(r.status))r.status='archived';
+    else if(!['draft','cancelled','archived','deleted','finalized'].includes(r.status))r.status='archived';
   }
 }
 function getClient(id){return state.clients.find(c=>c.id===id)}
@@ -2855,10 +2880,12 @@ async function refreshAdminBoard(){
       docsToArray(collection(fbDb,'requests')),
       docsToArray(collection(fbDb,'notifications'))
     ]);
+    requests.forEach(r=>{if(r&&r.id&&(r.permanentlyDeleted===true||r.status==='deleted'))rememberDeletedRequestId(r.id);});
     const previous=new Set(state.notifications.map(n=>n.id));
     const fresh=notifications.filter(n=>!previous.has(n.id)&&!n.read);
-    state.requests=Array.isArray(requests)?requests:state.requests;
+    state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
     state.requests.forEach(normalizeRequest);
+    state.requests=filterDeletedRequests(state.requests);
     state.notifications=Array.isArray(notifications)?notifications:state.notifications;
     saveLocal();
     if(fresh.length&&state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
@@ -2899,9 +2926,15 @@ async function archiveRequest(id,reason=''){
   document.querySelector('#deleteModal')?.remove();render();await storeCloudNow('Pozycja przeniesiona do archiwum na serwerze.');
 }
 async function permanentlyDeleteRequest(id){
-  cloudDeleted.requests.add(id);
-  state.requests=state.requests.filter(r=>r.id!==id);
-  document.querySelector('#deleteModal')?.remove();render();await storeCloudNow('Pozycja trwale usunięta z serwera.');
+  const r=state.requests.find(x=>x.id===id);if(!r)return;
+  const marker={...plain(r),status:'deleted',permanentlyDeleted:true,deletedAt:new Date().toISOString(),deletedBy:currentAuthEmail()||'admin'};
+  rememberDeletedRequestId(id);
+  document.querySelector('#deleteModal')?.remove();
+  state.requests=state.requests.filter(x=>x.id!==id);
+  render();
+  const ok=await saveRequestDirectly(marker);
+  if(ok)toast('Pozycja trwale usunięta i zablokowana przed powrotem.');
+  else toast('Nie zapisano trwałego usunięcia Firebase.'+cloudErrorShort());
 }
 function confirmDeleteRequest(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
