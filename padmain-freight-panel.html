@@ -61,7 +61,7 @@ body{font-size:13px}
 .admin-dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:12px;margin-bottom:12px}.dash-card{padding:14px;border:1px solid #e0e8ef;border-radius:12px;background:#fff}.dash-card span{display:block;color:#697887;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.dash-card b{display:block;margin-top:5px;color:#203040;font-size:24px}.priority-select{height:26px;border:1px solid #d3dde6;border-radius:7px;background:#fff;color:#324252;font-size:9px;font-weight:900}.priority-pill{display:inline-flex;align-items:center;justify-content:center;min-width:56px;height:22px;border-radius:999px;background:#eef2f5;color:#52606f;font-size:9px;font-weight:900}.priority-high{background:#ffe2e2;color:#9c2424}.priority-medium{background:#fff0c8;color:#7d5800}.priority-low{background:#e9f4ec;color:#23683d}.request-row.row-new-admin td:first-child{box-shadow:inset 7px 0 0 #e31e24!important}.request-row.row-new-admin td{background:#fffaf6!important}.client-message-row td,.admin-client-message-row td{padding:0!important;background:#fff!important}.client-message-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-top:1px solid #ecd6b7;background:#fff8ed;color:#704b16;font-size:10px}.client-message-bar b{color:#9a5510}.archive-toggle{display:inline-flex;align-items:center;gap:4px;margin-right:8px;padding:3px;border:1px solid #d7e0e8;border-radius:999px;background:#fff}.archive-toggle button{height:28px;border:0;border-radius:999px;background:transparent;color:#526273;font-size:10px;font-weight:900;cursor:pointer;padding:0 10px}.archive-toggle button.active{background:#1f3040;color:#fff}.export-chip{height:32px;border:1px solid #cfd9e2;border-radius:999px;background:#fff;color:#334353;font-size:10px;font-weight:900;cursor:pointer;padding:0 12px}.error-log-box{margin-top:12px;padding:10px 12px;border:1px dashed #d7b4b4;border-radius:10px;background:#fff8f8;color:#7b3333;font-size:11px;line-height:1.45}.mail-queue-note{margin-top:10px;color:#667686;font-size:11px;line-height:1.4}@media(max-width:900px){.admin-dashboard-grid{grid-template-columns:repeat(2,minmax(120px,1fr))}}
 @media(max-width:760px){.shell{grid-template-columns:1fr}.side{display:none}.fixed-notice{left:0;padding:10px 14px;font-size:12px}.main{padding-bottom:112px}.route-cell{min-width:250px}}
 
-/* v166 — MP3 sound, localized tab blink */
+/* v169 — MP3 sound, localized tab blink, no self-notifications */
 .nav-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;margin-left:6px;padding:0 6px;border-radius:999px;background:#e31e24;color:#fff;font-size:10px;font-weight:950;line-height:1}.nav button.active .nav-count{background:#fff;color:#b3131b}.priority-filter{display:inline-flex;align-items:center;gap:5px;margin-right:8px;padding:3px;border:1px solid #d7e0e8;border-radius:999px;background:#fff}.priority-filter span{padding-left:8px;color:#697887;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em}.priority-filter select{height:28px;border:0;border-radius:999px;background:#fff;color:#263544;font-size:10px;font-weight:950;padding:0 9px;cursor:pointer}.request-row.row-new-admin td{background:#fff8ef!important;border-top:2px solid #e31e24!important;border-bottom:2px solid #e31e24!important}.request-row.row-new-admin td:first-child{box-shadow:inset 9px 0 0 #e31e24!important;border-left:2px solid #e31e24!important}.request-row.row-new-admin td:last-child{border-right:2px solid #e31e24!important}.request-row.row-new-admin .code{color:#b3131b!important;font-weight:950!important}.dash-card small{display:block;margin-top:4px;color:#7c8894;font-size:10px;font-weight:800}.mail-queue-note b{color:#203040}
 .panel-alert{position:fixed;right:18px;top:76px;z-index:92;max-width:330px;padding:12px 14px;border:1px solid #f0c6c6;border-left:5px solid var(--red);border-radius:11px;background:#fff;color:#263544;box-shadow:0 14px 34px rgba(24,38,52,.16);font-size:11px;font-weight:900;opacity:0;transform:translateY(-8px);pointer-events:none;transition:.22s}.panel-alert.show{opacity:1;transform:translateY(0)}.panel-alert b{display:block;margin-bottom:3px;color:#b3131b}.client-status-wrap{display:grid;gap:4px;justify-items:center}.client-status-wrap small{display:block;max-width:130px;color:#697887;font-size:8px;line-height:1.12;white-space:normal;font-weight:800}.mobile-help-note{display:none}@media(max-width:780px){.table-toolbar{display:flex!important;flex-wrap:wrap!important;gap:7px!important;align-items:stretch!important}.archive-toggle,.priority-filter{width:100%;justify-content:center}.table-search{width:100%;min-width:0!important}.table-search input{width:100%}.export-chip{width:100%;justify-content:center}.topbar{gap:8px;align-items:flex-start}.user{max-width:52%;justify-content:flex-end}.profile-link{max-width:100%;overflow:hidden}.head h1{font-size:20px}.admin-dashboard-grid{grid-template-columns:1fr!important}.mobile-help-note{display:block;margin:0 0 8px;padding:8px 10px;border:1px solid #dce6ef;border-radius:9px;background:#fff;color:#526372;font-size:10px}.table-wrap{max-height:none}.modal-card{padding:18px}.date-row{grid-template-columns:1fr 1fr}.client-status-wrap small{display:none}.toast{left:12px;right:12px;bottom:12px;text-align:center}}
 
@@ -2321,6 +2321,7 @@ async function storeCloudNow(successText='Zapisano na serwerze.'){
   saveLocal();
   if(cloudSaveTimer){clearTimeout(cloudSaveTimer);cloudSaveTimer=null;}
   const ok=await cloudSaveNow();
+  if(ok){syncRequestWatchForRole(currentActorRole());}
   if(ok&&successText)toast(successText);
   if(!ok)toast('Nie zapisano na serwerze Firebase.'+cloudErrorShort());
   return ok;
@@ -2910,10 +2911,35 @@ function validatePointAgainstRoute(r,kind,p){
 
 function requestWatchFingerprint(r,role){
   if(!r)return '';
-  const common=[r.id,r.status,r.submitted,r.updatedAt,r.budget,r.currency,r.budgetProposalPending,r.clientProposal,r.clientProposalCurrency,r.archivedAt,r.archiveReason,r.permanentlyDeleted,r.status==='deleted'];
+  const common=[r.id,r.status,r.submitted,r.updatedAt,r.budget,r.currency,r.budgetProposalPending,r.clientProposal,r.clientProposalCurrency,r.archivedAt,r.archiveReason,r.permanentlyDeleted,r.status==='deleted',r.lastChangedBy,r.lastChangedAt];
   if(role==='client')common.push(r.clientStatusNotice,r.clientStatusNoticeAck,r.clientRejectionNote,r.clientRejectionAck,r.clientArchived,r.archiveNoticeConfirmed);
   else common.push(r.adminNew,r.priority,r.clientEmail,r.clientId,r.clientNote,r.notes);
   return common.map(v=>String(v??'')).join('¦');
+}
+function currentActorRole(){return state.current?.role==='admin'?'admin':'client'}
+function markRequestActor(r,role=currentActorRole()){
+  if(!r)return r;
+  const who=role==='admin'?'admin':'client';
+  r.lastChangedBy=who;
+  r.lastChangedByEmail=normalizeLogin(currentAuthEmail()||state.current?.email||'');
+  r.lastChangedAt=new Date().toISOString();
+  return r;
+}
+function syncRequestWatchForRole(role=currentActorRole(),rows=state.requests){
+  const who=role==='admin'?'admin':'client';
+  const bucket=requestChangeWatch[who]||(requestChangeWatch[who]={primed:false,map:new Map()});
+  const next=new Map();
+  (rows||[]).forEach(r=>{
+    if(!r||!r.id||r.permanentlyDeleted===true||r.status==='deleted'||!r.submitted)return;
+    next.set(r.id,requestWatchFingerprint(r,who));
+  });
+  bucket.map=next;bucket.primed=true;
+}
+function isOwnSideChange(role,r){return Boolean(r&&r.lastChangedBy&&r.lastChangedBy===role)}
+function notificationVisibleForRole(role,n,email=''){
+  const target=normalizeLogin(n?.targetEmail||'');
+  if(role==='admin')return !target||target===normalizeLogin(state.notifyEmail||ADMIN_EMAIL)||target===normalizeLogin(ADMIN_EMAIL);
+  return target===normalizeLogin(email||currentAuthEmail()||state.current?.email||'');
 }
 function detectRequestSideChanges(role,requests){
   const bucket=requestChangeWatch[role]||(requestChangeWatch[role]={primed:false,map:new Map()});
@@ -2922,8 +2948,8 @@ function detectRequestSideChanges(role,requests){
     if(!r||!r.id||r.permanentlyDeleted===true||r.status==='deleted'||!r.submitted)return;
     const fp=requestWatchFingerprint(r,role);
     const old=bucket.map.get(r.id);
-    if(bucket.primed&&old&&old!==fp)changed.push(r);
-    if(bucket.primed&&!old)changed.push(r);
+    if(bucket.primed&&old&&old!==fp&&!isOwnSideChange(role,r))changed.push(r);
+    if(bucket.primed&&!old&&!isOwnSideChange(role,r))changed.push(r);
     next.set(r.id,fp);
   });
   bucket.map=next;bucket.primed=true;
@@ -2988,13 +3014,13 @@ async function refreshCloudLists(force=false){
       ]);
       requests.forEach(r=>{if(r&&r.id&&(r.permanentlyDeleted===true||r.status==='deleted'))rememberDeletedRequestId(r.id);});
       const previous=new Set(state.notifications.map(n=>n.id));
-      const fresh=notifications.filter(n=>!previous.has(n.id)&&!n.read);
+      const fresh=notifications.filter(n=>!previous.has(n.id)&&!n.read&&notificationVisibleForRole('admin',n,email));
       state.clients=Array.isArray(clients)?clients.map(c=>{delete c.accessCode;return {...c,role:'client'}}):state.clients;
       state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
       state.requests.forEach(normalizeRequest);
       state.requests=filterDeletedRequests(state.requests);
       const changedRequests=detectRequestSideChanges('admin',state.requests);
-      state.notifications=Array.isArray(notifications)?notifications:state.notifications;
+      state.notifications=Array.isArray(notifications)?notifications.filter(n=>notificationVisibleForRole('admin',n,email)):state.notifications;
       if(fresh.length){
         startTitleBlink(fresh.length);
         panelAlert(fresh[0].kind||'Nowe powiadomienie', `${fresh[0].code||''}${fresh[0].client?' · '+fresh[0].client:''}`);
@@ -3016,8 +3042,8 @@ async function refreshCloudLists(force=false){
       state.requests.forEach(normalizeRequest);
       state.requests=filterDeletedRequests(state.requests);
       const changedRequests=detectRequestSideChanges('client',state.requests);
-      const fresh=Array.isArray(notifications)?notifications.filter(n=>!previous.has(n.id)&&!n.read):[];
-      if(Array.isArray(notifications))state.notifications=notifications;
+      const fresh=Array.isArray(notifications)?notifications.filter(n=>!previous.has(n.id)&&!n.read&&notificationVisibleForRole('client',n,email)):[];
+      if(Array.isArray(notifications))state.notifications=notifications.filter(n=>notificationVisibleForRole('client',n,email));
       if(fresh.length){
         startTitleBlink(fresh.length);
         panelAlert(fresh[0].kind||'Nowe powiadomienie', `${fresh[0].code||''}${fresh[0].details?' · '+fresh[0].details:''}`);
@@ -3037,7 +3063,7 @@ setInterval(()=>refreshCloudLists(false),AUTO_REFRESH_MS);
 
 function requestBrowserNotifications(){if(!('Notification' in window)){toast('Ta przeglądarka nie obsługuje powiadomień systemowych.');return}Notification.requestPermission().then(p=>{state.notifyBrowser=p==='granted';store();render();toast(state.notifyBrowser?'Powiadomienia systemowe włączone.':'Powiadomienia systemowe nie zostały włączone.');})}
 function demoNotifyAdmin(r,kind='Nowe zapytanie'){const to=(state.notifyEmail||'').trim();if(!to){toast('W ustawieniach wpisz e-mail do powiadomień administratora.');return}const c=getClient(r.clientId)||{};const subject=`${kind}: ${r.code||''}`;const body=`${kind}\n\nNumer: ${r.code||''}\nKlient: ${c.company||''}\nZaładunek: ${routeSummary(r.loads||[])}\nRozładunek: ${routeSummary(r.unloads||[])}\nWymagania: ${requirementsText(r)||'brak'}\nNotatka klienta: ${r.clientNote||'brak'}\nBudżet: ${r.budget||'brak'} ${r.currency||state.currency}`;window.location.href=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;toast('Otworzono próbne powiadomienie. Wyślij je z programu pocztowego.')} 
-async function updateRequest(id){draftFromRow(id);const r=state.requests.find(x=>x.id===id);if(!r)return;const missing=[];if(!r.loads.length)missing.push('załadunek');if(!r.unloads.length)missing.push('rozładunek');if(!String(r.ldm||'').trim()&&!String(r.notes||'').trim())missing.push('LDM albo lista ładunkowa');if(String(r.weight||'').trim()==='')missing.push('waga');if(!r.access)missing.push('dostęp');if(missing.length){toast(`Uzupełnij pola wymagane: ${missing.join(', ')}.`);return}const dateError=validateRouteDates(r);if(dateError){toast(dateError);return}r.editing=false;r.submitted=true;r.status='waiting';r.updatedAt=new Date().toISOString();r.adminNew=true;normalizeRequest(r);addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.')} 
+async function updateRequest(id){draftFromRow(id);const r=state.requests.find(x=>x.id===id);if(!r)return;const missing=[];if(!r.loads.length)missing.push('załadunek');if(!r.unloads.length)missing.push('rozładunek');if(!String(r.ldm||'').trim()&&!String(r.notes||'').trim())missing.push('LDM albo lista ładunkowa');if(String(r.weight||'').trim()==='')missing.push('waga');if(!r.access)missing.push('dostęp');if(missing.length){toast(`Uzupełnij pola wymagane: ${missing.join(', ')}.`);return}const dateError=validateRouteDates(r);if(dateError){toast(dateError);return}r.editing=false;r.submitted=true;r.status='waiting';r.updatedAt=new Date().toISOString();r.adminNew=true;markRequestActor(r,'client');normalizeRequest(r);addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.')} 
 function clientNeedsDeleteReason(r){return state.current?.role==='client'&&['searching','offer','accepted'].includes(r.status)}
 function openDeleteModal(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
@@ -3059,7 +3085,7 @@ async function archiveRequest(id,reason=''){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   const prev=r.status||'waiting';
   r.archivedFrom=prev;r.archiveReason=reason||'Usunięto z listy';r.archivedAt=new Date().toISOString();r.archivedBy=state.current?.role||'user';
-  r.status='archived';r.archiveNoticeConfirmed=false;r.budgetProposalPending=false;
+  r.status='archived';r.archiveNoticeConfirmed=false;r.budgetProposalPending=false;markRequestActor(r,r.archivedBy==='admin'?'admin':'client');
   if(r.archivedBy==='client')addNotification('Klient przeniósł zapytanie do archiwum',r,`Powód: ${r.archiveReason||'nie podano'}`);
   document.querySelector('#deleteModal')?.remove();render();await storeCloudNow('Pozycja przeniesiona do archiwum na serwerze.');
 }
@@ -3270,13 +3296,13 @@ async function saveRequestWizard(id){
   const max=wizardMaxStep();for(let i=1;i<max;i++){if(!validateWizardStep(i))return;}
   const r=state.requests.find(x=>x.id===id);if(!r)return;const data=getWizardData();
   const wasSubmitted=Boolean(r.submitted&&!r.isNewDraft);
-  Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',updatedAt:new Date().toISOString(),budgetProposalPending:false,adminNew:true,priority:r.priority||'normal'});
+  Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',updatedAt:new Date().toISOString(),budgetProposalPending:false,adminNew:true,priority:r.priority||'normal'});markRequestActor(r,state.current?.role==='admin'?'admin':'client');
   if(state.current?.role==='client'){const c=ensureCurrentClientIdentity();if(c){r.clientId=c.id;r.clientEmail=normalizeLogin(c.email);}}
   if(!r.requirements.includes('temperature')){r.tempMin='';r.tempMax=''}
   const note=addNotification(wasSubmitted?'Klient edytował zgłoszenie':(r.recurring?'Nowe stałe przesyłki':'Nowe zgłoszenie klienta'),r,wasSubmitted?'Klient zmienił dane zapytania.':(r.recurring?'Klient wysłał plan stałych przesyłek.':'Klient wysłał nowe zapytanie.'),'high',false);
   saveLocal();$('#requestWizard')?.remove();render();
   const ok=await saveRequestDirectly(r);
-  if(ok){saveNotificationQuiet(note);toast(wasSubmitted?'Zmiany zapisane. Spedytor zobaczy aktualizację.':'Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.');}
+  if(ok){syncRequestWatchForRole('client');saveNotificationQuiet(note);toast(wasSubmitted?'Zmiany zapisane. Spedytor zobaczy aktualizację.':'Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.');}
   else toast('Nie zapisano na serwerze Firebase.'+cloudErrorShort());
 }
 function openRouteModal(id,kind){
@@ -3318,29 +3344,29 @@ async function submitBudgetProposal(id){
   const budget=$('#proposalBudget')?.value.trim()||'';
   const currency=$('#proposalCurrency')?.value||state.currency;
   if(!budget){toast('Wpisz cenę przed wysłaniem propozycji.');return}
-  r.budget=budget;r.currency=currency;r.status='budget';r.updatedAt=new Date().toISOString();r.adminNew=false;r.budgetProposalPending=true;r.clientProposal='';r.clientProposalCurrency=currency;r.clientStatusNotice=`Zaproponowano cenę: ${budget} ${currency}`;r.clientStatusNoticeAck=false;notifyClientStatus(r,'Zaproponowano cenę');
+  r.budget=budget;r.currency=currency;r.status='budget';r.updatedAt=new Date().toISOString();markRequestActor(r,'admin');r.adminNew=false;r.budgetProposalPending=true;r.clientProposal='';r.clientProposalCurrency=currency;r.clientStatusNotice=`Zaproponowano cenę: ${budget} ${currency}`;r.clientStatusNoticeAck=false;notifyClientStatus(r,'Zaproponowano cenę');
   document.querySelector('#budgetModal')?.remove();render();await storeCloudNow('Cena została zapisana na serwerze i wysłana klientowi do potwierdzenia.');
 }
 async function acceptBudget(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
-  r.status='budgetAccepted';r.updatedAt=new Date().toISOString();r.budgetProposalPending=false;
+  r.status='budgetAccepted';r.updatedAt=new Date().toISOString();markRequestActor(r,state.current?.role==='admin'?'admin':'client');r.budgetProposalPending=false;
   addNotification('Klient potwierdził budżet',r,`${r.budget||''} ${r.currency||state.currency}`);
   render();await storeCloudNow('Cena potwierdzona i zapisana na serwerze.');
 }
 async function confirmBudget(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   if(!String(r.budget||'').trim()){openBudgetModal(id);return}
-  r.status='searching';r.updatedAt=new Date().toISOString();r.adminNew=false;r.budgetProposalPending=false;r.clientStatusNotice=`${statusLabel('searching')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;if(state.current?.role==='admin')notifyClientStatus(r,'Potwierdzono cenę');
+  r.status='searching';r.updatedAt=new Date().toISOString();markRequestActor(r,state.current?.role==='admin'?'admin':'client');r.adminNew=false;r.budgetProposalPending=false;r.clientStatusNotice=`${statusLabel('searching')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;if(state.current?.role==='admin')notifyClientStatus(r,'Potwierdzono cenę');
   if(state.current?.role==='client')addNotification('Klient potwierdził budżet',r,`${r.budget||''} ${r.currency||state.currency}`);
   render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.');
 }
-async function declineBudgetProposal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.updatedAt=new Date().toISOString();r.budgetProposalPending=false;if(state.current?.role==='client')addNotification('Klient odrzucił propozycję ceny',r,`${r.budget||''} ${r.currency||state.currency}`);render();await storeCloudNow('Odrzucenie ceny zapisane na serwerze.')} 
+async function declineBudgetProposal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.updatedAt=new Date().toISOString();markRequestActor(r,state.current?.role==='admin'?'admin':'client');r.budgetProposalPending=false;if(state.current?.role==='client')addNotification('Klient odrzucił propozycję ceny',r,`${r.budget||''} ${r.currency||state.currency}`);render();await storeCloudNow('Odrzucenie ceny zapisane na serwerze.')} 
 function openCounterBudgetModal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;document.querySelector('.modal')?.remove();document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="counterBudgetModal"><section class="modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Proponowana cena</h2><p>Podaj własną propozycję. Spedytor zobaczy ją jako negocjację ceny.</p><div class="point-form"><label>Cena<input id="counterBudget" inputmode="decimal" value="${esc(r.budget||'')}"></label><label>Waluta<select id="counterCurrency">${['PLN','EUR','GBP'].map(x=>`<option ${r.currency===x?'selected':''}>${x}</option>`).join('')}</select></label></div><div class="modal-actions"><button class="btn red" data-submit-counter="${esc(id)}">Wyślij propozycję</button></div></section></div>`) }
-async function submitCounterBudget(id){const r=state.requests.find(x=>x.id===id);if(!r)return;const budget=$('#counterBudget')?.value.trim()||'';const currency=$('#counterCurrency')?.value||state.currency;if(!budget){toast('Wpisz proponowaną cenę.');return}r.clientProposal=budget;r.clientProposalCurrency=currency;r.status='counter';r.updatedAt=new Date().toISOString();r.budgetProposalPending=false;addNotification('Klient zaproponował drugi budżet',r,`${budget} ${currency}`);document.querySelector('#counterBudgetModal')?.remove();render();await storeCloudNow('Drugi budżet zapisany na serwerze i widoczny dla spedytora.')} 
-async function approveCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.updatedAt=new Date().toISOString();r.budget=r.clientProposal||r.budget;r.currency=r.clientProposalCurrency||r.currency;r.clientProposal='';r.clientProposalCurrency=r.currency;r.status='searching';r.adminNew=false;r.clientStatusNotice=`Potwierdzono cenę: ${r.budget||''} ${r.currency||state.currency}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Potwierdzono cenę');render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.')} 
+async function submitCounterBudget(id){const r=state.requests.find(x=>x.id===id);if(!r)return;const budget=$('#counterBudget')?.value.trim()||'';const currency=$('#counterCurrency')?.value||state.currency;if(!budget){toast('Wpisz proponowaną cenę.');return}r.clientProposal=budget;r.clientProposalCurrency=currency;r.status='counter';r.updatedAt=new Date().toISOString();markRequestActor(r,'client');r.budgetProposalPending=false;addNotification('Klient zaproponował drugi budżet',r,`${budget} ${currency}`);document.querySelector('#counterBudgetModal')?.remove();render();await storeCloudNow('Drugi budżet zapisany na serwerze i widoczny dla spedytora.')} 
+async function approveCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.updatedAt=new Date().toISOString();markRequestActor(r,'admin');r.budget=r.clientProposal||r.budget;r.currency=r.clientProposalCurrency||r.currency;r.clientProposal='';r.clientProposalCurrency=r.currency;r.status='searching';r.adminNew=false;r.clientStatusNotice=`Potwierdzono cenę: ${r.budget||''} ${r.currency||state.currency}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Potwierdzono cenę');render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.')} 
 async function declineCounter(id){openRejectNoteModal(id,'cancelled')}
-async function setOfferSent(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='offer';r.updatedAt=new Date().toISOString();r.adminNew=false;r.clientStatusNotice=`${statusLabel('offer')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Oferta wysłana');render();await storeCloudNow('Status zmieniony: Oferta wysłana.');}
-async function startRealisation(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='accepted';r.updatedAt=new Date().toISOString();r.adminNew=false;r.clientStatusNotice=`${statusLabel('accepted')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Transport w realizacji');render();await storeCloudNow('Status zmieniony: W realizacji.');}
+async function setOfferSent(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='offer';r.updatedAt=new Date().toISOString();markRequestActor(r,'admin');r.adminNew=false;r.clientStatusNotice=`${statusLabel('offer')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Oferta wysłana');render();await storeCloudNow('Status zmieniony: Oferta wysłana.');}
+async function startRealisation(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='accepted';r.updatedAt=new Date().toISOString();markRequestActor(r,'admin');r.adminNew=false;r.clientStatusNotice=`${statusLabel('accepted')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Transport w realizacji');render();await storeCloudNow('Status zmieniony: W realizacji.');}
 function formatOfferPoint(p,lang='pl'){
   const parts=postalParts(p||{});
   const date=pointDates(p)||'—';
@@ -3444,15 +3470,15 @@ async function setAdminStatus(id,status,skipRejectModal=false){
   const oldStatus=r.status;
   if(status==='archived'&&r.status!=='archived'){r.archivedFrom=r.status;r.archiveReason='Przeniesiono do archiwum przez admina';r.archivedAt=new Date().toISOString();r.archivedBy='admin';r.archiveNoticeConfirmed=true;}
   if(status!=='archived'){r.archiveNoticeConfirmed=false;}
-  r.status=status;r.updatedAt=new Date().toISOString();if(oldStatus!==status&&status!=='waiting')r.adminNew=false;
+  r.status=status;r.updatedAt=new Date().toISOString();markRequestActor(r,'admin');if(oldStatus!==status&&status!=='waiting')r.adminNew=false;
   r.clientStatusNotice=`${statusLabel(status)} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;
   r.budgetProposalPending=status==='budget'&&Boolean(String(r.budget||'').trim());
   if(status!=='budget')r.budgetProposalPending=false;
   notifyClientStatus(r,'Zmiana statusu zapytania');
   document.querySelector('#statusModal')?.remove();render();await storeCloudNow(`Status zapisany na serwerze: ${statusLabel(status)}.`);
 }
-async function setPriority(id,priority){const r=state.requests.find(x=>x.id===id);if(!r)return;r.priority=priority||'normal';render();await storeCloudNow('Priorytet zapisany.');}
-async function ackClientMessage(id,type){const r=state.requests.find(x=>x.id===id);if(!r)return;if(type==='reject')r.clientRejectionAck=true;else r.clientStatusNoticeAck=true;render();await storeCloudNow('Potwierdzenie zapisane.');}
+async function setPriority(id,priority){const r=state.requests.find(x=>x.id===id);if(!r)return;r.priority=priority||'normal';markRequestActor(r,'admin');render();await storeCloudNow('Priorytet zapisany.');}
+async function ackClientMessage(id,type){const r=state.requests.find(x=>x.id===id);if(!r)return;if(type==='reject')r.clientRejectionAck=true;else r.clientStatusNoticeAck=true;markRequestActor(r,'client');render();await storeCloudNow('Potwierdzenie zapisane.');}
 async function testMail(){panelAlert('Test powiadomienia','Powiadomienia zostają tylko w panelu — bez kolekcji mail.');}
 async function testNotificationSound(){
   state.notifySound=true;
