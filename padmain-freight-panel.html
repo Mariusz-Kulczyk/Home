@@ -7,6 +7,7 @@
 <meta name="keywords" content="M.KULCZYK, transport, spedycja, zapytania transportowe, LTL, drobnica, ADR, transport Europa, Padmain Freight Panel">
 <title>Padmain Freight Panel — M.KULCZYK</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e31e24'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-size='24' font-weight='900' fill='white'%3EMK%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="mk-notification.mp3" as="audio" type="audio/mpeg">
 <style>
 :root{--ink:#1b2630;--muted:#697885;--line:#d9e1e8;--red:#e31e24;--bg:#f3f5f7;--nav:#2f211a;--nav2:#432f25;--blue:#1674d1;--shadow:0 16px 42px rgba(24,38,52,.10)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:12px/1.32 Arial,sans-serif}button,input,select,textarea{font:inherit}.hidden{display:none!important}
@@ -60,7 +61,7 @@ body{font-size:13px}
 .admin-dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:12px;margin-bottom:12px}.dash-card{padding:14px;border:1px solid #e0e8ef;border-radius:12px;background:#fff}.dash-card span{display:block;color:#697887;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.dash-card b{display:block;margin-top:5px;color:#203040;font-size:24px}.priority-select{height:26px;border:1px solid #d3dde6;border-radius:7px;background:#fff;color:#324252;font-size:9px;font-weight:900}.priority-pill{display:inline-flex;align-items:center;justify-content:center;min-width:56px;height:22px;border-radius:999px;background:#eef2f5;color:#52606f;font-size:9px;font-weight:900}.priority-high{background:#ffe2e2;color:#9c2424}.priority-medium{background:#fff0c8;color:#7d5800}.priority-low{background:#e9f4ec;color:#23683d}.request-row.row-new-admin td:first-child{box-shadow:inset 7px 0 0 #e31e24!important}.request-row.row-new-admin td{background:#fffaf6!important}.client-message-row td,.admin-client-message-row td{padding:0!important;background:#fff!important}.client-message-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-top:1px solid #ecd6b7;background:#fff8ed;color:#704b16;font-size:10px}.client-message-bar b{color:#9a5510}.archive-toggle{display:inline-flex;align-items:center;gap:4px;margin-right:8px;padding:3px;border:1px solid #d7e0e8;border-radius:999px;background:#fff}.archive-toggle button{height:28px;border:0;border-radius:999px;background:transparent;color:#526273;font-size:10px;font-weight:900;cursor:pointer;padding:0 10px}.archive-toggle button.active{background:#1f3040;color:#fff}.export-chip{height:32px;border:1px solid #cfd9e2;border-radius:999px;background:#fff;color:#334353;font-size:10px;font-weight:900;cursor:pointer;padding:0 12px}.error-log-box{margin-top:12px;padding:10px 12px;border:1px dashed #d7b4b4;border-radius:10px;background:#fff8f8;color:#7b3333;font-size:11px;line-height:1.45}.mail-queue-note{margin-top:10px;color:#667686;font-size:11px;line-height:1.4}@media(max-width:900px){.admin-dashboard-grid{grid-template-columns:repeat(2,minmax(120px,1fr))}}
 @media(max-width:760px){.shell{grid-template-columns:1fr}.side{display:none}.fixed-notice{left:0;padding:10px 14px;font-size:12px}.main{padding-bottom:112px}.route-cell{min-width:250px}}
 
-/* v160 — liczniki, filtr priorytetu, mocne nowe zgłoszenia, favicon MK */
+/* v166 — MP3 sound, localized tab blink */
 .nav-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;margin-left:6px;padding:0 6px;border-radius:999px;background:#e31e24;color:#fff;font-size:10px;font-weight:950;line-height:1}.nav button.active .nav-count{background:#fff;color:#b3131b}.priority-filter{display:inline-flex;align-items:center;gap:5px;margin-right:8px;padding:3px;border:1px solid #d7e0e8;border-radius:999px;background:#fff}.priority-filter span{padding-left:8px;color:#697887;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em}.priority-filter select{height:28px;border:0;border-radius:999px;background:#fff;color:#263544;font-size:10px;font-weight:950;padding:0 9px;cursor:pointer}.request-row.row-new-admin td{background:#fff8ef!important;border-top:2px solid #e31e24!important;border-bottom:2px solid #e31e24!important}.request-row.row-new-admin td:first-child{box-shadow:inset 9px 0 0 #e31e24!important;border-left:2px solid #e31e24!important}.request-row.row-new-admin td:last-child{border-right:2px solid #e31e24!important}.request-row.row-new-admin .code{color:#b3131b!important;font-weight:950!important}.dash-card small{display:block;margin-top:4px;color:#7c8894;font-size:10px;font-weight:800}.mail-queue-note b{color:#203040}
 .panel-alert{position:fixed;right:18px;top:76px;z-index:92;max-width:330px;padding:12px 14px;border:1px solid #f0c6c6;border-left:5px solid var(--red);border-radius:11px;background:#fff;color:#263544;box-shadow:0 14px 34px rgba(24,38,52,.16);font-size:11px;font-weight:900;opacity:0;transform:translateY(-8px);pointer-events:none;transition:.22s}.panel-alert.show{opacity:1;transform:translateY(0)}.panel-alert b{display:block;margin-bottom:3px;color:#b3131b}.client-status-wrap{display:grid;gap:4px;justify-items:center}.client-status-wrap small{display:block;max-width:130px;color:#697887;font-size:8px;line-height:1.12;white-space:normal;font-weight:800}.mobile-help-note{display:none}@media(max-width:780px){.table-toolbar{display:flex!important;flex-wrap:wrap!important;gap:7px!important;align-items:stretch!important}.archive-toggle,.priority-filter{width:100%;justify-content:center}.table-search{width:100%;min-width:0!important}.table-search input{width:100%}.export-chip{width:100%;justify-content:center}.topbar{gap:8px;align-items:flex-start}.user{max-width:52%;justify-content:flex-end}.profile-link{max-width:100%;overflow:hidden}.head h1{font-size:20px}.admin-dashboard-grid{grid-template-columns:1fr!important}.mobile-help-note{display:block;margin:0 0 8px;padding:8px 10px;border:1px solid #dce6ef;border-radius:9px;background:#fff;color:#526372;font-size:10px}.table-wrap{max-height:none}.modal-card{padding:18px}.date-row{grid-template-columns:1fr 1fr}.client-status-wrap small{display:none}.toast{left:12px;right:12px;bottom:12px;text-align:center}}
 
@@ -1771,6 +1772,7 @@ const state={admin:structuredClone(defaults.admin),clients:structuredClone(defau
 const AUTO_REFRESH_MS=10000;
 let lastAutoRefreshAt=0;
 const BASE_PAGE_TITLE=document.title||'Padmain Freight Panel — M.KULCZYK';
+const NOTIFICATION_SOUND_FILE='mk-notification.mp3';
 let titleBlinkTimer=null;
 let titleBlinkOn=false;
 let titleNewCount=0;
@@ -1787,12 +1789,13 @@ function panelAlert(title,msg=''){
   playNotificationSound();
 }
 
+function titleBlinkWord(){return ({pl:'nowe',en:'new',de:'neu'}[state.lang]||'nowe')}
 function startTitleBlink(count=1){
   titleNewCount=Math.max(Number(count)||1,titleNewCount||0);
   if(titleBlinkTimer)return;
   titleBlinkTimer=setInterval(()=>{
     titleBlinkOn=!titleBlinkOn;
-    document.title=titleBlinkOn?`(${titleNewCount}) nowe — MK Panel`:BASE_PAGE_TITLE;
+    document.title=titleBlinkOn?`(${titleNewCount}) ${titleBlinkWord()} — MK Panel`:BASE_PAGE_TITLE;
   },900);
 }
 function stopTitleBlink(){
@@ -2823,7 +2826,7 @@ function renderSettings(){
   const currencies=['PLN','EUR','GBP'];
   const unread=unreadNotifications();
   const notes=state.notifications.length?state.notifications.map(n=>`<div class="notification-item ${n.read?'read':''} ${n.priority==='high'?'high':''}"><div><b>${esc(n.kind)} ${n.code?`· ${esc(n.code)}`:''}</b><span>${esc(formatRegisteredAt(n.createdAt))} · ${esc(n.client||'')} ${n.details?`· ${esc(n.details)}`:''} · ${esc(n.targetEmail||'contact@mkulczyk.pl')}</span></div></div>`).join(''):`<div class="notification-empty">${esc(ui('noNotifications'))}</div>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Powiadomienia zostają w panelu i odświeżają się automatycznie.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="Panel + przeglądarka, bez e-maili" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label>${esc(ui('browserNotify'))}</label><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> Włącz powiadomienia systemowe Chrome</label></div><div class="field full"><label>Dźwięk powiadomień</label><select id="notifySoundMode"><option value="beep" ${state.notifySound?'selected':''}>Krótki beep — pip</option><option value="off" ${!state.notifySound?'selected':''}>Wyłączony</option></select></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-sound>Test dźwięku</button><button class="btn" type="button" data-test-title-blink>Test migania karty</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> dźwięk jest generowany w przeglądarce, bez pliku mp3/wav. Chrome pozwala na beep dopiero po kliknięciu na stronie. Przy nowym powiadomieniu tytuł karty miga np. „(1) nowe — MK Panel”.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}</section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
+  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Powiadomienia zostają w panelu i odświeżają się automatycznie.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="Panel + przeglądarka, bez e-maili" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label>${esc(ui('browserNotify'))}</label><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> Włącz powiadomienia systemowe Chrome</label></div><div class="field full"><label>Dźwięk powiadomień</label><select id="notifySoundMode"><option value="beep" ${state.notifySound?'selected':''}>Dźwięk MK — MP3</option><option value="off" ${!state.notifySound?'selected':''}>Wyłączony</option></select></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-sound>Test dźwięku</button><button class="btn" type="button" data-test-title-blink>Test migania karty</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> dźwięk jest odtwarzany z pliku mk-notification.mp3. Chrome pozwala na dźwięk dopiero po kliknięciu na stronie. Przy nowym powiadomieniu tytuł karty miga w języku panelu, np. „(1) nowe/new/neu — MK Panel”.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}</section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='dashboard'?renderDashboard():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
@@ -3382,22 +3385,33 @@ async function setAdminStatus(id,status,skipRejectModal=false){
 async function setPriority(id,priority){const r=state.requests.find(x=>x.id===id);if(!r)return;r.priority=priority||'normal';render();await storeCloudNow('Priorytet zapisany.');}
 async function ackClientMessage(id,type){const r=state.requests.find(x=>x.id===id);if(!r)return;if(type==='reject')r.clientRejectionAck=true;else r.clientStatusNoticeAck=true;render();await storeCloudNow('Potwierdzenie zapisane.');}
 async function testMail(){panelAlert('Test powiadomienia','Powiadomienia zostają tylko w panelu — bez kolekcji mail.');}
-function testNotificationSound(){state.notifySound=true;primeNotificationSound();playNotificationSound(true);toast('Test dźwięku: krótki beep.');}
+async function testNotificationSound(){
+  state.notifySound=true;
+  primeNotificationSound();
+  const ok=await playNotificationSound(true);
+  toast(ok?'Test dźwięku: odtworzono powiadomienie.':'Dźwięk zablokowany — sprawdź głośność, wyciszenie karty albo kliknij stronę jeszcze raz.');
+}
 function testTitleBlink(){startTitleBlink(1);toast('Test migania karty włączony — zatrzymasz przez oznaczenie powiadomień jako przeczytane.');}
 let notifyAudioCtx=null;
+let notificationAudio=null;
+function getNotificationAudio(){
+  try{
+    notificationAudio=notificationAudio||new Audio(NOTIFICATION_SOUND_FILE);
+    notificationAudio.preload='auto';
+    notificationAudio.volume=0.75;
+    return notificationAudio;
+  }catch(e){return null}
+}
 function primeNotificationSound(){
   if(!state.notifySound)return;
+  try{getNotificationAudio()?.load?.()}catch(e){}
   const Ctx=window.AudioContext||window.webkitAudioContext;
   if(!Ctx)return;
-  try{
-    notifyAudioCtx=notifyAudioCtx||new Ctx();
-    if(notifyAudioCtx.state==='suspended')notifyAudioCtx.resume().catch(()=>{});
-  }catch(e){}
+  try{notifyAudioCtx=notifyAudioCtx||new Ctx();}catch(e){}
 }
-function playNotificationSound(force=false){
-  if(!force&&!state.notifySound)return;
+function playFallbackBeep(){
   const Ctx=window.AudioContext||window.webkitAudioContext;
-  if(!Ctx)return;
+  if(!Ctx)return false;
   try{
     notifyAudioCtx=notifyAudioCtx||new Ctx();
     const fire=()=>{
@@ -3413,9 +3427,24 @@ function playNotificationSound(force=false){
       osc.connect(gain);gain.connect(notifyAudioCtx.destination);
       osc.start(now);osc.stop(now+0.26);
     };
-    if(notifyAudioCtx.state==='suspended'){notifyAudioCtx.resume().then(fire).catch(()=>{});return;}
-    fire();
-  }catch(e){}
+    if(notifyAudioCtx.state==='suspended'){notifyAudioCtx.resume().then(fire).catch(()=>{});return true;}
+    fire();return true;
+  }catch(e){return false}
+}
+async function playNotificationSound(force=false){
+  if(!force&&!state.notifySound)return false;
+  const audio=getNotificationAudio();
+  if(audio){
+    try{
+      audio.pause();
+      try{audio.currentTime=0;}catch(e){}
+      await audio.play();
+      return true;
+    }catch(e){
+      console.warn('MP3 notification sound failed, fallback beep used',e);
+    }
+  }
+  return playFallbackBeep();
 }
 document.addEventListener('click',primeNotificationSound,{capture:true,passive:true});
 document.addEventListener('keydown',primeNotificationSound,{capture:true,passive:true});
