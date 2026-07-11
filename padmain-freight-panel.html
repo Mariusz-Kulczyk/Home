@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Padmain Freight Panel M.KULCZYK — panel zapytań transportowych dla stałych klientów: przesyłki jednorazowe, stałe, statusy, archiwum i powiadomienia w panelu.">
+<meta name="keywords" content="M.KULCZYK, transport, spedycja, zapytania transportowe, LTL, drobnica, ADR, transport Europa, Padmain Freight Panel">
 <title>Padmain Freight Panel — M.KULCZYK</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e31e24'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-size='24' font-weight='900' fill='white'%3EMK%3C/text%3E%3C/svg%3E">
 <style>
@@ -60,6 +62,8 @@ body{font-size:13px}
 
 /* v160 — liczniki, filtr priorytetu, mocne nowe zgłoszenia, favicon MK */
 .nav-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;margin-left:6px;padding:0 6px;border-radius:999px;background:#e31e24;color:#fff;font-size:10px;font-weight:950;line-height:1}.nav button.active .nav-count{background:#fff;color:#b3131b}.priority-filter{display:inline-flex;align-items:center;gap:5px;margin-right:8px;padding:3px;border:1px solid #d7e0e8;border-radius:999px;background:#fff}.priority-filter span{padding-left:8px;color:#697887;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em}.priority-filter select{height:28px;border:0;border-radius:999px;background:#fff;color:#263544;font-size:10px;font-weight:950;padding:0 9px;cursor:pointer}.request-row.row-new-admin td{background:#fff8ef!important;border-top:2px solid #e31e24!important;border-bottom:2px solid #e31e24!important}.request-row.row-new-admin td:first-child{box-shadow:inset 9px 0 0 #e31e24!important;border-left:2px solid #e31e24!important}.request-row.row-new-admin td:last-child{border-right:2px solid #e31e24!important}.request-row.row-new-admin .code{color:#b3131b!important;font-weight:950!important}.dash-card small{display:block;margin-top:4px;color:#7c8894;font-size:10px;font-weight:800}.mail-queue-note b{color:#203040}
+.panel-alert{position:fixed;right:18px;top:76px;z-index:92;max-width:330px;padding:12px 14px;border:1px solid #f0c6c6;border-left:5px solid var(--red);border-radius:11px;background:#fff;color:#263544;box-shadow:0 14px 34px rgba(24,38,52,.16);font-size:11px;font-weight:900;opacity:0;transform:translateY(-8px);pointer-events:none;transition:.22s}.panel-alert.show{opacity:1;transform:translateY(0)}.panel-alert b{display:block;margin-bottom:3px;color:#b3131b}.client-status-wrap{display:grid;gap:4px;justify-items:center}.client-status-wrap small{display:block;max-width:130px;color:#697887;font-size:8px;line-height:1.12;white-space:normal;font-weight:800}.mobile-help-note{display:none}@media(max-width:780px){.table-toolbar{display:flex!important;flex-wrap:wrap!important;gap:7px!important;align-items:stretch!important}.archive-toggle,.priority-filter{width:100%;justify-content:center}.table-search{width:100%;min-width:0!important}.table-search input{width:100%}.export-chip{width:100%;justify-content:center}.topbar{gap:8px;align-items:flex-start}.user{max-width:52%;justify-content:flex-end}.profile-link{max-width:100%;overflow:hidden}.head h1{font-size:20px}.admin-dashboard-grid{grid-template-columns:1fr!important}.mobile-help-note{display:block;margin:0 0 8px;padding:8px 10px;border:1px solid #dce6ef;border-radius:9px;background:#fff;color:#526372;font-size:10px}.table-wrap{max-height:none}.modal-card{padding:18px}.date-row{grid-template-columns:1fr 1fr}.client-status-wrap small{display:none}.toast{left:12px;right:12px;bottom:12px;text-align:center}}
+
 
 /* V10: budżet z walutą, akceptacja budżetu i centrowanie tabeli */
 .tbl th,.tbl td{text-align:center!important;vertical-align:middle!important}
@@ -1716,7 +1720,7 @@ body{
 </style>
 </head>
 <body>
-<div id="app"></div><div id="toast" class="toast"></div>
+<div id="app"></div><div id="toast" class="toast"></div><div id="panelAlert" class="panel-alert"></div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -1762,13 +1766,40 @@ try{
   cloudOnline=true;
 }catch(firebaseInitError){console.warn('Firebase init error',firebaseInitError);}
 const ADMIN={id:'admin',role:'admin',company:'M. KULCZYK',companyCode:'MK',name:'Mariusz Kulczyk',contact:'Mariusz Kulczyk',email:'contact@mkulczyk.pl',phone:'',login:'contact@mkulczyk.pl',language:'pl',vatEu:''};
-const defaults={admin:structuredClone(ADMIN),clients:[],requests:[],notifications:[],notifyEmail:'contact@mkulczyk.pl',currency:'PLN',notifyBrowser:false};
-const state={admin:structuredClone(defaults.admin),clients:structuredClone(defaults.clients),requests:[],notifications:[],errorLog:[],notifyEmail:defaults.notifyEmail,currency:defaults.currency,notifyBrowser:false,current:null,view:'loads',lang:'pl',noticeDismissed:false};
+const defaults={admin:structuredClone(ADMIN),clients:[],requests:[],notifications:[],notifyEmail:'contact@mkulczyk.pl',currency:'PLN',notifyBrowser:false,notifySound:true};
+const state={admin:structuredClone(defaults.admin),clients:structuredClone(defaults.clients),requests:[],notifications:[],errorLog:[],notifyEmail:defaults.notifyEmail,currency:defaults.currency,notifyBrowser:false,notifySound:defaults.notifySound,current:null,view:'loads',lang:'pl',noticeDismissed:false};
 const AUTO_REFRESH_MS=10000;
 let lastAutoRefreshAt=0;
+const BASE_PAGE_TITLE=document.title||'Padmain Freight Panel — M.KULCZYK';
+let titleBlinkTimer=null;
+let titleBlinkOn=false;
+let titleNewCount=0;
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const toast=t=>{const el=$('#toast');el.textContent=t;el.className='toast show';setTimeout(()=>el.className='toast',3200)};
+function panelAlert(title,msg=''){
+  const el=$('#panelAlert');
+  if(!el){toast([title,msg].filter(Boolean).join(' — '));return}
+  el.innerHTML=`<b>${esc(title||'Powiadomienie')}</b>${msg?`<span>${esc(msg)}</span>`:''}`;
+  el.className='panel-alert show';
+  setTimeout(()=>{el.className='panel-alert'},5200);
+  try{navigator.vibrate?.(80)}catch(e){}
+  playNotificationSound();
+}
+
+function startTitleBlink(count=1){
+  titleNewCount=Math.max(Number(count)||1,titleNewCount||0);
+  if(titleBlinkTimer)return;
+  titleBlinkTimer=setInterval(()=>{
+    titleBlinkOn=!titleBlinkOn;
+    document.title=titleBlinkOn?`(${titleNewCount}) nowe — MK Panel`:BASE_PAGE_TITLE;
+  },900);
+}
+function stopTitleBlink(){
+  if(titleBlinkTimer){clearInterval(titleBlinkTimer);titleBlinkTimer=null;}
+  titleBlinkOn=false;titleNewCount=0;document.title=BASE_PAGE_TITLE;
+}
+
 const statusLabels={
   pl:{draft:'Uzupełnij dane',waiting:'Oczekujące',budget:'Cena do potwierdzenia',budgetAccepted:'Cena potwierdzona',counter:'Negocjacje cenowe',searching:'Oferta w przygotowaniu',offer:'Oferta wysłana',accepted:'W realizacji',cancelled:'Odrzucono',archived:'Archiwum',deleted:'Usunięto trwale',finalized:'Zrealizowano'},
   en:{draft:'Complete details',waiting:'Pending',budget:'Price to confirm',budgetAccepted:'Price confirmed',counter:'Price negotiation',searching:'Offer in preparation',offer:'Offer sent',accepted:'In progress',cancelled:'Rejected',archived:'Archive',deleted:'Permanently deleted',finalized:'Completed'},
@@ -1965,7 +1996,7 @@ function ensureDefaultClients(){
   state.clients.forEach(c=>{delete c.accessCode;c.role='client';c.email=normalizeLogin(c.email||c.login||'');c.login=c.email;c.companyCode=c.companyCode||String(c.company||'KL').slice(0,2).toUpperCase();c.contact=c.contact||c.name||'';c.name=c.name||c.contact||'';c.phone=c.phone||'';c.vatEu=c.vatEu||'';c.language=c.language||'pl';});
   normalizeClientDirectory(false);
 }
-function localSnapshot(){return {notifyEmail:state.notifyEmail,currency:state.currency,lang:state.lang,notifyBrowser:state.notifyBrowser}}
+function localSnapshot(){return {notifyEmail:state.notifyEmail,currency:state.currency,lang:state.lang,notifyBrowser:state.notifyBrowser,notifySound:state.notifySound}}
 function clearOldLocalBackups(){try{['mkLtlModelV44FirebaseBackup','mkLtlModelV23','mkLtlModelV17','mkLtlModelV16','mkLtlModelV15'].forEach(k=>localStorage.removeItem(k));}catch(e){}}
 function saveLocal(){try{localStorage.setItem('mkPfeUiPrefs',JSON.stringify(localSnapshot()));clearOldLocalBackups();}catch(e){}}
 function plain(obj){return JSON.parse(JSON.stringify(obj||{}));}
@@ -2093,7 +2124,7 @@ async function saveRequestDirectly(r){
 }
 async function saveNotificationQuiet(n){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!n)return false;
-  try{await setDoc(doc(fbDb,'notifications',n.id),isAdminEmail(currentAuthEmail())?plain(n):prepareOwnedNotificationForSave(n),{merge:true});const to=n.targetEmail||ADMIN_EMAIL;await queueEmailQuiet(to,`${n.kind||'Powiadomienie'}${n.code?' · '+n.code:''}`,`${n.kind||'Powiadomienie'}\n${n.code||''}\n${n.client||''}\n${n.details||''}`,{requestId:n.requestId||'',notificationId:n.id||''});return true;}
+  try{await setDoc(doc(fbDb,'notifications',n.id),isAdminEmail(currentAuthEmail())?plain(n):prepareOwnedNotificationForSave(n),{merge:true});return true;}
   catch(e){console.warn('Firebase notification save skipped',e);return false;}
 }
 async function ensureAuthProfileOnLogin(user){
@@ -2181,7 +2212,7 @@ async function loadCloudData(){
         docsToArray(collection(fbDb,'notifications'))
       ]);
       if(adminDoc.exists())state.admin={...state.admin,...adminDoc.data(),role:'admin'};
-      if(settingsDoc.exists()){const x=settingsDoc.data();state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.notifyBrowser=Boolean(x.notifyBrowser);}
+      if(settingsDoc.exists()){const x=settingsDoc.data();state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.notifyBrowser=Boolean(x.notifyBrowser);if('notifySound' in x)state.notifySound=Boolean(x.notifySound);}
       state.clients=Array.isArray(clients)?clients.map(c=>{delete c.accessCode;return {...c,role:'client'}}):[];
       state.requests=filterDeletedRequests(requests);
       state.notifications=Array.isArray(notifications)?notifications:[];
@@ -2235,7 +2266,7 @@ async function cloudSaveNow(){
       const batch=writeBatch(fbDb);
       normalizeClientDirectory(true);
       batch.set(doc(fbDb,'admin','profile'),cleanAdminForSave(state.admin),{merge:true});
-      batch.set(doc(fbDb,'settings','global'),plain({notifyEmail:state.notifyEmail,currency:state.currency,notifyBrowser:state.notifyBrowser}),{merge:true});
+      batch.set(doc(fbDb,'settings','global'),plain({notifyEmail:state.notifyEmail,currency:state.currency,notifyBrowser:state.notifyBrowser,notifySound:state.notifySound}),{merge:true});
       state.clients.forEach(c=>{const clean=cleanClientForSave(c);if(clean.email)batch.set(doc(fbDb,'clients',clean.email),clean,{merge:true});});
       filterDeletedRequests(state.requests).forEach(r=>batch.set(doc(fbDb,'requests',r.id),withClientEmail(r),{merge:true}));
       state.notifications.forEach(n=>batch.set(doc(fbDb,'notifications',n.id),plain(n),{merge:true}));
@@ -2274,26 +2305,7 @@ function logFirebaseError(area,err){
 }
 function cloudErrorShort(){const x=state.errorLog[0]?.message||String(cloudLastError?.message||cloudLastError||'');return x?` Szczegół: ${x}`:''}
 async function queueEmailQuiet(to,subject,text,meta={}){
-  if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!to)return false;
-  const cleanTo=Array.isArray(to)?to.map(normalizeLogin).filter(Boolean):normalizeLogin(to);
-  if((Array.isArray(cleanTo)&&!cleanTo.length)||(!Array.isArray(cleanTo)&&!cleanTo))return false;
-  try{
-    const id='mail_'+Date.now()+'_'+Math.random().toString(16).slice(2);
-    const body=String(text||'');
-    await setDoc(doc(fbDb,'mail',id),{
-      to:Array.isArray(cleanTo)?cleanTo:[cleanTo],
-      from:'notifications@mkulczyk.pl',
-      replyTo:'contact@mkulczyk.pl',
-      message:{subject:String(subject||'Powiadomienie'),text:body,html:`<pre style="font-family:Arial,sans-serif;white-space:pre-wrap">${esc(body)}</pre>`},
-      createdAt:new Date().toISOString(),
-      status:'queued',
-      sender:'notifications@mkulczyk.pl',
-      extension:'firestore-send-email',
-      ...plain(meta)
-    },{merge:false});
-    return true;
-  }
-  catch(e){logFirebaseError('Kolejka e-mail',e);return false;}
+  return false;
 }
 async function storeCloudNow(successText='Zapisano na serwerze.'){
   saveLocal();
@@ -2306,7 +2318,7 @@ async function storeCloudNow(successText='Zapisano na serwerze.'){
 function store(){saveLocal();if(fbAuth?.currentUser&&fbDb){if(cloudSaveTimer)clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(cloudSaveNow,250);}}
 async function load(){
   loadLocalDeletedRequestIds();
-  try{const raw=localStorage.getItem('mkPfeUiPrefs');const x=JSON.parse(raw);if(x){state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.lang=x.lang||state.lang;state.notifyBrowser=Boolean(x.notifyBrowser);}}catch(e){}
+  try{const raw=localStorage.getItem('mkPfeUiPrefs');const x=JSON.parse(raw);if(x){state.notifyEmail=x.notifyEmail||state.notifyEmail;state.currency=x.currency||state.currency;state.lang=x.lang||state.lang;state.notifyBrowser=Boolean(x.notifyBrowser);if('notifySound' in x)state.notifySound=Boolean(x.notifySound);}}catch(e){}
   mergeLegacyClientProfilesFromLocal();
   clearOldLocalBackups();
   try{const urlLang=new URLSearchParams(location.search).get('lang');if(['pl','en','de'].includes(urlLang))state.lang=urlLang;}catch(e){}
@@ -2415,9 +2427,9 @@ const publicCopy={
 };
 function tPublic(k){return (publicCopy[state.lang]||publicCopy.pl)[k]||publicCopy.pl[k]||k}
 const uiCopy={
-  pl:{platform:'Padmain Freight Panel',inquiries:'Zapytania',myInquiries:'Lista pojedynczych przesyłek',clients:'Klienci / profile',settings:'Ustawienia',profile:'Profil',operational:'Panel operacyjny',accountProfile:'Profil konta',courses:'Padmain Freight Panel',inquiryPlatform:'Padmain Freight Panel',logout:'Wyloguj',loadplannerSmall:'',currentlyAt:'Obecnie w:',search:'Wyszukiwanie',searchPlaceholder:'Numer, klient, adres, status…',sort:'Sortowanie:',date:'Data',regDate:'Data rejestru',no:'Nr',route:'Trasa',cargo:'Ładunek',details:'Wymagania / notatka',budget:'Budżet',price:'Cena',status:'Status',operations:'Operacje',client:'Klient',addInquiry:'Dodaj zapytanie',clientLead:'Zgłoś transport w jednym prostym formularzu',clientEmpty:'Nie masz jeszcze zapytań. Kliknij „Dodaj zapytanie”, aby rozpocząć.',adminLead:'Lista do prowadzenia ofert — kraj i kod pocztowy, terminy, ładunek oraz status.',waiting:'Oczekujące',priceConfirm:'Cena do potwierdzenia',offerPrep:'Oferta w przygotowaniu',inProgress:'W realizacji',notifications:'Powiadomienia',notificationCenter:'Centrum powiadomień',noNotifications:'Brak powiadomień.',markRead:'Oznacz jako przeczytane',clear:'Wyczyść',settingsTitle:'Powiadomienia i domyślna waluta',notifyEmail:'E-mail do powiadomień administratora',browserNotify:'Powiadomienia systemowe w przeglądarce, gdy przeglądarka pozwoli',saveSettings:'Zapisz ustawienia',enableBrowser:'Włącz powiadomienia przeglądarki',testEmail:'Próba powiadomienia e-mail',systemSender:'Nadawca systemu',defaultCurrency:'Domyślna waluta budżetu'},
-  en:{platform:'Padmain Freight Panel',inquiries:'Inquiries',myInquiries:'Single shipments list',clients:'Clients / profiles',settings:'Settings',profile:'Profile',operational:'Operations panel',accountProfile:'Account profile',courses:'Padmain Freight Panel',inquiryPlatform:'Padmain Freight Panel',logout:'Log out',loadplannerSmall:'',currentlyAt:'Currently at:',search:'Search',searchPlaceholder:'Number, client, address, status…',sort:'Sorting:',date:'Date',regDate:'Registered',no:'No.',route:'Route',cargo:'Cargo',details:'Requirements / note',budget:'Budget',price:'Price',status:'Status',operations:'Actions',client:'Client',addInquiry:'Add inquiry',clientLead:'Submit transport in one simple form.',clientEmpty:'You have no inquiries yet. Click “Add inquiry” to start.',adminLead:'List for managing offers — country and postal code, dates, cargo and status.',waiting:'Pending',priceConfirm:'Price to confirm',offerPrep:'Offer in preparation',inProgress:'In progress',notifications:'Notifications',notificationCenter:'Notification center',noNotifications:'No notifications.',markRead:'Mark as read',clear:'Clear',settingsTitle:'Notifications and default currency',notifyEmail:'Admin notification e-mail',browserNotify:'Browser system notifications when allowed by the browser',saveSettings:'Save settings',enableBrowser:'Enable browser notifications',testEmail:'Test e-mail notification',systemSender:'System sender',defaultCurrency:'Default budget currency'},
-  de:{platform:'Padmain Freight Panel',inquiries:'Anfragen',myInquiries:'Liste einzelner Sendungen',clients:'Kunden / Profile',settings:'Einstellungen',profile:'Profil',operational:'Operatives Panel',accountProfile:'Kontoprofil',courses:'Padmain Freight Panel',inquiryPlatform:'Padmain Freight Panel',logout:'Abmelden',loadplannerSmall:'',currentlyAt:'Derzeit bei:',search:'Suche',searchPlaceholder:'Nummer, Kunde, Adresse, Status…',sort:'Sortierung:',date:'Datum',regDate:'Registriert',no:'Nr.',route:'Route',cargo:'Ladung',details:'Anforderungen / Notiz',budget:'Budget',price:'Preis',status:'Status',operations:'Aktionen',client:'Kunde',addInquiry:'Anfrage hinzufügen',clientLead:'Transport in einem einfachen Formular melden.',clientEmpty:'Sie haben noch keine Anfragen. Klicken Sie auf „Anfrage hinzufügen“, um zu starten.',adminLead:'Liste zur Angebotsführung — Land und Postleitzahl, Termine, Ladung und Status.',waiting:'Wartend',priceConfirm:'Preis zu bestätigen',offerPrep:'Angebot in Vorbereitung',inProgress:'In Durchführung',notifications:'Benachrichtigungen',notificationCenter:'Benachrichtigungszentrum',noNotifications:'Keine Benachrichtigungen.',markRead:'Als gelesen markieren',clear:'Löschen',settingsTitle:'Benachrichtigungen und Standardwährung',notifyEmail:'Admin-Benachrichtigungs-E-Mail',browserNotify:'Systembenachrichtigungen im Browser, wenn erlaubt',saveSettings:'Einstellungen speichern',enableBrowser:'Browser-Benachrichtigungen aktivieren',testEmail:'Test-E-Mail-Benachrichtigung',systemSender:'Systemabsender',defaultCurrency:'Standardwährung für Budget'}
+  pl:{platform:'Padmain Freight Panel',inquiries:'Zapytania',myInquiries:'Lista pojedynczych przesyłek',clients:'Klienci / profile',settings:'Ustawienia',profile:'Profil',operational:'Panel operacyjny',accountProfile:'Profil konta',courses:'Padmain Freight Panel',inquiryPlatform:'Padmain Freight Panel',logout:'Wyloguj',loadplannerSmall:'',currentlyAt:'Obecnie w:',search:'Wyszukiwanie',searchPlaceholder:'Numer, klient, adres, status…',sort:'Sortowanie:',date:'Data',regDate:'Data rejestru',no:'Nr',route:'Trasa',cargo:'Ładunek',details:'Wymagania / notatka',budget:'Budżet',price:'Cena',status:'Status',operations:'Operacje',client:'Klient',addInquiry:'Dodaj zapytanie',clientLead:'Zgłoś transport w jednym prostym formularzu',clientEmpty:'Nie masz jeszcze zapytań. Kliknij „Dodaj zapytanie”, aby rozpocząć.',adminLead:'Lista do prowadzenia ofert — kraj i kod pocztowy, terminy, ładunek oraz status.',waiting:'Oczekujące',priceConfirm:'Cena do potwierdzenia',offerPrep:'Oferta w przygotowaniu',inProgress:'W realizacji',notifications:'Powiadomienia',notificationCenter:'Centrum powiadomień',noNotifications:'Brak powiadomień.',markRead:'Oznacz jako przeczytane',clear:'Wyczyść',settingsTitle:'Powiadomienia i domyślna waluta',notifyEmail:'E-mail konta admina',browserNotify:'Powiadomienia systemowe w przeglądarce, gdy przeglądarka pozwoli',saveSettings:'Zapisz ustawienia',enableBrowser:'Włącz powiadomienia przeglądarki',testEmail:'Test powiadomienia',systemSender:'Tryb powiadomień',defaultCurrency:'Domyślna waluta budżetu'},
+  en:{platform:'Padmain Freight Panel',inquiries:'Inquiries',myInquiries:'Single shipments list',clients:'Clients / profiles',settings:'Settings',profile:'Profile',operational:'Operations panel',accountProfile:'Account profile',courses:'Padmain Freight Panel',inquiryPlatform:'Padmain Freight Panel',logout:'Log out',loadplannerSmall:'',currentlyAt:'Currently at:',search:'Search',searchPlaceholder:'Number, client, address, status…',sort:'Sorting:',date:'Date',regDate:'Registered',no:'No.',route:'Route',cargo:'Cargo',details:'Requirements / note',budget:'Budget',price:'Price',status:'Status',operations:'Actions',client:'Client',addInquiry:'Add inquiry',clientLead:'Submit transport in one simple form.',clientEmpty:'You have no inquiries yet. Click “Add inquiry” to start.',adminLead:'List for managing offers — country and postal code, dates, cargo and status.',waiting:'Pending',priceConfirm:'Price to confirm',offerPrep:'Offer in preparation',inProgress:'In progress',notifications:'Notifications',notificationCenter:'Notification center',noNotifications:'No notifications.',markRead:'Mark as read',clear:'Clear',settingsTitle:'Notifications and default currency',notifyEmail:'Admin account e-mail',browserNotify:'Browser system notifications when allowed by the browser',saveSettings:'Save settings',enableBrowser:'Enable browser notifications',testEmail:'Test notification',systemSender:'Notification mode',defaultCurrency:'Default budget currency'},
+  de:{platform:'Padmain Freight Panel',inquiries:'Anfragen',myInquiries:'Liste einzelner Sendungen',clients:'Kunden / Profile',settings:'Einstellungen',profile:'Profil',operational:'Operatives Panel',accountProfile:'Kontoprofil',courses:'Padmain Freight Panel',inquiryPlatform:'Padmain Freight Panel',logout:'Abmelden',loadplannerSmall:'',currentlyAt:'Derzeit bei:',search:'Suche',searchPlaceholder:'Nummer, Kunde, Adresse, Status…',sort:'Sortierung:',date:'Datum',regDate:'Registriert',no:'Nr.',route:'Route',cargo:'Ladung',details:'Anforderungen / Notiz',budget:'Budget',price:'Preis',status:'Status',operations:'Aktionen',client:'Kunde',addInquiry:'Anfrage hinzufügen',clientLead:'Transport in einem einfachen Formular melden.',clientEmpty:'Sie haben noch keine Anfragen. Klicken Sie auf „Anfrage hinzufügen“, um zu starten.',adminLead:'Liste zur Angebotsführung — Land und Postleitzahl, Termine, Ladung und Status.',waiting:'Wartend',priceConfirm:'Preis zu bestätigen',offerPrep:'Angebot in Vorbereitung',inProgress:'In Durchführung',notifications:'Benachrichtigungen',notificationCenter:'Benachrichtigungszentrum',noNotifications:'Keine Benachrichtigungen.',markRead:'Als gelesen markieren',clear:'Löschen',settingsTitle:'Benachrichtigungen und Standardwährung',notifyEmail:'Admin-Konto-E-Mail',browserNotify:'Systembenachrichtigungen im Browser, wenn erlaubt',saveSettings:'Einstellungen speichern',enableBrowser:'Browser-Benachrichtigungen aktivieren',testEmail:'Test-Benachrichtigung',systemSender:'Benachrichtigungsmodus',defaultCurrency:'Standardwährung für Budget'}
 };
 function ui(k){return (uiCopy[state.lang]||uiCopy.pl)[k]||uiCopy.pl[k]||k}
 function siteHomeHref(){return state.lang==='en'?'home-en.html':(state.lang==='de'?'home-de.html':'home.html')}
@@ -2578,11 +2590,20 @@ function clientStatusTooltip(r){
   };
   return (tips[lang]&&tips[lang][r.status])||tips.pl[r.status]||statusLabel(r.status);
 }
+function clientStatusShort(r){
+  const lang=state.lang||'pl';
+  const map={
+    pl:{draft:'uzupełnij przed wysłaniem',waiting:'czeka na sprawdzenie',budget:'potwierdź lub odrzuć cenę',budgetAccepted:'cena potwierdzona',counter:'czeka na decyzję spedytora',searching:'szukamy transportu',offer:'sprawdź ofertę',accepted:'transport w toku',finalized:'zakończone',archived:'w archiwum',cancelled:'odrzucone'},
+    en:{draft:'complete before sending',waiting:'waiting for review',budget:'confirm or reject price',budgetAccepted:'price confirmed',counter:'waiting for forwarder',searching:'transport search',offer:'check the offer',accepted:'in progress',finalized:'completed',archived:'in archive',cancelled:'rejected'},
+    de:{draft:'vor dem Senden ergänzen',waiting:'wartet auf Prüfung',budget:'Preis bestätigen/ablehnen',budgetAccepted:'Preis bestätigt',counter:'wartet auf Spediteur',searching:'Transport wird gesucht',offer:'Angebot prüfen',accepted:'in Durchführung',finalized:'abgeschlossen',archived:'im Archiv',cancelled:'abgelehnt'}
+  };
+  return (map[lang]&&map[lang][r.status])||map.pl[r.status]||'';
+}
 function statusTag(r,admin=false){
   const label=statusLabel(r.status);
   return admin
     ?`<button type="button" class="status-tag ${esc(r.status)} status-trigger" data-open-status="${esc(r.id)}" aria-label="${esc(state.lang==='en'?'Change status: ':state.lang==='de'?'Status ändern: ':'Zmień status: ')}${esc(label)}">${esc(label)}</button>`
-    :`<span class="status-tag ${esc(r.status)}" title="${esc(clientStatusTooltip(r))}">${esc(label)}</span>`;
+    :`<span class="client-status-wrap"><span class="status-tag ${esc(r.status)}" title="${esc(clientStatusTooltip(r))}">${esc(label)}</span><small>${esc(clientStatusShort(r))}</small></span>`;
 }
 function clientFaqHtml(){return '';}
 function renderDashboard(){
@@ -2802,7 +2823,7 @@ function renderSettings(){
   const currencies=['PLN','EUR','GBP'];
   const unread=unreadNotifications();
   const notes=state.notifications.length?state.notifications.map(n=>`<div class="notification-item ${n.read?'read':''} ${n.priority==='high'?'high':''}"><div><b>${esc(n.kind)} ${n.code?`· ${esc(n.code)}`:''}</b><span>${esc(formatRegisteredAt(n.createdAt))} · ${esc(n.client||'')} ${n.details?`· ${esc(n.details)}`:''} · ${esc(n.targetEmail||'contact@mkulczyk.pl')}</span></div></div>`).join(''):`<div class="notification-empty">${esc(ui('noNotifications'))}</div>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Adres alertów administratora: ${esc(state.notifyEmail||defaults.notifyEmail)}.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="notifications@mkulczyk.pl" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> ${esc(ui('browserNotify'))}</label></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-mail>${esc(ui('testEmail'))}</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> ważne akcje klientów zapisują się dla adresu ustawionego w polu „E-mail alertów” i odświeżają się automatycznie. Prawdziwy automatyczny e-mail działa dopiero po włączeniu Firebase Extension Trigger Email na kolekcji mail i ustawieniu SMTP.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}<div class="mail-queue-note">E-maile automatyczne są odkładane do kolekcji <b>mail</b> z nadawcą <b>notifications@mkulczyk.pl</b>; do wysyłki włącz Firebase Trigger Email.</div></section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
+  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Powiadomienia zostają w panelu i odświeżają się automatycznie.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="Panel + przeglądarka, bez e-maili" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label>${esc(ui('browserNotify'))}</label><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> Włącz powiadomienia systemowe Chrome</label></div><div class="field full"><label>Dźwięk powiadomień</label><select id="notifySoundMode"><option value="beep" ${state.notifySound?'selected':''}>Krótki beep — pip</option><option value="off" ${!state.notifySound?'selected':''}>Wyłączony</option></select></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-sound>Test dźwięku</button><button class="btn" type="button" data-test-title-blink>Test migania karty</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> dźwięk jest generowany w przeglądarce, bez pliku mp3/wav. Chrome pozwala na beep dopiero po kliknięciu na stronie. Przy nowym powiadomieniu tytuł karty miga np. „(1) nowe — MK Panel”.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}</section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='dashboard'?renderDashboard():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
@@ -2887,8 +2908,8 @@ function addNotification(kind,r,details='',priority='high',persist=true){
   return item;
 }
 function unreadNotifications(){return state.notifications.filter(n=>!n.read).length}
-function markNotificationsRead(){state.notifications.forEach(n=>n.read=true);store();render();toast('Powiadomienia oznaczone jako przeczytane.')}
-function clearNotifications(){state.notifications.forEach(n=>cloudDeleted.notifications.add(n.id));state.notifications=[];store();render();toast('Powiadomienia wyczyszczone.')}
+function markNotificationsRead(){state.notifications.forEach(n=>n.read=true);stopTitleBlink();store();render();toast('Powiadomienia oznaczone jako przeczytane.')}
+function clearNotifications(){state.notifications.forEach(n=>cloudDeleted.notifications.add(n.id));state.notifications=[];stopTitleBlink();store();render();toast('Powiadomienia wyczyszczone.')}
 let notificationPollBusy=false;
 async function refreshCloudLists(force=false){
   if(notificationPollBusy||!cloudOnline||!fbAuth?.currentUser||!fbDb)return;
@@ -2914,8 +2935,12 @@ async function refreshCloudLists(force=false){
       state.requests.forEach(normalizeRequest);
       state.requests=filterDeletedRequests(state.requests);
       state.notifications=Array.isArray(notifications)?notifications:state.notifications;
-      if(fresh.length&&state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
-        try{new Notification('M.Kulczyk — nowe powiadomienie',{body:`${fresh[0].kind}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
+      if(fresh.length){
+        startTitleBlink(fresh.length);
+        panelAlert(fresh[0].kind||'Nowe powiadomienie', `${fresh[0].code||''}${fresh[0].client?' · '+fresh[0].client:''}`);
+        if(state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
+          try{new Notification('M.Kulczyk — nowe powiadomienie',{body:`${fresh[0].kind}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
+        }
       }
       saveLocal();
       if(state.current?.role==='admin')render();
@@ -3172,14 +3197,15 @@ function closeRequestWizard(id){const r=state.requests.find(x=>x.id===id);if(r?.
 async function saveRequestWizard(id){
   const max=wizardMaxStep();for(let i=1;i<max;i++){if(!validateWizardStep(i))return;}
   const r=state.requests.find(x=>x.id===id);if(!r)return;const data=getWizardData();
+  const wasSubmitted=Boolean(r.submitted&&!r.isNewDraft);
   Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',budgetProposalPending:false,adminNew:true,priority:r.priority||'normal'});
   if(state.current?.role==='client'){const c=ensureCurrentClientIdentity();if(c){r.clientId=c.id;r.clientEmail=normalizeLogin(c.email);}}
   if(!r.requirements.includes('temperature')){r.tempMin='';r.tempMax=''}
-  const note=addNotification(r.recurring?'Nowe stałe przesyłki':'Nowe zgłoszenie klienta',r,r.recurring?'Klient wysłał plan stałych przesyłek.':'Klient wysłał nowe zapytanie.','high',false);
+  const note=addNotification(wasSubmitted?'Klient edytował zgłoszenie':(r.recurring?'Nowe stałe przesyłki':'Nowe zgłoszenie klienta'),r,wasSubmitted?'Klient zmienił dane zapytania.':(r.recurring?'Klient wysłał plan stałych przesyłek.':'Klient wysłał nowe zapytanie.'),'high',false);
   saveLocal();$('#requestWizard')?.remove();render();
   const ok=await saveRequestDirectly(r);
-  if(ok){saveNotificationQuiet(note);toast('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.');}
-  else toast('Nie zapisano na serwerze Firebase. Sprawdź logowanie albo reguły Firestore.');
+  if(ok){saveNotificationQuiet(note);toast(wasSubmitted?'Zmiany zapisane. Spedytor zobaczy aktualizację.':'Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.');}
+  else toast('Nie zapisano na serwerze Firebase.'+cloudErrorShort());
 }
 function openRouteModal(id,kind){
   draftFromRow(id);
@@ -3355,11 +3381,45 @@ async function setAdminStatus(id,status,skipRejectModal=false){
 }
 async function setPriority(id,priority){const r=state.requests.find(x=>x.id===id);if(!r)return;r.priority=priority||'normal';render();await storeCloudNow('Priorytet zapisany.');}
 async function ackClientMessage(id,type){const r=state.requests.find(x=>x.id===id);if(!r)return;if(type==='reject')r.clientRejectionAck=true;else r.clientStatusNoticeAck=true;render();await storeCloudNow('Potwierdzenie zapisane.');}
-async function testMail(){
-  const to=normalizeLogin(state.notifyEmail||ADMIN_EMAIL);
-  const ok=await queueEmailQuiet(to,'Test powiadomień MK','To jest test automatycznych powiadomień z Padmain Freight Panel.\nJeżeli widzisz ten e-mail, Firebase Trigger Email działa poprawnie.',{type:'test',manualTest:true});
-  toast(ok?'Test dodany do kolejki mail. Jeżeli Trigger Email jest ustawiony, e-mail dojdzie.':'Nie udało się dodać testu do kolejki mail.' );
-} 
+async function testMail(){panelAlert('Test powiadomienia','Powiadomienia zostają tylko w panelu — bez kolekcji mail.');}
+function testNotificationSound(){state.notifySound=true;primeNotificationSound();playNotificationSound(true);toast('Test dźwięku: krótki beep.');}
+function testTitleBlink(){startTitleBlink(1);toast('Test migania karty włączony — zatrzymasz przez oznaczenie powiadomień jako przeczytane.');}
+let notifyAudioCtx=null;
+function primeNotificationSound(){
+  if(!state.notifySound)return;
+  const Ctx=window.AudioContext||window.webkitAudioContext;
+  if(!Ctx)return;
+  try{
+    notifyAudioCtx=notifyAudioCtx||new Ctx();
+    if(notifyAudioCtx.state==='suspended')notifyAudioCtx.resume().catch(()=>{});
+  }catch(e){}
+}
+function playNotificationSound(force=false){
+  if(!force&&!state.notifySound)return;
+  const Ctx=window.AudioContext||window.webkitAudioContext;
+  if(!Ctx)return;
+  try{
+    notifyAudioCtx=notifyAudioCtx||new Ctx();
+    const fire=()=>{
+      const now=notifyAudioCtx.currentTime;
+      const osc=notifyAudioCtx.createOscillator();
+      const gain=notifyAudioCtx.createGain();
+      osc.type='sine';
+      osc.frequency.setValueAtTime(880,now);
+      osc.frequency.exponentialRampToValueAtTime(660,now+0.20);
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.09,now+0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.24);
+      osc.connect(gain);gain.connect(notifyAudioCtx.destination);
+      osc.start(now);osc.stop(now+0.26);
+    };
+    if(notifyAudioCtx.state==='suspended'){notifyAudioCtx.resume().then(fire).catch(()=>{});return;}
+    fire();
+  }catch(e){}
+}
+document.addEventListener('click',primeNotificationSound,{capture:true,passive:true});
+document.addEventListener('keydown',primeNotificationSound,{capture:true,passive:true});
+document.addEventListener('touchstart',primeNotificationSound,{capture:true,passive:true});
 
 function openCountryMenu(input){
   const field=input.closest('.country-field');if(!field)return;
@@ -3377,7 +3437,7 @@ function filterCountryMenu(input){
 function closeCountryMenus(){document.querySelectorAll('.country-field.open').forEach(x=>x.classList.remove('open'))}
 document.addEventListener('click',e=>{const opt=e.target.closest('[data-country-code]');if(opt){const field=opt.closest('.country-field');const input=field?.querySelector('[data-country-input]');if(input){input.value=opt.dataset.countryCode;input.classList.remove('wizard-field-error');field.classList.remove('open');}return}if(!e.target.closest('.country-field'))closeCountryMenus();});
 document.addEventListener('click',e=>{const a=e.target.closest('[data-account-sort-key]');if(a){const key=a.dataset.accountSortKey;const ui=tableUi.accounts;if(ui.key===key)ui.dir=ui.dir==='asc'?'desc':'asc';else{ui.key=key;ui.dir='asc'}render();return}const t=e.target.closest('[data-sort-key]');if(!t)return;const role=t.dataset.sortRole,key=t.dataset.sortKey;if(!role||!key)return;const ui=tableUi[role];if(ui.key===key)ui.dir=ui.dir==='asc'?'desc':'asc';else{ui.key=key;ui.dir=key==='createdAt'?'desc':'asc'}render();applyTableSearch(role,ui.query);});
-document.addEventListener('click',e=>{const t=e.target.closest('button,[data-quick]');if(!t)return;if(t.dataset.quick){login(t.dataset.quick);return}if(t.hasAttribute('data-fixed-notice-ok')){state.noticeDismissed=true;t.closest('.fixed-notice')?.remove();return}if(t.dataset.archiveScope){const role=t.dataset.archiveRole||'admin';if(tableUi[role])tableUi[role].scope=t.dataset.archiveScope;render();return}if(t.dataset.exportCsv){exportRequestsCsv(t.dataset.exportCsv);return}if(t.dataset.ackClientMessage){ackClientMessage(t.dataset.ackClientMessage,t.dataset.ackType||'status');return}if(t.dataset.saveRejectNote){saveRejectNote(t.dataset.saveRejectNote,t.dataset.nextStatus||'cancelled');return}if(t.hasAttribute('data-open-login')){loginModal();return}if(t.hasAttribute('data-add-client')){openClientAddModal();return}if(t.hasAttribute('data-repair-clients')){repairClientProfilesByEmail();return}if(t.hasAttribute('data-create-client-profile')){createClientProfileFromEmail();return}if(t.dataset.action==='logout'){logout();return}if(t.dataset.action==='add-request'){addRequest();return}if(t.dataset.action==='add-recurring'){addRecurringRequest();return}if(t.hasAttribute('data-how-works')){openHowWorksModal();return}if(t.dataset.nav){state.view=t.dataset.nav;render();return}if(t.hasAttribute('data-profile')){state.view='profile';render();return}if(t.dataset.lang){state.lang=t.dataset.lang;try{const url=new URL(location.href);url.searchParams.set('lang',state.lang);history.replaceState(null,'',url.toString())}catch(e){}store();render();return}if(t.dataset.save){updateRequest(t.dataset.save);return}if(t.dataset.delete){deleteRequest(t.dataset.delete);return}if(t.dataset.confirmDelete){confirmDeleteRequest(t.dataset.confirmDelete);return}if(t.dataset.confirmArchiveNotice){confirmArchiveNotice(t.dataset.confirmArchiveNotice);return}if(t.hasAttribute('data-add-user-info')){openAddUserInfo();return}if(t.hasAttribute('data-edit-profile')){openProfileEditModal();return}if(t.hasAttribute('data-save-profile')){saveProfile();return}if(t.dataset.editClient){openClientEditModal(t.dataset.editClient);return}if(t.dataset.deleteClient){openDeleteClientModal(t.dataset.deleteClient);return}if(t.dataset.confirmDeleteClient){confirmDeleteClient(t.dataset.confirmDeleteClient);return}if(t.dataset.saveClient){saveClientAccount(t.dataset.saveClient);return}if(t.hasAttribute('data-mark-notifications-read')){markNotificationsRead();return}if(t.hasAttribute('data-clear-notifications')){clearNotifications();return}if(t.hasAttribute('data-enable-browser-notify')){requestBrowserNotifications();return}if(t.dataset.edit){editRequest(t.dataset.edit);return}if(t.dataset.routeId){openRouteModal(t.dataset.routeId,t.dataset.routeKind);return}if(t.dataset.addRoutePoint){addRoutePoint(t.dataset.addRoutePoint,t.dataset.routeKind);return}if(t.dataset.removeRoutePoint){removeRoutePoint(t.dataset.removeRoutePoint,t.dataset.routeKind,t.dataset.routeIndex);return}if(t.dataset.requirements){requirementsModal(t.dataset.requirements);return}if(t.dataset.saveRequirements){saveRequirements(t.dataset.saveRequirements);return}if(t.dataset.acceptBudget){acceptBudget(t.dataset.acceptBudget);return}if(t.dataset.declineBudget){declineBudgetProposal(t.dataset.declineBudget);return}if(t.dataset.counterBudget){openCounterBudgetModal(t.dataset.counterBudget);return}if(t.dataset.submitCounter){submitCounterBudget(t.dataset.submitCounter);return}if(t.dataset.submitBudgetProposal){submitBudgetProposal(t.dataset.submitBudgetProposal);return}if(t.dataset.openStatus){openStatusModal(t.dataset.openStatus);return}if(t.dataset.saveStatus){setAdminStatus(t.dataset.saveStatus,$('#adminStatusChoice')?.value||'waiting');return}if(t.dataset.offerSent){setOfferSent(t.dataset.offerSent);return}if(t.dataset.startRealisation){startRealisation(t.dataset.startRealisation);return}if(t.dataset.openOfferMailLangs){openOfferMailLangModal(t.dataset.openOfferMailLangs);return}if(t.dataset.sendOfferMail){sendOfferMail(t.dataset.sendOfferMail,t.dataset.mailLang||state.lang||'pl');return}if(t.dataset.approveCounter){approveCounter(t.dataset.approveCounter);return}if(t.dataset.declineCounter){declineCounter(t.dataset.declineCounter);return}if(t.hasAttribute('data-test-mail')){testMail();return}if(t.dataset.copy){const r=state.requests.find(x=>x.id===t.dataset.copy);if(r){navigator.clipboard?.writeText(`${r.code}\n${routeSummary(r.loads)}\n${routeSummary(r.unloads)}\nLDM: ${ldmDisplay(r.ldm)} | Waga: ${r.weight||''} t`);toast('Szkic oferty skopiowany.')}return}if(t.dataset.mail){const r=state.requests.find(x=>x.id===t.dataset.mail),c=r&&getClient(r.clientId);if(r&&c)window.location.href=`mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent('Zapytanie '+r.code)}&body=${encodeURIComponent('Dzień dobry,\n\nstatus zapytania '+r.code+': '+statusLabel(r.status)+'.')}`;return}if(t.hasAttribute('data-close-modal')){document.querySelector('.modal')?.remove();return}});
+document.addEventListener('click',e=>{const t=e.target.closest('button,[data-quick]');if(!t)return;if(t.dataset.quick){login(t.dataset.quick);return}if(t.hasAttribute('data-fixed-notice-ok')){state.noticeDismissed=true;t.closest('.fixed-notice')?.remove();return}if(t.dataset.archiveScope){const role=t.dataset.archiveRole||'admin';if(tableUi[role])tableUi[role].scope=t.dataset.archiveScope;render();return}if(t.dataset.exportCsv){exportRequestsCsv(t.dataset.exportCsv);return}if(t.dataset.ackClientMessage){ackClientMessage(t.dataset.ackClientMessage,t.dataset.ackType||'status');return}if(t.dataset.saveRejectNote){saveRejectNote(t.dataset.saveRejectNote,t.dataset.nextStatus||'cancelled');return}if(t.hasAttribute('data-open-login')){loginModal();return}if(t.hasAttribute('data-add-client')){openClientAddModal();return}if(t.hasAttribute('data-repair-clients')){repairClientProfilesByEmail();return}if(t.hasAttribute('data-create-client-profile')){createClientProfileFromEmail();return}if(t.dataset.action==='logout'){logout();return}if(t.dataset.action==='add-request'){addRequest();return}if(t.dataset.action==='add-recurring'){addRecurringRequest();return}if(t.hasAttribute('data-how-works')){openHowWorksModal();return}if(t.dataset.nav){state.view=t.dataset.nav;if(state.view==='notifications'||state.view==='settings')stopTitleBlink();render();return}if(t.hasAttribute('data-profile')){state.view='profile';render();return}if(t.dataset.lang){state.lang=t.dataset.lang;try{const url=new URL(location.href);url.searchParams.set('lang',state.lang);history.replaceState(null,'',url.toString())}catch(e){}store();render();return}if(t.dataset.save){updateRequest(t.dataset.save);return}if(t.dataset.delete){deleteRequest(t.dataset.delete);return}if(t.dataset.confirmDelete){confirmDeleteRequest(t.dataset.confirmDelete);return}if(t.dataset.confirmArchiveNotice){confirmArchiveNotice(t.dataset.confirmArchiveNotice);return}if(t.hasAttribute('data-add-user-info')){openAddUserInfo();return}if(t.hasAttribute('data-edit-profile')){openProfileEditModal();return}if(t.hasAttribute('data-save-profile')){saveProfile();return}if(t.dataset.editClient){openClientEditModal(t.dataset.editClient);return}if(t.dataset.deleteClient){openDeleteClientModal(t.dataset.deleteClient);return}if(t.dataset.confirmDeleteClient){confirmDeleteClient(t.dataset.confirmDeleteClient);return}if(t.dataset.saveClient){saveClientAccount(t.dataset.saveClient);return}if(t.hasAttribute('data-mark-notifications-read')){markNotificationsRead();return}if(t.hasAttribute('data-clear-notifications')){clearNotifications();return}if(t.hasAttribute('data-enable-browser-notify')){requestBrowserNotifications();return}if(t.hasAttribute('data-test-sound')){testNotificationSound();return}if(t.hasAttribute('data-test-title-blink')){testTitleBlink();return}if(t.dataset.edit){editRequest(t.dataset.edit);return}if(t.dataset.routeId){openRouteModal(t.dataset.routeId,t.dataset.routeKind);return}if(t.dataset.addRoutePoint){addRoutePoint(t.dataset.addRoutePoint,t.dataset.routeKind);return}if(t.dataset.removeRoutePoint){removeRoutePoint(t.dataset.removeRoutePoint,t.dataset.routeKind,t.dataset.routeIndex);return}if(t.dataset.requirements){requirementsModal(t.dataset.requirements);return}if(t.dataset.saveRequirements){saveRequirements(t.dataset.saveRequirements);return}if(t.dataset.acceptBudget){acceptBudget(t.dataset.acceptBudget);return}if(t.dataset.declineBudget){declineBudgetProposal(t.dataset.declineBudget);return}if(t.dataset.counterBudget){openCounterBudgetModal(t.dataset.counterBudget);return}if(t.dataset.submitCounter){submitCounterBudget(t.dataset.submitCounter);return}if(t.dataset.submitBudgetProposal){submitBudgetProposal(t.dataset.submitBudgetProposal);return}if(t.dataset.openStatus){openStatusModal(t.dataset.openStatus);return}if(t.dataset.saveStatus){setAdminStatus(t.dataset.saveStatus,$('#adminStatusChoice')?.value||'waiting');return}if(t.dataset.offerSent){setOfferSent(t.dataset.offerSent);return}if(t.dataset.startRealisation){startRealisation(t.dataset.startRealisation);return}if(t.dataset.openOfferMailLangs){openOfferMailLangModal(t.dataset.openOfferMailLangs);return}if(t.dataset.sendOfferMail){sendOfferMail(t.dataset.sendOfferMail,t.dataset.mailLang||state.lang||'pl');return}if(t.dataset.approveCounter){approveCounter(t.dataset.approveCounter);return}if(t.dataset.declineCounter){declineCounter(t.dataset.declineCounter);return}if(t.dataset.copy){const r=state.requests.find(x=>x.id===t.dataset.copy);if(r){navigator.clipboard?.writeText(`${r.code}\n${routeSummary(r.loads)}\n${routeSummary(r.unloads)}\nLDM: ${ldmDisplay(r.ldm)} | Waga: ${r.weight||''} t`);toast('Szkic oferty skopiowany.')}return}if(t.dataset.mail){const r=state.requests.find(x=>x.id===t.dataset.mail),c=r&&getClient(r.clientId);if(r&&c)window.location.href=`mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent('Zapytanie '+r.code)}&body=${encodeURIComponent('Dzień dobry,\n\nstatus zapytania '+r.code+': '+statusLabel(r.status)+'.')}`;return}if(t.hasAttribute('data-close-modal')){document.querySelector('.modal')?.remove();return}});
 document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;if(t.dataset.wizardAddPoint){addWizardPoint(t.dataset.wizardAddPoint);return}if(t.hasAttribute('data-wizard-show-stops')){const section=$('#wizardStopsSection');if(section){section.classList.remove('is-collapsed');section.classList.add('is-open');if(!$('#wizardStopsPoints')?.children.length)addWizardPoint('stops')}return}if(t.dataset.wizardRemovePoint){removeWizardPoint(t);return}if(t.hasAttribute('data-wizard-next')){setWizardStep(Number($('#requestWizard')?.dataset.step||1)+1);return}if(t.hasAttribute('data-wizard-prev')){setWizardStep(Math.max(1,Number($('#requestWizard')?.dataset.step||1)-1));return}if(t.dataset.wizardSave){saveRequestWizard(t.dataset.wizardSave);return}if(t.dataset.wizardCancel){closeRequestWizard(t.dataset.wizardCancel);return}});
 document.addEventListener('change',e=>{if(e.target.matches('[data-wizard-temp]'))$('#wizTempRange')?.classList.toggle('hidden',!e.target.checked);if(e.target.matches('#requestWizard input[name="wizScheduleMode"]'))updateWizardScheduleMode();if(e.target.matches('#requestWizard [data-weekday]')){const key=e.target.dataset.weekday;const input=document.querySelector(`#requestWizard [data-weekday-qty="${key}"]`);if(input){input.disabled=!e.target.checked;if(!e.target.checked)input.value='';else setTimeout(()=>input.focus(),0);}e.target.closest('label')?.classList.toggle('is-selected',e.target.checked);}});
 function updateFieldColour(el){if(!el.matches('[name="ldm"],[name="weight"],[name="access"]'))return;const empty=String(el.value||'').trim()==='';el.classList.toggle('missing-strong',empty)}
@@ -3386,7 +3446,7 @@ document.addEventListener('change',e=>{if(e.target?.dataset?.priorityFilter){con
 document.addEventListener('input',e=>{if(e.target.matches('[data-table-search]')){const role=e.target.dataset.tableSearch;tableUi[role].query=e.target.value;applyTableSearch(role,e.target.value);return}if(e.target.matches('[data-account-search]')){const pos=e.target.selectionStart||0;tableUi.accounts.query=e.target.value;render();setTimeout(()=>{const el=document.querySelector('[data-account-search]');if(el){el.focus();try{el.setSelectionRange(pos,pos)}catch(e){}}},0);return}if(e.target.matches('[data-country-input]')){const raw=e.target.value.toUpperCase();if(e.target.value!==raw)e.target.value=raw;openCountryMenu(e.target);return}if(e.target.id==='routePostalCity'){const raw=e.target.value;const upper=raw.toUpperCase();if(raw!==upper)e.target.value=upper;}if(e.target.matches('[data-point-field="postal"]')){const raw=e.target.value;const upper=raw.toUpperCase().replace(/\s+/g,'').slice(0,7);if(raw!==upper)e.target.value=upper;}if(e.target.matches('#wizAccessGroup input')){$('#wizAccessGroup')?.classList.remove('wizard-field-error')}if(e.target.closest('#requestWizard')&&e.target.matches('[data-point-field],#wizLdm,#wizNotes,#wizWeight,#wizAccessGroup input')){e.target.classList.remove('wizard-field-error');const card=e.target.closest('.wizard-point-card');if(card&&!card.querySelector('.wizard-field-error'))card.classList.remove('wizard-card-error');}updateFieldColour(e.target)});
 document.addEventListener('focusin',e=>{if(e.target.matches('[data-country-input]'))openCountryMenu(e.target);},true);
 document.addEventListener('change',e=>{if(e.target.matches('[data-point-field="country"]')){const code=normalizeCountryCode(e.target.value);if(code)e.target.value=code;}if(e.target.matches('[data-temp-toggle]')){$('#tempRange')?.classList.toggle('hidden',!e.target.checked)}if(e.target.dataset.adminStatus){setAdminStatus(e.target.dataset.adminStatus,e.target.value);return}updateFieldColour(e.target)});document.addEventListener('focusin',e=>{if(e.target.id==='wizLdm')e.target.value=normalizedLdm(e.target.value);},true);document.addEventListener('focusout',e=>{if(e.target.matches('[data-point-field="country"]')){const code=normalizeCountryCode(e.target.value);if(code)e.target.value=code;}if(e.target.id==='wizLdm')e.target.value=ldmDisplay(e.target.value);},true);
-document.addEventListener('submit',e=>{if(e.target.id==='accessLoginForm'){e.preventDefault();loginWithCode();return}if(e.target.id==='settingsForm'){e.preventDefault();state.notifyEmail=$('#notifyEmail').value.trim();state.currency=$('#defaultCurrency').value||'PLN';state.notifyBrowser=Boolean($('#notifyBrowser')?.checked);render();storeCloudNow('Ustawienia zapisane na serwerze.')}});
+document.addEventListener('submit',e=>{if(e.target.id==='accessLoginForm'){e.preventDefault();loginWithCode();return}if(e.target.id==='settingsForm'){e.preventDefault();state.notifyEmail=$('#notifyEmail').value.trim();state.currency=$('#defaultCurrency').value||'PLN';state.notifyBrowser=Boolean($('#notifyBrowser')?.checked);state.notifySound=($('#notifySoundMode')?.value||'beep')!=='off';primeNotificationSound();render();storeCloudNow('Ustawienia zapisane na serwerze.')}});
 await load();render();
 })();
 
