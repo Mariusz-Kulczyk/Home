@@ -1782,6 +1782,7 @@ const NOTIFICATION_SOUND_FILE='mk-notification.mp3';
 let titleBlinkTimer=null;
 let titleBlinkOn=false;
 let titleNewCount=0;
+const requestChangeWatch={admin:{primed:false,map:new Map()},client:{primed:false,map:new Map()}};
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const toast=t=>{const el=$('#toast');el.textContent=t;el.className='toast show';setTimeout(()=>el.className='toast',3200)};
@@ -2847,7 +2848,7 @@ function renderSettings(){
   const currencies=['PLN','EUR','GBP'];
   const unread=unreadNotifications();
   const notes=state.notifications.length?state.notifications.map(n=>`<div class="notification-item ${n.read?'read':''} ${n.priority==='high'?'high':''}"><div><b>${esc(n.kind)} ${n.code?`· ${esc(n.code)}`:''}</b><span>${esc(formatRegisteredAt(n.createdAt))} · ${esc(n.client||'')} ${n.details?`· ${esc(n.details)}`:''} · ${esc(n.targetEmail||'contact@mkulczyk.pl')}</span></div></div>`).join(''):`<div class="notification-empty">${esc(ui('noNotifications'))}</div>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Powiadomienia zostają w panelu i odświeżają się automatycznie.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="Panel + przeglądarka, bez e-maili" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label>${esc(ui('browserNotify'))}</label><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> Włącz powiadomienia systemowe Chrome</label></div><div class="field full"><label>Dźwięk powiadomień</label><select id="notifySoundMode"><option value="beep" ${state.notifySound?'selected':''}>Dźwięk MK — MP3</option><option value="off" ${!state.notifySound?'selected':''}>Wyłączony</option></select></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-sound>Test dźwięku</button><button class="btn" type="button" data-test-title-blink>Test migania karty</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> dźwięk jest odtwarzany z pliku mk-notification.mp3. Chrome pozwala na dźwięk dopiero po kliknięciu na stronie. Przy nowym powiadomieniu tytuł karty miga w języku panelu, np. „(1) nowe/new/neu — MK Panel”.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}</section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
+  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Powiadomienia zostają w panelu i odświeżają się automatycznie.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="Panel + przeglądarka, bez e-maili" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label>${esc(ui('browserNotify'))}</label><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> Włącz powiadomienia systemowe Chrome</label></div><div class="field full"><label>Dźwięk powiadomień</label><select id="notifySoundMode"><option value="beep" ${state.notifySound?'selected':''}>Dźwięk MK — MP3</option><option value="off" ${!state.notifySound?'selected':''}>Wyłączony</option></select></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-sound>Test dźwięku</button><button class="btn" type="button" data-test-title-blink>Test migania karty</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> dźwięk jest odtwarzany z pliku mk-notification.mp3. Chrome pozwala na dźwięk dopiero po kliknięciu na stronie. Przy nowym powiadomieniu albo zmianie statusu tytuł karty miga w języku panelu, np. „(1) nowe/new/neu — MK Panel”.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}</section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='dashboard'?renderDashboard():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
@@ -2906,6 +2907,40 @@ function validatePointAgainstRoute(r,kind,p){
 }
 
 
+
+function requestWatchFingerprint(r,role){
+  if(!r)return '';
+  const common=[r.id,r.status,r.submitted,r.updatedAt,r.budget,r.currency,r.budgetProposalPending,r.clientProposal,r.clientProposalCurrency,r.archivedAt,r.archiveReason,r.permanentlyDeleted,r.status==='deleted'];
+  if(role==='client')common.push(r.clientStatusNotice,r.clientStatusNoticeAck,r.clientRejectionNote,r.clientRejectionAck,r.clientArchived,r.archiveNoticeConfirmed);
+  else common.push(r.adminNew,r.priority,r.clientEmail,r.clientId,r.clientNote,r.notes);
+  return common.map(v=>String(v??'')).join('¦');
+}
+function detectRequestSideChanges(role,requests){
+  const bucket=requestChangeWatch[role]||(requestChangeWatch[role]={primed:false,map:new Map()});
+  const changed=[];const next=new Map();
+  (requests||[]).forEach(r=>{
+    if(!r||!r.id||r.permanentlyDeleted===true||r.status==='deleted'||!r.submitted)return;
+    const fp=requestWatchFingerprint(r,role);
+    const old=bucket.map.get(r.id);
+    if(bucket.primed&&old&&old!==fp)changed.push(r);
+    if(bucket.primed&&!old)changed.push(r);
+    next.set(r.id,fp);
+  });
+  bucket.map=next;bucket.primed=true;
+  return changed;
+}
+function changeAlertTitle(role,count){
+  if(role==='client')return ({pl:'Zmiana w zapytaniu',en:'Request updated',de:'Anfrage aktualisiert'}[state.lang]||'Zmiana w zapytaniu');
+  return ({pl:'Zmiana w panelu',en:'Panel update',de:'Panel-Aktualisierung'}[state.lang]||'Zmiana w panelu');
+}
+function firePanelChangeAlert(role,items){
+  const arr=(items||[]).filter(Boolean);if(!arr.length)return;
+  startTitleBlink(arr.length);
+  const first=arr[0]||{};
+  const bits=[first.code||'',first.client||getClientForRequest(first)?.company||'',statusLabel(first.status||'')].filter(Boolean).join(' · ');
+  panelAlert(changeAlertTitle(role,arr.length),bits||`${arr.length}`);
+}
+
 function addNotification(kind,r,details='',priority='high',persist=true){
   const c=getClientForRequest(r)||{};
   const target=state.notifyEmail||ADMIN_EMAIL;
@@ -2958,6 +2993,7 @@ async function refreshCloudLists(force=false){
       state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
       state.requests.forEach(normalizeRequest);
       state.requests=filterDeletedRequests(state.requests);
+      const changedRequests=detectRequestSideChanges('admin',state.requests);
       state.notifications=Array.isArray(notifications)?notifications:state.notifications;
       if(fresh.length){
         startTitleBlink(fresh.length);
@@ -2966,6 +3002,7 @@ async function refreshCloudLists(force=false){
           try{new Notification('M.Kulczyk — nowe powiadomienie',{body:`${fresh[0].kind}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
         }
       }
+      if(!fresh.length&&changedRequests.length)firePanelChangeAlert('admin',changedRequests);
       saveLocal();
       if(state.current?.role==='admin')render();
     }else{
@@ -2978,6 +3015,7 @@ async function refreshCloudLists(force=false){
       state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
       state.requests.forEach(normalizeRequest);
       state.requests=filterDeletedRequests(state.requests);
+      const changedRequests=detectRequestSideChanges('client',state.requests);
       const fresh=Array.isArray(notifications)?notifications.filter(n=>!previous.has(n.id)&&!n.read):[];
       if(Array.isArray(notifications))state.notifications=notifications;
       if(fresh.length){
@@ -2987,6 +3025,7 @@ async function refreshCloudLists(force=false){
           try{new Notification('M.Kulczyk — '+titleBlinkWord(),{body:`${fresh[0].kind||'Powiadomienie'}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
         }
       }
+      if(!fresh.length&&changedRequests.length)firePanelChangeAlert('client',changedRequests);
       saveLocal();
       if(state.current?.role==='client')render();
     }
@@ -2998,7 +3037,7 @@ setInterval(()=>refreshCloudLists(false),AUTO_REFRESH_MS);
 
 function requestBrowserNotifications(){if(!('Notification' in window)){toast('Ta przeglądarka nie obsługuje powiadomień systemowych.');return}Notification.requestPermission().then(p=>{state.notifyBrowser=p==='granted';store();render();toast(state.notifyBrowser?'Powiadomienia systemowe włączone.':'Powiadomienia systemowe nie zostały włączone.');})}
 function demoNotifyAdmin(r,kind='Nowe zapytanie'){const to=(state.notifyEmail||'').trim();if(!to){toast('W ustawieniach wpisz e-mail do powiadomień administratora.');return}const c=getClient(r.clientId)||{};const subject=`${kind}: ${r.code||''}`;const body=`${kind}\n\nNumer: ${r.code||''}\nKlient: ${c.company||''}\nZaładunek: ${routeSummary(r.loads||[])}\nRozładunek: ${routeSummary(r.unloads||[])}\nWymagania: ${requirementsText(r)||'brak'}\nNotatka klienta: ${r.clientNote||'brak'}\nBudżet: ${r.budget||'brak'} ${r.currency||state.currency}`;window.location.href=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;toast('Otworzono próbne powiadomienie. Wyślij je z programu pocztowego.')} 
-async function updateRequest(id){draftFromRow(id);const r=state.requests.find(x=>x.id===id);if(!r)return;const missing=[];if(!r.loads.length)missing.push('załadunek');if(!r.unloads.length)missing.push('rozładunek');if(!String(r.ldm||'').trim()&&!String(r.notes||'').trim())missing.push('LDM albo lista ładunkowa');if(String(r.weight||'').trim()==='')missing.push('waga');if(!r.access)missing.push('dostęp');if(missing.length){toast(`Uzupełnij pola wymagane: ${missing.join(', ')}.`);return}const dateError=validateRouteDates(r);if(dateError){toast(dateError);return}r.editing=false;r.submitted=true;r.status='waiting';r.adminNew=true;normalizeRequest(r);addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.')} 
+async function updateRequest(id){draftFromRow(id);const r=state.requests.find(x=>x.id===id);if(!r)return;const missing=[];if(!r.loads.length)missing.push('załadunek');if(!r.unloads.length)missing.push('rozładunek');if(!String(r.ldm||'').trim()&&!String(r.notes||'').trim())missing.push('LDM albo lista ładunkowa');if(String(r.weight||'').trim()==='')missing.push('waga');if(!r.access)missing.push('dostęp');if(missing.length){toast(`Uzupełnij pola wymagane: ${missing.join(', ')}.`);return}const dateError=validateRouteDates(r);if(dateError){toast(dateError);return}r.editing=false;r.submitted=true;r.status='waiting';r.updatedAt=new Date().toISOString();r.adminNew=true;normalizeRequest(r);addNotification('Nowe zgłoszenie klienta',r,'Klient wysłał nowe zapytanie.');render();await storeCloudNow('Zapytanie zapisane na serwerze. Spedytor zobaczy je na swoim koncie.')} 
 function clientNeedsDeleteReason(r){return state.current?.role==='client'&&['searching','offer','accepted'].includes(r.status)}
 function openDeleteModal(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
@@ -3231,7 +3270,7 @@ async function saveRequestWizard(id){
   const max=wizardMaxStep();for(let i=1;i<max;i++){if(!validateWizardStep(i))return;}
   const r=state.requests.find(x=>x.id===id);if(!r)return;const data=getWizardData();
   const wasSubmitted=Boolean(r.submitted&&!r.isNewDraft);
-  Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',budgetProposalPending:false,adminNew:true,priority:r.priority||'normal'});
+  Object.assign(r,data,{submitted:true,isNewDraft:false,editing:false,status:'waiting',updatedAt:new Date().toISOString(),budgetProposalPending:false,adminNew:true,priority:r.priority||'normal'});
   if(state.current?.role==='client'){const c=ensureCurrentClientIdentity();if(c){r.clientId=c.id;r.clientEmail=normalizeLogin(c.email);}}
   if(!r.requirements.includes('temperature')){r.tempMin='';r.tempMax=''}
   const note=addNotification(wasSubmitted?'Klient edytował zgłoszenie':(r.recurring?'Nowe stałe przesyłki':'Nowe zgłoszenie klienta'),r,wasSubmitted?'Klient zmienił dane zapytania.':(r.recurring?'Klient wysłał plan stałych przesyłek.':'Klient wysłał nowe zapytanie.'),'high',false);
@@ -3279,29 +3318,29 @@ async function submitBudgetProposal(id){
   const budget=$('#proposalBudget')?.value.trim()||'';
   const currency=$('#proposalCurrency')?.value||state.currency;
   if(!budget){toast('Wpisz cenę przed wysłaniem propozycji.');return}
-  r.budget=budget;r.currency=currency;r.status='budget';r.adminNew=false;r.budgetProposalPending=true;r.clientProposal='';r.clientProposalCurrency=currency;r.clientStatusNotice=`Zaproponowano cenę: ${budget} ${currency}`;r.clientStatusNoticeAck=false;notifyClientStatus(r,'Zaproponowano cenę');
+  r.budget=budget;r.currency=currency;r.status='budget';r.updatedAt=new Date().toISOString();r.adminNew=false;r.budgetProposalPending=true;r.clientProposal='';r.clientProposalCurrency=currency;r.clientStatusNotice=`Zaproponowano cenę: ${budget} ${currency}`;r.clientStatusNoticeAck=false;notifyClientStatus(r,'Zaproponowano cenę');
   document.querySelector('#budgetModal')?.remove();render();await storeCloudNow('Cena została zapisana na serwerze i wysłana klientowi do potwierdzenia.');
 }
 async function acceptBudget(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
-  r.status='budgetAccepted';r.budgetProposalPending=false;
+  r.status='budgetAccepted';r.updatedAt=new Date().toISOString();r.budgetProposalPending=false;
   addNotification('Klient potwierdził budżet',r,`${r.budget||''} ${r.currency||state.currency}`);
   render();await storeCloudNow('Cena potwierdzona i zapisana na serwerze.');
 }
 async function confirmBudget(id){
   const r=state.requests.find(x=>x.id===id);if(!r)return;
   if(!String(r.budget||'').trim()){openBudgetModal(id);return}
-  r.status='searching';r.adminNew=false;r.budgetProposalPending=false;r.clientStatusNotice=`${statusLabel('searching')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;if(state.current?.role==='admin')notifyClientStatus(r,'Potwierdzono cenę');
+  r.status='searching';r.updatedAt=new Date().toISOString();r.adminNew=false;r.budgetProposalPending=false;r.clientStatusNotice=`${statusLabel('searching')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;if(state.current?.role==='admin')notifyClientStatus(r,'Potwierdzono cenę');
   if(state.current?.role==='client')addNotification('Klient potwierdził budżet',r,`${r.budget||''} ${r.currency||state.currency}`);
   render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.');
 }
-async function declineBudgetProposal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.budgetProposalPending=false;if(state.current?.role==='client')addNotification('Klient odrzucił propozycję ceny',r,`${r.budget||''} ${r.currency||state.currency}`);render();await storeCloudNow('Odrzucenie ceny zapisane na serwerze.')} 
+async function declineBudgetProposal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='cancelled';r.updatedAt=new Date().toISOString();r.budgetProposalPending=false;if(state.current?.role==='client')addNotification('Klient odrzucił propozycję ceny',r,`${r.budget||''} ${r.currency||state.currency}`);render();await storeCloudNow('Odrzucenie ceny zapisane na serwerze.')} 
 function openCounterBudgetModal(id){const r=state.requests.find(x=>x.id===id);if(!r)return;document.querySelector('.modal')?.remove();document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="counterBudgetModal"><section class="modal-card"><button class="modal-close" aria-label="Zamknij" data-close-modal>×</button><h2>Proponowana cena</h2><p>Podaj własną propozycję. Spedytor zobaczy ją jako negocjację ceny.</p><div class="point-form"><label>Cena<input id="counterBudget" inputmode="decimal" value="${esc(r.budget||'')}"></label><label>Waluta<select id="counterCurrency">${['PLN','EUR','GBP'].map(x=>`<option ${r.currency===x?'selected':''}>${x}</option>`).join('')}</select></label></div><div class="modal-actions"><button class="btn red" data-submit-counter="${esc(id)}">Wyślij propozycję</button></div></section></div>`) }
-async function submitCounterBudget(id){const r=state.requests.find(x=>x.id===id);if(!r)return;const budget=$('#counterBudget')?.value.trim()||'';const currency=$('#counterCurrency')?.value||state.currency;if(!budget){toast('Wpisz proponowaną cenę.');return}r.clientProposal=budget;r.clientProposalCurrency=currency;r.status='counter';r.budgetProposalPending=false;addNotification('Klient zaproponował drugi budżet',r,`${budget} ${currency}`);document.querySelector('#counterBudgetModal')?.remove();render();await storeCloudNow('Drugi budżet zapisany na serwerze i widoczny dla spedytora.')} 
-async function approveCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.budget=r.clientProposal||r.budget;r.currency=r.clientProposalCurrency||r.currency;r.clientProposal='';r.clientProposalCurrency=r.currency;r.status='searching';r.adminNew=false;r.clientStatusNotice=`Potwierdzono cenę: ${r.budget||''} ${r.currency||state.currency}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Potwierdzono cenę');render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.')} 
+async function submitCounterBudget(id){const r=state.requests.find(x=>x.id===id);if(!r)return;const budget=$('#counterBudget')?.value.trim()||'';const currency=$('#counterCurrency')?.value||state.currency;if(!budget){toast('Wpisz proponowaną cenę.');return}r.clientProposal=budget;r.clientProposalCurrency=currency;r.status='counter';r.updatedAt=new Date().toISOString();r.budgetProposalPending=false;addNotification('Klient zaproponował drugi budżet',r,`${budget} ${currency}`);document.querySelector('#counterBudgetModal')?.remove();render();await storeCloudNow('Drugi budżet zapisany na serwerze i widoczny dla spedytora.')} 
+async function approveCounter(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.updatedAt=new Date().toISOString();r.budget=r.clientProposal||r.budget;r.currency=r.clientProposalCurrency||r.currency;r.clientProposal='';r.clientProposalCurrency=r.currency;r.status='searching';r.adminNew=false;r.clientStatusNotice=`Potwierdzono cenę: ${r.budget||''} ${r.currency||state.currency}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Potwierdzono cenę');render();await storeCloudNow('Budżet potwierdzony i zapisany na serwerze.')} 
 async function declineCounter(id){openRejectNoteModal(id,'cancelled')}
-async function setOfferSent(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='offer';r.adminNew=false;r.clientStatusNotice=`${statusLabel('offer')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Oferta wysłana');render();await storeCloudNow('Status zmieniony: Oferta wysłana.');}
-async function startRealisation(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='accepted';r.adminNew=false;r.clientStatusNotice=`${statusLabel('accepted')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Transport w realizacji');render();await storeCloudNow('Status zmieniony: W realizacji.');}
+async function setOfferSent(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='offer';r.updatedAt=new Date().toISOString();r.adminNew=false;r.clientStatusNotice=`${statusLabel('offer')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Oferta wysłana');render();await storeCloudNow('Status zmieniony: Oferta wysłana.');}
+async function startRealisation(id){const r=state.requests.find(x=>x.id===id);if(!r)return;r.status='accepted';r.updatedAt=new Date().toISOString();r.adminNew=false;r.clientStatusNotice=`${statusLabel('accepted')} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;r.budgetProposalPending=false;notifyClientStatus(r,'Transport w realizacji');render();await storeCloudNow('Status zmieniony: W realizacji.');}
 function formatOfferPoint(p,lang='pl'){
   const parts=postalParts(p||{});
   const date=pointDates(p)||'—';
@@ -3405,7 +3444,7 @@ async function setAdminStatus(id,status,skipRejectModal=false){
   const oldStatus=r.status;
   if(status==='archived'&&r.status!=='archived'){r.archivedFrom=r.status;r.archiveReason='Przeniesiono do archiwum przez admina';r.archivedAt=new Date().toISOString();r.archivedBy='admin';r.archiveNoticeConfirmed=true;}
   if(status!=='archived'){r.archiveNoticeConfirmed=false;}
-  r.status=status;if(oldStatus!==status&&status!=='waiting')r.adminNew=false;
+  r.status=status;r.updatedAt=new Date().toISOString();if(oldStatus!==status&&status!=='waiting')r.adminNew=false;
   r.clientStatusNotice=`${statusLabel(status)} — ${formatRegisteredAt(new Date().toISOString())}`;r.clientStatusNoticeAck=false;
   r.budgetProposalPending=status==='budget'&&Boolean(String(r.budget||'').trim());
   if(status!=='budget')r.budgetProposalPending=false;
