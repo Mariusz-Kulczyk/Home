@@ -1,0 +1,16 @@
+v162 - powiadomienia e-mail
+
+Panel zapisuje wiadomości do Firestore -> kolekcja mail.
+To NIE wysyła maila samo z siebie.
+
+Żeby e-maile realnie dochodziły:
+1. Firebase Console -> Extensions.
+2. Zainstaluj Trigger Email from Firestore.
+3. Collection path ustaw: mail.
+4. Nadawcę/SMTP ustaw jako notifications@mkulczyk.pl.
+5. Podaj dane SMTP / SendGrid / Gmail OAuth zgodnie z konfiguracją extension.
+6. W panelu admina -> Ustawienia -> Test e-mail.
+
+Automatyczne odświeżanie:
+- admin i klient odświeżają listy co 10 sekund, bez F5.
+- jeśli jest otwarty modal/edycja, odświeżanie nie nadpisuje widoku.

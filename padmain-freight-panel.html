@@ -1764,6 +1764,8 @@ try{
 const ADMIN={id:'admin',role:'admin',company:'M. KULCZYK',companyCode:'MK',name:'Mariusz Kulczyk',contact:'Mariusz Kulczyk',email:'contact@mkulczyk.pl',phone:'',login:'contact@mkulczyk.pl',language:'pl',vatEu:''};
 const defaults={admin:structuredClone(ADMIN),clients:[],requests:[],notifications:[],notifyEmail:'contact@mkulczyk.pl',currency:'PLN',notifyBrowser:false};
 const state={admin:structuredClone(defaults.admin),clients:structuredClone(defaults.clients),requests:[],notifications:[],errorLog:[],notifyEmail:defaults.notifyEmail,currency:defaults.currency,notifyBrowser:false,current:null,view:'loads',lang:'pl',noticeDismissed:false};
+const AUTO_REFRESH_MS=10000;
+let lastAutoRefreshAt=0;
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const toast=t=>{const el=$('#toast');el.textContent=t;el.className='toast show';setTimeout(()=>el.className='toast',3200)};
@@ -2273,7 +2275,24 @@ function logFirebaseError(area,err){
 function cloudErrorShort(){const x=state.errorLog[0]?.message||String(cloudLastError?.message||cloudLastError||'');return x?` Szczegół: ${x}`:''}
 async function queueEmailQuiet(to,subject,text,meta={}){
   if(!cloudOnline||!fbAuth?.currentUser||!fbDb||!to)return false;
-  try{const id='mail_'+Date.now()+'_'+Math.random().toString(16).slice(2);await setDoc(doc(fbDb,'mail',id),{to:[to],message:{from:'notifications@mkulczyk.pl',subject,text},createdAt:new Date().toISOString(),status:'queued',sender:'notifications@mkulczyk.pl',...plain(meta)},{merge:false});return true;}
+  const cleanTo=Array.isArray(to)?to.map(normalizeLogin).filter(Boolean):normalizeLogin(to);
+  if((Array.isArray(cleanTo)&&!cleanTo.length)||(!Array.isArray(cleanTo)&&!cleanTo))return false;
+  try{
+    const id='mail_'+Date.now()+'_'+Math.random().toString(16).slice(2);
+    const body=String(text||'');
+    await setDoc(doc(fbDb,'mail',id),{
+      to:Array.isArray(cleanTo)?cleanTo:[cleanTo],
+      from:'notifications@mkulczyk.pl',
+      replyTo:'contact@mkulczyk.pl',
+      message:{subject:String(subject||'Powiadomienie'),text:body,html:`<pre style="font-family:Arial,sans-serif;white-space:pre-wrap">${esc(body)}</pre>`},
+      createdAt:new Date().toISOString(),
+      status:'queued',
+      sender:'notifications@mkulczyk.pl',
+      extension:'firestore-send-email',
+      ...plain(meta)
+    },{merge:false});
+    return true;
+  }
   catch(e){logFirebaseError('Kolejka e-mail',e);return false;}
 }
 async function storeCloudNow(successText='Zapisano na serwerze.'){
@@ -2783,7 +2802,7 @@ function renderSettings(){
   const currencies=['PLN','EUR','GBP'];
   const unread=unreadNotifications();
   const notes=state.notifications.length?state.notifications.map(n=>`<div class="notification-item ${n.read?'read':''} ${n.priority==='high'?'high':''}"><div><b>${esc(n.kind)} ${n.code?`· ${esc(n.code)}`:''}</b><span>${esc(formatRegisteredAt(n.createdAt))} · ${esc(n.client||'')} ${n.details?`· ${esc(n.details)}`:''} · ${esc(n.targetEmail||'contact@mkulczyk.pl')}</span></div></div>`).join(''):`<div class="notification-empty">${esc(ui('noNotifications'))}</div>`;
-  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Adres alertów administratora: ${esc(state.notifyEmail||defaults.notifyEmail)}.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="notifications@mkulczyk.pl" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> ${esc(ui('browserNotify'))}</label></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-mail>${esc(ui('testEmail'))}</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> ważne akcje klientów zapisują się dla adresu ustawionego w polu „E-mail alertów” i odświeżają się automatycznie. Prawdziwy automatyczny e-mail działa po włączeniu Firebase Extension Trigger Email na kolekcji mail.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}<div class="mail-queue-note">E-maile automatyczne są odkładane do kolekcji <b>mail</b> z nadawcą <b>notifications@mkulczyk.pl</b>; do wysyłki włącz Firebase Trigger Email.</div></section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
+  return layout(`<div class="head"><div><h1>${esc(ui('settings'))}</h1><p>Adres alertów administratora: ${esc(state.notifyEmail||defaults.notifyEmail)}.</p></div></div><section class="card"><h2 class="section-title">${esc(ui('settingsTitle'))}</h2><form id="settingsForm" class="form-grid"><div class="field full"><label>${esc(ui('systemSender'))}</label><input value="notifications@mkulczyk.pl" readonly></div><div class="field"><label>${esc(ui('notifyEmail'))}</label><input id="notifyEmail" type="email" value="${esc(state.notifyEmail)}"></div><div class="field"><label>${esc(ui('defaultCurrency'))}</label><select id="defaultCurrency">${currencies.map(x=>`<option ${state.currency===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label class="settings-switch"><input id="notifyBrowser" type="checkbox" ${state.notifyBrowser?'checked':''}> ${esc(ui('browserNotify'))}</label></div><div class="field full"><div class="actions"><button class="btn red" type="submit">${esc(ui('saveSettings'))}</button><button class="btn" type="button" data-enable-browser-notify>${esc(ui('enableBrowser'))}</button><button class="btn" type="button" data-test-mail>${esc(ui('testEmail'))}</button></div></div></form><p class="settings-note"><b>Powiadomienia:</b> ważne akcje klientów zapisują się dla adresu ustawionego w polu „E-mail alertów” i odświeżają się automatycznie. Prawdziwy automatyczny e-mail działa dopiero po włączeniu Firebase Extension Trigger Email na kolekcji mail i ustawieniu SMTP.</p>${state.errorLog[0]?`<div class="error-log-box"><b>Ostatni błąd Firebase:</b><br>${esc(state.errorLog[0].message||'')}</div>`:''}<div class="mail-queue-note">E-maile automatyczne są odkładane do kolekcji <b>mail</b> z nadawcą <b>notifications@mkulczyk.pl</b>; do wysyłki włącz Firebase Trigger Email.</div></section><section class="card" style="margin-top:12px"><h2 class="section-title">${esc(ui('notificationCenter'))} ${unread?`<span class="notification-badge">${unread}</span>`:''}</h2><div class="notification-list">${notes}</div><div class="modal-actions" style="padding:0 14px 14px"><button class="btn" data-mark-notifications-read>${esc(ui('markRead'))}</button><button class="btn danger" data-clear-notifications>${esc(ui('clear'))}</button></div></section>`);
 }
 function render(){state.requests.forEach(normalizeRequest);syncLoggedInSession();const app=$('#app');if(!state.current){app.innerHTML=renderPublic();return}if(state.view==='profile'){app.innerHTML=renderProfile();return}app.innerHTML=state.current.role==='client'?renderClient():state.view==='dashboard'?renderDashboard():state.view==='clients'?renderClients():state.view==='settings'?renderSettings():renderAdmin()}
 function nextCode(c){const nums=state.requests.filter(r=>r.clientId===c.id).map(r=>parseInt((r.code||'').split('-')[1],10)||0);return `${c.companyCode}-${String(Math.max(0,...nums)+1).padStart(3,'0')}`}
@@ -2871,31 +2890,53 @@ function unreadNotifications(){return state.notifications.filter(n=>!n.read).len
 function markNotificationsRead(){state.notifications.forEach(n=>n.read=true);store();render();toast('Powiadomienia oznaczone jako przeczytane.')}
 function clearNotifications(){state.notifications.forEach(n=>cloudDeleted.notifications.add(n.id));state.notifications=[];store();render();toast('Powiadomienia wyczyszczone.')}
 let notificationPollBusy=false;
-async function refreshAdminBoard(){
-  if(notificationPollBusy||!cloudOnline||!fbAuth?.currentUser||!fbDb||!isAdminEmail(fbAuth.currentUser.email||''))return;
+async function refreshCloudLists(force=false){
+  if(notificationPollBusy||!cloudOnline||!fbAuth?.currentUser||!fbDb)return;
   if(document.querySelector('.modal'))return;
+  const now=Date.now();
+  if(!force&&now-lastAutoRefreshAt<AUTO_REFRESH_MS-500)return;
+  lastAutoRefreshAt=now;
   notificationPollBusy=true;
   try{
-    const [requests,notifications]=await Promise.all([
-      docsToArray(collection(fbDb,'requests')),
-      docsToArray(collection(fbDb,'notifications'))
-    ]);
-    requests.forEach(r=>{if(r&&r.id&&(r.permanentlyDeleted===true||r.status==='deleted'))rememberDeletedRequestId(r.id);});
-    const previous=new Set(state.notifications.map(n=>n.id));
-    const fresh=notifications.filter(n=>!previous.has(n.id)&&!n.read);
-    state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
-    state.requests.forEach(normalizeRequest);
-    state.requests=filterDeletedRequests(state.requests);
-    state.notifications=Array.isArray(notifications)?notifications:state.notifications;
-    saveLocal();
-    if(fresh.length&&state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
-      try{new Notification('M.Kulczyk — nowe powiadomienie',{body:`${fresh[0].kind}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
+    const email=normalizeLogin(fbAuth.currentUser.email||'');
+    if(!email)return;
+    if(isAdminEmail(email)){
+      const [clients,requests,notifications]=await Promise.all([
+        docsToArray(collection(fbDb,'clients')),
+        docsToArray(collection(fbDb,'requests')),
+        docsToArray(collection(fbDb,'notifications'))
+      ]);
+      requests.forEach(r=>{if(r&&r.id&&(r.permanentlyDeleted===true||r.status==='deleted'))rememberDeletedRequestId(r.id);});
+      const previous=new Set(state.notifications.map(n=>n.id));
+      const fresh=notifications.filter(n=>!previous.has(n.id)&&!n.read);
+      state.clients=Array.isArray(clients)?clients.map(c=>{delete c.accessCode;return {...c,role:'client'}}):state.clients;
+      state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
+      state.requests.forEach(normalizeRequest);
+      state.requests=filterDeletedRequests(state.requests);
+      state.notifications=Array.isArray(notifications)?notifications:state.notifications;
+      if(fresh.length&&state.notifyBrowser&&'Notification' in window&&Notification.permission==='granted'){
+        try{new Notification('M.Kulczyk — nowe powiadomienie',{body:`${fresh[0].kind}${fresh[0].code?' · '+fresh[0].code:''}`});}catch(e){}
+      }
+      saveLocal();
+      if(state.current?.role==='admin')render();
+    }else{
+      const [requests,notifications]=await Promise.all([
+        docsToArray(query(collection(fbDb,'requests'),where('clientEmail','==',email))),
+        docsToArray(query(collection(fbDb,'notifications'),where('targetEmail','==',email))).catch(()=>[])
+      ]);
+      requests.forEach(r=>{if(r&&r.id&&(r.permanentlyDeleted===true||r.status==='deleted'))rememberDeletedRequestId(r.id);});
+      state.requests=filterDeletedRequests(Array.isArray(requests)?requests:state.requests);
+      state.requests.forEach(normalizeRequest);
+      state.requests=filterDeletedRequests(state.requests);
+      if(Array.isArray(notifications))state.notifications=notifications;
+      saveLocal();
+      if(state.current?.role==='client')render();
     }
-    if(state.current?.role==='admin')render();
-  }catch(e){console.warn('Notification refresh error',e)}
+  }catch(e){logFirebaseError('Automatyczne odświeżanie Firebase',e)}
   finally{notificationPollBusy=false;}
 }
-setInterval(refreshAdminBoard,45000);
+const refreshAdminBoard=refreshCloudLists;
+setInterval(()=>refreshCloudLists(false),AUTO_REFRESH_MS);
 
 function requestBrowserNotifications(){if(!('Notification' in window)){toast('Ta przeglądarka nie obsługuje powiadomień systemowych.');return}Notification.requestPermission().then(p=>{state.notifyBrowser=p==='granted';store();render();toast(state.notifyBrowser?'Powiadomienia systemowe włączone.':'Powiadomienia systemowe nie zostały włączone.');})}
 function demoNotifyAdmin(r,kind='Nowe zapytanie'){const to=(state.notifyEmail||'').trim();if(!to){toast('W ustawieniach wpisz e-mail do powiadomień administratora.');return}const c=getClient(r.clientId)||{};const subject=`${kind}: ${r.code||''}`;const body=`${kind}\n\nNumer: ${r.code||''}\nKlient: ${c.company||''}\nZaładunek: ${routeSummary(r.loads||[])}\nRozładunek: ${routeSummary(r.unloads||[])}\nWymagania: ${requirementsText(r)||'brak'}\nNotatka klienta: ${r.clientNote||'brak'}\nBudżet: ${r.budget||'brak'} ${r.currency||state.currency}`;window.location.href=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;toast('Otworzono próbne powiadomienie. Wyślij je z programu pocztowego.')} 
@@ -3314,7 +3355,11 @@ async function setAdminStatus(id,status,skipRejectModal=false){
 }
 async function setPriority(id,priority){const r=state.requests.find(x=>x.id===id);if(!r)return;r.priority=priority||'normal';render();await storeCloudNow('Priorytet zapisany.');}
 async function ackClientMessage(id,type){const r=state.requests.find(x=>x.id===id);if(!r)return;if(type==='reject')r.clientRejectionAck=true;else r.clientStatusNoticeAck=true;render();await storeCloudNow('Potwierdzenie zapisane.');}
-function testMail(){const sample={code:'TEST-001',clientId:state.clients[0]?.id,loads:[],unloads:[],budget:'',currency:state.currency};demoNotifyAdmin(sample,'Próba powiadomienia')} 
+async function testMail(){
+  const to=normalizeLogin(state.notifyEmail||ADMIN_EMAIL);
+  const ok=await queueEmailQuiet(to,'Test powiadomień MK','To jest test automatycznych powiadomień z Padmain Freight Panel.\nJeżeli widzisz ten e-mail, Firebase Trigger Email działa poprawnie.',{type:'test',manualTest:true});
+  toast(ok?'Test dodany do kolejki mail. Jeżeli Trigger Email jest ustawiony, e-mail dojdzie.':'Nie udało się dodać testu do kolejki mail.' );
+} 
 
 function openCountryMenu(input){
   const field=input.closest('.country-field');if(!field)return;
